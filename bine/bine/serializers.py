@@ -1,5 +1,5 @@
 from rest_framework import  serializers
-from authentication.models import User
+from bine.models import User
 from django.contrib.auth import update_session_auth_hash
 
 class UserSerializer(serializers.ModelSerializer):
