@@ -1,6 +1,6 @@
 from rest_framework import  serializers
-from bine.models import User
 from django.contrib.auth import update_session_auth_hash
+from bine.models import User, Book, BookNote
 
 class UserSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True, required=False)
@@ -33,4 +33,25 @@ class UserSerializer(serializers.ModelSerializer):
                 update_session_auth_hash(self.context.get('request'), instance)
             
             return instance
+
+class UserSimpleSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ('id', 'username', 'fullname')
+        
+class BookSimpleSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Book
+        fields = ('id', 'title', 'photo')
+
+class BookNoteSerializer(serializers.ModelSerializer):
+    user = UserSimpleSerializer(read_only=True)
+    book = BookSimpleSerializer(read_only=True)
+    
+    class Meta:
+        model = BookNote
+        fields = ('id', 'user', 'book', 'content', 'read_date_from', 'read_date_to', 'preference', 
+                  'attach', 'share_to', 'created_at', 'updated_on')
+    
+    
     
