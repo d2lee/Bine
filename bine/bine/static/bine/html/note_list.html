@@ -1,0 +1,59 @@
+<div class="row">
+   	<ul class="col-sm-12 nav nav-pills submenu">
+   		<li role="presentation" class="dropdown  pull-right">
+    <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-expanded="false">
+     정렬 <span class="caret"></span>
+    </a>
+    <ul class="dropdown-menu" role="menu">
+		<li role="presentation"><a role="menuitem" tabindex="-1" href="#">최신 날짜순</a></li>
+	    <li role="presentation"><a role="menuitem" tabindex="-1" href="#">답글 많은 순</a></li>
+    </ul>
+		</li>
+		<li role="presentation" class="dropdown pull-right">
+		    <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-expanded="false">
+		      보기 <span class="caret"></span>
+		    </a>
+    <ul class="dropdown-menu" role="menu">
+    	<li role="presentation" class="active"><a role="menuitem" tabindex="-1" href="#">친구 노트 포함</a></li>
+		<li role="presentation"><a role="menuitem" tabindex="-1" href="#">자기 노트만</a></li>
+	    <li role="presentation"><a role="menuitem" tabindex="-1" href="#">새 답글 노트만</a></li>
+	    <li role="presentation"><a role="menuitem" tabindex="-1" href="#">새 노트만</a></li>
+    </ul>
+		</li>
+		<li role="presentation" class="pull-right"><a href="#/note/new/">독서노트쓰기</a></li>	
+	</ul>
+ </div>
+		 
+<div class="alert status-box alert-dismissible fade in" role="alert">
+	<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
+	<h4><span class="glyphicon glyphicon-info-sign"></span> 알림</h4>
+	<p>이도윤님은 이번 주에 <strong>10</strong>권의 책을 읽었습니다.</p>
+	<p>목표한 <strong>100</strong>권까지는 이제 <strong>50</strong>권 남았습니다.</p>
+	<div class="progress">
+	  <div class="progress-bar progress-bar-primary" role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100" style="width: 50%">
+	    <span class="sr-only">50% 완성</span>
+	  </div>
+	</div>
+</div>
+	<div id="list" ng-repeat="note in notes">
+	 <div class='media'> 
+		 <div class='media-body'> 
+	        <h4 class='media-heading note-book-title'>{{ note.book.title }}</h4>
+	        <p class='note-content'>{{ note.content | truncate: 128 }}</p>
+		    <div class='note-read-date'>
+		    	<span class="glyphicon glyphicon-calendar"></span><span>{{ note.created_at  | date:"yyyy/MM/dd h:mm a" }}</span> |
+		    	<span ng-bind-html="convertPreferenceToHtml(note.preference)"></span> | 
+	    		<span>모두</span> |
+	    		<span><a href='#/note/{{note.id}}' class='note-reply-view'>답글(10/12)</a></span>
+	    	</div>
+		  </div> 
+		  <div class='media-right media-top'> 
+			  <a href='#/note/{{note.id}}'> 
+			    <img class='media-object note-book-photo' src='/static/bine/images/book1.jpg' width='120px' height='200px'>      
+			  </a> 
+		  </div> 
+		 <div> 
+			
+		</div>
+	</div>
+</div>

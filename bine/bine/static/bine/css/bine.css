@@ -1,0 +1,161 @@
+body {
+  min-height: 2000px;
+  background-color:#f5f5f5;
+}
+
+@media screen and (max-width: 400px) {
+	.media-object {
+		width:80px;
+		height:auto;
+	}
+}
+
+@media screen and (min-width: 400px) {
+	.media-object {
+		width:100px;
+		height:auto;
+	}
+}
+
+.container {
+	padding-left: 4px;
+	padding-right: 4px;
+}
+
+
+/* prevent body from scrolling when modal popup */
+body.modal-open {
+    overflow: hidden;
+    position:fixed;
+    width: 100%;
+}
+
+.navbar-static-top {
+	margin-bottom: 0px;
+	
+	background-color: white;
+	font-weight: bold; 
+}
+
+.navbar-static-top .glyphicon {
+	color: #777;
+}
+
+.navbar-brand {
+	color: #4CAF50 !important;
+}
+
+.form-control {
+    -webkit-appearance: none;
+    -moz-appearance: none; /* mobile firefox too! */
+    font-size: 16px;
+}
+
+.status-box {
+	background-color: #4CAF50;
+	color: white;
+	margin-bottom: 6px;
+	border-radius: 2px;
+	padding: 8px;
+}
+
+.status-box > h4 {
+	font-size: 16px;
+}
+
+.status-box > p {
+	font-size: 14px;
+}
+
+.progress {
+	margin-top:4px;
+	margin-bottom: 4px;
+}
+
+.media {
+	/*border-bottom: solid 1px lightgray;
+	padding-bottom: 10px;
+	*/
+	
+	
+	border: 1px solid #e3e3e3;
+	border-radius: 2px;
+	background-color: white; 
+	padding: 8px;
+	margin-top: 6px;
+}
+
+.note-book-title {
+	/*
+	margin-top: 8px;
+	text-align: center;
+	*/
+	margin-bottom: 8px;
+}
+
+.note-content {
+	margin-bottom: 10px;
+	
+}
+
+.note-preference, .readcount {
+	margin-right: 10px;
+}
+
+.likeit {
+	float:none;
+	margin-bottom: 10px;
+}
+
+.glyphicon {
+	margin-right: 2px;
+}
+
+.submenu1 > li > a {
+	color: #4CAF50 !important;
+}
+
+.note-reply > .panel-heading {
+	background-color: white;
+}
+
+.note-reply {
+	margin-top: 8px;	
+}
+
+.reply-user {
+	margin-left: 10px;
+	font-size: 12px;
+}
+
+.reply-date {
+	margin-left: 10px;
+	font-size: 12px;
+}
+
+.note-preference > .glyphicon, .reply-user > .glyphicon, .reply-date > .glyphicon {
+	color: #337ab7;
+}
+
+.thumbnail-title {
+	text-align:center;
+	font-size: 14px;
+	font-weight: bold;
+}
+
+.date-label, .date-item {
+	float:left;
+	width:auto;
+}
+
+.form-box-top {
+	margin-top: 10px;
+}
+
+.date-label{
+	margin-right: 4px;
+}
+
+.note-new-panel {
+	margin-top: 8px;	
+}

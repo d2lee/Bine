@@ -1,0 +1,59 @@
+<div class="row">
+   	<ul class="col-sm-12 nav nav-pills submenu">
+   		<li role="presentation" class="pull-right"><a href="#" >삭제</a></li>	
+   		<li role="presentation" class="pull-right"><a href="#" >수정</a></li>	
+	</ul>
+ </div>
+
+<div class='media'> 
+	<div class='media-body'> 
+	      <h4 class='media-heading note-book-title'>{{ note.book.title }}</h4> 
+	   <p class='note-content'>{{ note.content }}</p>
+	   <div class='note-read-date'>
+	   	<span class="glyphicon glyphicon-calendar"></span>{{ note.created_at }} |
+	   	<span>평점:</span>{{note.preference}}	 | 
+	  		<span>모두</span> 	
+	  	</div>
+	</div> 
+	<div class='media-right media-top'> 
+	 <a href='#/note/{{note.id}}'> 
+	   <img class='media-object note-book-photo' src='/static/bine/images/book1.jpg' width='120px' height='200px'>      
+	 </a> 
+	</div>
+</div>
+
+<div class="panel panel-default note-reply">
+  <!-- Default panel contents -->
+  <div class="panel-heading"><span>답글</span> <a class="pull-right" href="" ng-click="create_reply()">답글 작성</a></div>
+  <ul class="list-group">
+    <li class="list-group-item" ng-repeat="reply in replies">
+    	<span class='reply-content'><a href="" ng-click="update_reply(reply)">{{reply.content}}</a></span>
+		<span class='reply-user'><span class='glyphicon glyphicon-user'></span>{{reply.user.fullname}}</span>
+		<span class='reply-date'><span class='glyphicon glyphicon-calendar'></span>{{reply.created_at | date:"yyyy/MM/dd h:mm a"}}</span>
+		<a href="" ng-click="delete_reply(reply, $index)"><span class='glyphicon glyphicon-trash reply_delete'></span></a>
+	</li>
+  </ul>
+</div>
+
+<!-- New Review Modal -->
+<div class="modal fade" id="reply_modal" tabindex="-1" role="dialog" aria-labelledby="" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">리뷰작성</h4>
+      </div>
+      <div class="modal-body">
+         <form class="form">
+			<textarea class='form-control' rows='3' ng-model="new_reply_content"></textarea>  
+		</form>
+	 </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal" >취소</button>
+        <button type="button" class="btn btn-primary" ng-click="save_reply()">저장</button>
+      </div>
+    </div>
+  </div>
+</div>
