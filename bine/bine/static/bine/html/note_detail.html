@@ -1,47 +1,41 @@
-<div class="row">
-   	<ul class="col-sm-12 nav nav-pills submenu">
-   		<li role="presentation" class="pull-right"><a href="#" >삭제</a></li>	
-   		<li role="presentation" class="pull-right"><a href="#" >수정</a></li>	
-	</ul>
- </div>
-
-<div class="panel panel-default note-panel">
-  <div class="panel-heading">
-    <h4 class="panel-title">{{ note.book.title }}</h4>
-  </div>
-  <div class="panel-body note-panel-body">
-  		
-  	<div class='note-info'>
-    	<span class="glyphicon glyphicon-calendar"></span><span>{{ note.created_at | date:"yyyy/MM/dd h:mm a" }}</span> |
-    	<span ng-bind-html="convertPreferenceToHtml(note.preference)"></span> | 
-   		<span>모두</span> |
-   		<span></span>
-   	</div>
-   	<a href='#/note/{{note.id}}'> 
-	   		<img class="note-book-photo" src='/static/bine/images/book1.jpg' align="right" width='120px' height='200px'>      
+<div class='note-detail'>
+	<div class="panel panel-default note-panel">
+	  <div class="panel-heading">
+	    <h4 class="panel-title">{{ note.book.title }}</h4>
+	  </div>
+	  <div class="panel-body note-panel-body">		
+	  	<div class='note-info'>
+	    	<span class="glyphicon glyphicon-time"></span><span>{{ note.created_at | date:"yyyy/MM/dd h:mm a" }}</span> |
+	    	<span ng-bind-html="convertPreferenceToHtml(note.preference)"></span> | 
+	   		<span>{{ convertShareToHtml(note.share_to)}}</span>
+	   		<span></span>
+	   	</div>
+	   	<a href='#/note/{{note.id}}'> 
+		   	<img class="note-book-photo" src='/static/bine/images/book1.jpg' align="right" width='120px' height='200px'>      
 		</a>
-    <p class='note-content'>
-		{{ note.content}}
-		
-	</p>
-	
-  </div>
-  <div class="panel-footer">
-  	 <a href='#/note/{{note.id}}' class='note-reply-view'>답글(10/12)</a> | <a href="">좋아요</a> | <a href="">수정</a> | <a href="">삭제</a>
-  </div>
-</div>
+	    <p class='note-content'>
+			{{ note.content}}
+		</p>
+	  </div>
+	  <div class="panel-footer">
+	  	<a href=""><span class="glyphicon glyphicon-heart"></span>좋아요({{note.likeit}})</a> |
+		<a href="">수정</a> |
+		<a href="">삭제</a>
+	  </div>
+	</div>
 
-<div class="panel panel-default note-reply">
-  <!-- Default panel contents -->
-  <div class="panel-heading"><span>답글</span> <a class="pull-right" href="" ng-click="create_reply()">답글 작성</a></div>
-  <ul class="list-group">
-    <li class="list-group-item" ng-repeat="reply in replies">
-    	<span class='reply-content'><a href="" ng-click="update_reply(reply)">{{reply.content}}</a></span>
-		<span class='reply-user'><span class='glyphicon glyphicon-user'></span>{{reply.user.fullname}}</span>
-		<span class='reply-date'><span class='glyphicon glyphicon-calendar'></span>{{reply.created_at | date:"yyyy/MM/dd h:mm a"}}</span>
-		<a href="" ng-click="delete_reply(reply, $index)"><span class='glyphicon glyphicon-trash reply_delete'></span></a>
-	</li>
-  </ul>
+	<div class="panel panel-default note-reply">
+	  <!-- Default panel contents -->
+	  <div class="panel-heading"><span>답글</span> <a class="pull-right" href="" ng-click="create_reply()">답글 작성</a></div>
+	  <ul class="list-group">
+	    <li class="list-group-item" ng-repeat="reply in replies">
+	    	<span class='reply-content'><a href="" ng-click="update_reply(reply)">{{reply.content}}</a></span>
+			<span class='reply-user'><span class='glyphicon glyphicon-user'></span>{{reply.user.fullname}}</span>
+			<span class='reply-date'><span class='glyphicon glyphicon-time'></span>{{reply.created_at | date:"yyyy/MM/dd h:mm a"}}</span>
+			<a href="" ng-click="delete_reply(reply, $index)"><span class='glyphicon glyphicon-trash reply_delete'></span></a>
+		</li>
+	  </ul>
+	</div>
 </div>
 
 <!-- New Review Modal -->

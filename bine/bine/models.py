@@ -1,6 +1,6 @@
 from django.db import models
 from django.db.models.fields import CharField, DateField,TextField,\
-    DateTimeField
+    DateTimeField, SmallIntegerField
 from django.db.models.fields.related import ManyToManyField, ForeignKey
 from django.db.models.fields.files import ImageField, FileField
 from django.contrib.auth.models import BaseUserManager, AbstractBaseUser,\
@@ -132,6 +132,14 @@ class Book(models.Model):
     def __str__(self):
         return self.title
     
+    def to_json(self):
+        json_data = {'id': self.id, 
+                    'title': self.title,
+                    'author': self.author,
+                    'photo': self.photo.url,
+                    }
+        return json_data;
+    
     class Meta:
         db_table = 'books'
         
@@ -170,7 +178,10 @@ class BookNote(models.Model):
                     'read_date_from': self.read_date_from,
                     'read_date_to': self.read_date_to,
                     'share_to': self.share_to,
+                    'likeit': self.likeit.count(),
+                    'replies_count': self.replies.count(),
                     'created_at': self.created_at,
+                    'updated_on': self.updated_on,
                     }
         return json_data
     
@@ -180,6 +191,18 @@ class BookNote(models.Model):
     class Meta:
         db_table = 'booknotes'
         
+class BookNoteLikeit(models.Model):
+    user = ForeignKey(User, related_name='likeit')
+    note = ForeignKey(BookNote, related_name='likeit')
+    created_at = DateTimeField(auto_now_add=True)
+    
+    def __str__(self):
+        return self.user.username + " - " + self.book.title
+    
+    class Meta:
+        unique_together = (("user", "note"),)
+        db_table = 'booknote_likeit'
+    
 class BookNoteReply(models.Model):
     user = ForeignKey(User, related_name='replies')
     note = ForeignKey(BookNote, related_name='replies')

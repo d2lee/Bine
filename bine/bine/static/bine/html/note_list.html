@@ -45,20 +45,19 @@
 	   		<img class="note-book-photo" src='/static/bine/images/book1.jpg' align="right" width='120px' height='200px'>      
 		</a>
   	<div class='note-info'>
-    	<span class="glyphicon glyphicon-calendar"></span><span>{{ note.created_at | date:"yyyy/MM/dd h:mm a" }}</span> |
+    	<span class="glyphicon glyphicon-time"></span><span>{{ note.created_at | date:"yyyy/MM/dd h:mm a" }}</span> |
     	<span ng-bind-html="convertPreferenceToHtml(note.preference)"></span> | 
-   		<span>모두</span> |
+   		<span>{{convertShareToHtml(note.share_to)}}</span>
    		<span></span>
    	</div>
-    <p class='note-content'>
-    	
+    <p class='note-content'>   	
 		{{ note.content | truncate: 128 }}
 	</p>
   </div>
   <div class="panel-footer">
-  	 <a href=""><span class="glyphicon glyphicon-heart"></span>좋아요(100)</a> | 
-  	 <a href='#/note/{{note.id}}' class='note-reply-view'>답글(10/12)</a> | 
-  	 <a href="">수정</a> | 
-  	 <a href="">삭제</a>
+  	 <a href="" ng-click="update_likeit(note)"><span class="glyphicon glyphicon-heart"></span>좋아요({{note.likeit}})</a> | 
+  	 <a href='#/note/{{note.id}}' class='note-reply-view'>답글({{note.replies_count}})</a> | 
+  	 <a href="" ng-click="edit_note(note)">수정</a> | 
+  	 <a href="" ng-click="delete_note(note, $index)">삭제</a>
   </div>
 </div>

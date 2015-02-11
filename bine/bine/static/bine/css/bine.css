@@ -1,6 +1,7 @@
 body {
   min-height: 2000px;
   background-color:#f5f5f5;
+  font-family: AppleSDGothicNeo-Light, sans-serif-light;
 }
 
 @media screen and (max-width: 400px) {
@@ -34,7 +35,6 @@ body.modal-open {
 	margin-bottom: 0px;
 	
 	background-color: white;
-	font-weight: bold; 
 }
 
 .navbar-static-top .glyphicon {
@@ -54,7 +54,7 @@ body.modal-open {
 .status-box {
 	background-color: #4CAF50;
 	color: white;
-	margin-bottom: 6px;
+	margin-bottom: 8px;
 	border-radius: 2px;
 	padding: 8px;
 }
@@ -160,11 +160,20 @@ body.modal-open {
 	margin-top: 8px;	
 }
 
+.note-panel {
+	border-radius: 2px;
+	margin-bottom: 8px;
+}
+
+.note-panel > .note-panel-body > .note-info {
+	font-size: 9pt;
+	color: #595959;
+}
 .note-panel > .note-book-photo {
 	padding: 4px;
 }
 
-.note-content {
+.note-panel > .note-panel-body >.note-content {
 	margin-top: 4px;
 	margin-bottom: 4px;
 }
@@ -172,6 +181,9 @@ body.modal-open {
 .note-panel > .panel-heading {
 	background-color: white;
 	border-bottom: none;
+	font-size: 18pt;
+	overflow: hidden;
+	text-overflow: ellipsis;
 }
 
 .note-panel > .panel-footer {
@@ -182,4 +194,37 @@ body.modal-open {
 	padding-top: 0px;
 	padding-bottom: 0px;
 	margin-bottom: 8px;
-}}
+}
+
+.note-detail > .note-panel {
+	margin-top: 8px;
+	margin-bottom: 8px;
+}
+
+.preference_active {
+	font-color: red;
+}
+
+.preference_inactive {
+	font-color: #f5f5f5;
+}
+
+.note-new-panel > .panel-heading > a {
+	color: white;
+}
+
+.book-search-modal .modal-body {
+	height: 300px;
+}
+
+.book-search-modal .modal-header {
+	padding: 10px;
+}
+
+.book-search-modal .row {
+	margin-top: 8px;
+}
+
+.book-search-modal .caption {
+	font-size: 8pt;
+}

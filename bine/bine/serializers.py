@@ -63,13 +63,13 @@ class BookNoteViewSerializer(serializers.ModelSerializer):
     class Meta:
         model = BookNote
         fields = ('id', 'user', 'book', 'content', 'read_date_from', 'read_date_to', 'preference', 
-                  'attach', 'share_to', 'created_at', 'updated_on')
+                  'likeit', 'attach', 'share_to', 'created_at', 'updated_on')
         
 class BookNoteWriteSerializer(serializers.ModelSerializer):
     class Meta:
         model = BookNote
         fields = ('id', 'user', 'book', 'content', 'read_date_from', 'read_date_to', 'preference', 
-                  'attach', 'share_to', 'created_at', 'updated_on')
+                  'attach', 'share_to')
 
 class BookNoteReplySerializerMixin(object):
     def get_serializer_class(self):

@@ -1,7 +1,7 @@
 var bineControllers = angular.module('bineControllers', []);
 
-bineControllers.controller('NoteListControl', ['$scope', '$sce', '$http',
-  function ($scope, $sce, $http) {
+bineControllers.controller('NoteListControl', ['$rootScope', '$scope', '$sce', '$http',
+  function ($rootScope, $scope, $sce, $http) {
 		$http.get('/note/').success(function(data) {
 		$scope.notes = data;
 		
@@ -13,6 +13,43 @@ bineControllers.controller('NoteListControl', ['$scope', '$sce', '$http',
 			}
 			
 			return $sce.trustAsHtml(spanHtml);
+		}
+		
+		$scope.edit_note = function (note) {
+			$rootScope.note = note;
+			location.href = "#/note/new/"
+		}
+		
+		$scope.delete_note = function (note, index) {
+			var url = "/note/" + note.id + "/";
+			$http.delete(url).success(function(data){
+				alert('삭제되었습니다.');
+				$scope.notes.splice(index,1)
+				
+			});
+		}
+		
+		$scope.update_likeit = function (note) {
+			var url = "/note/" + note.id + "/likeit/";
+			$http.post(url).success(function(data) {
+				note.likeit = data.likeit;
+			});
+		}
+		
+		$scope.convertShareToHtml = function(share_to) {
+			var text = "";
+			switch (share_to) {
+			case 'P': 
+				text = "개인";
+				break;
+			case 'F':
+				text = "친구";
+				break;
+			case 'A':
+				text = "모두";
+				break;
+			}
+			return text;
 		}
     });
   }]);
@@ -96,9 +133,128 @@ bineControllers.controller('NoteDetailControl', ['$scope', '$routeParams', '$htt
 		$scope.current_reply = '';
 		$('#reply_modal').modal('show');
 	}
+	
+	$scope.convertShareToHtml = function(share_to) {
+		var text = "";
+		switch (share_to) {
+		case 'P': 
+			text = "개인";
+			break;
+		case 'F':
+			text = "친구";
+			break;
+		case 'A':
+			text = "모두";
+			break;
+		}
+		return text;
+	}
 }]);
 
-bineControllers.controller('NoteNewControl', ['$scope', '$sce', '$http',
-    function ($scope, $sce, $http) {
+bineControllers.controller('NoteNewControl', ['$rootScope', '$scope', '$sce', '$http',
+    function ($rootScope, $scope, $sce, $http) {
+		
+		if ($rootScope.note == null) {
+			var today = new Date();
+			
+			$scope.note = {
+					'user': {'id':2},
+					'preference': 3, 
+					'share_to': 'F',
+					'read_date_from': today,
+					'read_date_to': today,
+			};
+			$scope.book_title = "";
+		}
+		else {
+			$scope.note = $rootScope.note;
+			$scope.book_title = $scope.note.book.title;
+			
+			// convert string date to date object to initialize input date object.
+			$scope.note.read_date_from = new Date($scope.note.read_date_from);
+			$scope.note.read_date_to = new Date($scope.note.read_date_to);
+		}
+		
+		$scope.save = function() {
+			var note = $scope.note;
+			var id = null;
+			
+			if (note.id != null)
+				id = note.id;
+				
+			var data = {
+					'id': id,
+					'user': note.user.id,
+					'book': note.book.id,
+					'content': note.content,
+					'read_date_from': getFormattedDate(note.read_date_from),
+					'read_date_to': getFormattedDate(note.read_date_to),
+					'preference': note.preference,
+					'share_to': note.share_to,
+			};
+			
+			var url = '/note/';
+				
+			if ($scope.note.id != null) { // update
+				url = url + $scope.note.id + "/";
+			}
+			
+			
+			$http.post(url, data).
+			  success(function(data, status, headers, config) {
+				  alert('성공적으로 저장되었습니다.')
+			  }).
+			  error(function(data, status, headers, config) {
+			      alert("error");
+			  });
+		}
+		
+		$scope.set_preference = function(pref) {			
+			for (var i = 1; i <= 5; i ++) {
+				if (i <= pref)
+					$('#pref-' + i).css('color', '#337ab7');
+				else
+					$('#pref-' + i).css('color', '#333');
+			}
+			
+			$scope.note.preference = pref;
+		}
+		
+		$scope.set_preference($scope.note.preference);
+		
+		$scope.search_book = function() {
+			var title = $scope.book_title;
+			
+			if (title == '') {
+				alert('검색할 책 이름을 입력하십시오.')
+				return;
+			}
+			else {
+				var url = "/book/?title=" + $scope.book_title;
+				
+				$http.get(url).
+				  success(function(data, status, headers, config) {
+					  $scope.books = data;
+					  $('#book_search_modal').modal('show');
+				  }).
+				  error(function(data, status, headers, config) {
+				      alert("error");
+				  });
+			}
+		}
+		
+		$scope.select_book = function(book) {
+			$scope.note.book = book;
+			$('#book_search_modal').modal('hide');
+		}
+		
+		function getFormattedDate(date) {
+			var year = date.getFullYear();
+			var month = (1 + date.getMonth()).toString();
+			month = month.length > 1 ? month : '0' + month;
+			var day = date.getDate().toString();
+			day = day.length > 1 ? day : '0' + day;
+			return year + '-' + month + '-' + day;
+		}
 	}
 ]);
