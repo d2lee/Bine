@@ -170,7 +170,7 @@ class BookNote(models.Model):
                     'read_date_from': self.read_date_from,
                     'read_date_to': self.read_date_to,
                     'share_to': self.share_to,
-                    'replies': list(map(lambda x: x.to_json(), self.replies.all()))
+                    'created_at': self.created_at,
                     }
         return json_data
     

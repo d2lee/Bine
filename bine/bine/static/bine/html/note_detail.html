@@ -5,21 +5,30 @@
 	</ul>
  </div>
 
-<div class='media'> 
-	<div class='media-body'> 
-	      <h4 class='media-heading note-book-title'>{{ note.book.title }}</h4> 
-	   <p class='note-content'>{{ note.content }}</p>
-	   <div class='note-read-date'>
-	   	<span class="glyphicon glyphicon-calendar"></span>{{ note.created_at }} |
-	   	<span>평점:</span>{{note.preference}}	 | 
-	  		<span>모두</span> 	
-	  	</div>
-	</div> 
-	<div class='media-right media-top'> 
-	 <a href='#/note/{{note.id}}'> 
-	   <img class='media-object note-book-photo' src='/static/bine/images/book1.jpg' width='120px' height='200px'>      
-	 </a> 
-	</div>
+<div class="panel panel-default note-panel">
+  <div class="panel-heading">
+    <h4 class="panel-title">{{ note.book.title }}</h4>
+  </div>
+  <div class="panel-body note-panel-body">
+  		
+  	<div class='note-info'>
+    	<span class="glyphicon glyphicon-calendar"></span><span>{{ note.created_at | date:"yyyy/MM/dd h:mm a" }}</span> |
+    	<span ng-bind-html="convertPreferenceToHtml(note.preference)"></span> | 
+   		<span>모두</span> |
+   		<span></span>
+   	</div>
+   	<a href='#/note/{{note.id}}'> 
+	   		<img class="note-book-photo" src='/static/bine/images/book1.jpg' align="right" width='120px' height='200px'>      
+		</a>
+    <p class='note-content'>
+		{{ note.content}}
+		
+	</p>
+	
+  </div>
+  <div class="panel-footer">
+  	 <a href='#/note/{{note.id}}' class='note-reply-view'>답글(10/12)</a> | <a href="">좋아요</a> | <a href="">수정</a> | <a href="">삭제</a>
+  </div>
 </div>
 
 <div class="panel panel-default note-reply">

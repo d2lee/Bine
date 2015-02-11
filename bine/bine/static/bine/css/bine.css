@@ -4,15 +4,15 @@ body {
 }
 
 @media screen and (max-width: 400px) {
-	.media-object {
+	.note-book-photo {
 		width:80px;
 		height:auto;
 	}
 }
 
 @media screen and (min-width: 400px) {
-	.media-object {
-		width:100px;
+	.note-book-photo {
+		width:80px;
 		height:auto;
 	}
 }
@@ -159,3 +159,27 @@ body.modal-open {
 .note-new-panel {
 	margin-top: 8px;	
 }
+
+.note-panel > .note-book-photo {
+	padding: 4px;
+}
+
+.note-content {
+	margin-top: 4px;
+	margin-bottom: 4px;
+}
+
+.note-panel > .panel-heading {
+	background-color: white;
+	border-bottom: none;
+}
+
+.note-panel > .panel-footer {
+	background-color: white;
+}
+
+.note-panel > .panel-body {
+	padding-top: 0px;
+	padding-bottom: 0px;
+	margin-bottom: 8px;
+}}
