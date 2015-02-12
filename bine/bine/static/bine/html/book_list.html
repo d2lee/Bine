@@ -1,0 +1,33 @@
+
+<link href="/static/bine/css/book.css" rel="stylesheet">
+    
+<div class="row">
+   	<ul class="col-sm-12 nav nav-pills submenu">
+   		<li role="presentation" class="pull-right"><a href="#/book/new/">친구 추천 도서</a></li>
+	</ul>
+</div>
+
+<div class="panel panel-default book-panel" ng-repeat="book in books">
+  <div class="panel-heading">
+    <h4 class="panel-title">{{book.title}}</h4>
+  </div>
+  <div class="panel-body book-panel-body">
+  	<a href='#/book/{{book.id}}'> 
+	   	<img class="book-photo" src='{{book.photo}}' align="right" width='120px' height='200px'>      
+	</a>
+  	<div class='book-info'>
+  		<span>저자: {{ book.author }}</span> |
+  		<span>출판사: {{ book.publisher }}</span> |
+  		<span>ISBN: {{ book.isbn }}</span> |
+  		<span>출판일: {{ book.pub_date | date:"yyyy/MM/dd" }}</span>
+   	</div>
+    <p class='book-content'>   	
+		{{ book.description | truncate: 256 }}
+	</p>
+  </div>
+  <div class="panel-footer">
+  	 <a href="">친구들 독후감 보기</a> |
+  	 <a href="">독후감 쓰기</a> | 
+  	 <a href="">책 빌리기</a>
+  </div>
+</div>
