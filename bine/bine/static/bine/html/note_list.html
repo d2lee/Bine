@@ -47,8 +47,8 @@
   	<div class='note-info'>
     	<span class="glyphicon glyphicon-time"></span><span>{{ note.created_at | date:"yyyy/MM/dd h:mm a" }}</span> |
     	<span ng-bind-html="convertPreferenceToHtml(note.preference)"></span> | 
-   		<span>{{convertShareToHtml(note.share_to)}}</span>
-   		<span></span>
+   		<span>{{convertShareToHtml(note.share_to)}}</span> |
+   		<span ng-bind-html="showAttachHtml(note.attach)"></span>
    	</div>
     <p class='note-content'>   	
 		{{ note.content | truncate: 128 }}
