@@ -1,6 +1,7 @@
 var bineApp = angular.module('bineApp', [
                              'ngRoute',
                              'ngSanitize',
+                             'angularFileUpload',
                              'bineControllers'
                              ]);
 

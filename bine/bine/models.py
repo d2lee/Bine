@@ -1,10 +1,14 @@
 from django.db import models
 from django.db.models.fields import CharField, DateField,TextField,\
-    DateTimeField, SmallIntegerField
+    DateTimeField
 from django.db.models.fields.related import ManyToManyField, ForeignKey
 from django.db.models.fields.files import ImageField, FileField
 from django.contrib.auth.models import BaseUserManager, AbstractBaseUser,\
     PermissionsMixin
+from time import strftime, gmtime;
+import os.path
+from uuid import uuid4
+
 
 class UserManager(BaseUserManager):
     def create_user(self, username, password, is_staff, is_superuser, **kwargs):
@@ -142,8 +146,13 @@ class Book(models.Model):
     
     class Meta:
         db_table = 'books'
-        
 
+def get_file_name(instance, filename):
+    time = gmtime()
+    path = strftime("note/%Y/%m/%d/", time)
+    new_file_name = strftime("%Y%m%d-%X", time) + "-" + instance.user.username + os.path.splitext(filename)[1]
+    return os.path.join(path, new_file_name)
+    
 class BookNote(models.Model):
     user = ForeignKey(User, related_name='booknotes')
     book = ForeignKey(Book, related_name='booknotes')
@@ -153,7 +162,7 @@ class BookNote(models.Model):
     
     content = TextField(blank=True)
     preference = CharField(max_length=1, blank=False, default=3)
-    attach = FileField(upload_to='notes/%Y/%m/%d', null=True)
+    attach = ImageField(upload_to=get_file_name, null=True)
     
     SHARE_CHOICES = (
         ('P', '개인'),
@@ -165,8 +174,12 @@ class BookNote(models.Model):
     updated_on = DateTimeField(auto_now=True)
     created_at = DateTimeField(auto_now_add=True)
     
-    def to_json(self):
-        json_data = {'id': self.id, 
+    def to_json(self):       
+        json_data = {}
+        if self.attach:
+            json_data.update({'attach':  self.attach.url})
+            
+        json_data.update({'id': self.id, 
                     'user': {'id': self.user.id,
                              'username': self.user.username,
                              'fullname': self.user.fullname},                  
@@ -182,9 +195,11 @@ class BookNote(models.Model):
                     'replies_count': self.replies.count(),
                     'created_at': self.created_at,
                     'updated_on': self.updated_on,
-                    }
+                    })
         return json_data
     
+    
+
     def __str__(self):
         return self.user.fullname + " - " + self.book.title
     

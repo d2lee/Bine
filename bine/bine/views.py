@@ -4,6 +4,8 @@ from django.http.response import JsonResponse, HttpResponseBadRequest,\
 from django.views.generic.base import View
 from bine.serializers import BookNoteWriteSerializer
 import json
+from rest_framework.views import APIView
+from bine.forms import BookNoteForm
 
 def get_current_user(request):
     if request.user:
@@ -27,22 +29,25 @@ class BookList(View):
         json_text = list(map(lambda x: x.to_json(), books.all()))
         return JsonResponse(json_text, safe=False)
             
-class BookNoteList(View):
+class BookNoteList(APIView):
     def get(self, request):
         notes = BookNote.objects.all()
         json_text = list(map(lambda x: x.to_json(), notes.all()))
         
         return JsonResponse(json_text, safe=False)
     
-    def post(self, request):    
-        json_data =  json.loads(request.body.decode('utf-8'))
+    def post(self, request):
+        form = BookNoteForm(request.POST, request.FILES)
+        if form.is_valid():
+            note = form.save();
+        """
+        json_data =  request.data
                             
         serializer = BookNoteWriteSerializer(data=json_data)
         if not serializer.is_valid():
             return HttpResponseBadRequest()
         
         note = serializer.save()
-        """
         note.user = get_current_user(request)
         note.book = get_book(json_data.get('book_id'))
         note.read_date_from = json_data.get('read_date_from')
@@ -52,7 +57,7 @@ class BookNoteList(View):
         note.content = json_data.get('content')
         note.save()
         """        
-        if note:
+        if form:
             return JsonResponse(note.to_json(), safe=False)
     
 class BookNoteDetail(View):

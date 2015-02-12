@@ -2,6 +2,8 @@ var bineControllers = angular.module('bineControllers', []);
 
 bineControllers.controller('NoteListControl', ['$rootScope', '$scope', '$sce', '$http',
   function ($rootScope, $scope, $sce, $http) {
+		$rootScope.note = null;
+	
 		$http.get('/note/').success(function(data) {
 		$scope.notes = data;
 		
@@ -24,8 +26,7 @@ bineControllers.controller('NoteListControl', ['$rootScope', '$scope', '$sce', '
 			var url = "/note/" + note.id + "/";
 			$http.delete(url).success(function(data){
 				alert('삭제되었습니다.');
-				$scope.notes.splice(index,1)
-				
+				$scope.notes.splice(index,1);
 			});
 		}
 		
@@ -50,6 +51,14 @@ bineControllers.controller('NoteListControl', ['$rootScope', '$scope', '$sce', '
 				break;
 			}
 			return text;
+		}
+		
+		$scope.showAttachHtml = function(attach_url) {
+			var html = "";
+			if (attach_url) {
+				html = "<a href='" + attach_url + "'>첨부파일(1)</a>";
+			}
+			return $sce.trustAsHtml(html);
 		}
     });
   }]);
@@ -151,8 +160,8 @@ bineControllers.controller('NoteDetailControl', ['$scope', '$routeParams', '$htt
 	}
 }]);
 
-bineControllers.controller('NoteNewControl', ['$rootScope', '$scope', '$sce', '$http',
-    function ($rootScope, $scope, $sce, $http) {
+bineControllers.controller('NoteNewControl', ['$rootScope', '$scope', '$sce', '$upload', '$http', 
+    function ($rootScope, $scope, $sce, $upload, $http) {
 		
 		if ($rootScope.note == null) {
 			var today = new Date();
@@ -187,10 +196,11 @@ bineControllers.controller('NoteNewControl', ['$rootScope', '$scope', '$sce', '$
 					'user': note.user.id,
 					'book': note.book.id,
 					'content': note.content,
-					'read_date_from': getFormattedDate(note.read_date_from),
-					'read_date_to': getFormattedDate(note.read_date_to),
+					'read_date_from': $scope.format_date(note.read_date_from),
+					'read_date_to': $scope.format_date(note.read_date_to),
 					'preference': note.preference,
 					'share_to': note.share_to,
+					'attach': note.attach, 
 			};
 			
 			var url = '/note/';
@@ -199,14 +209,23 @@ bineControllers.controller('NoteNewControl', ['$rootScope', '$scope', '$sce', '$
 				url = url + $scope.note.id + "/";
 			}
 			
-			
-			$http.post(url, data).
-			  success(function(data, status, headers, config) {
-				  alert('성공적으로 저장되었습니다.')
-			  }).
-			  error(function(data, status, headers, config) {
-			      alert("error");
-			  });
+			$scope.upload(url, data, $scope.note.attach)
+			/*
+			var attach = $scope.note.attach;
+			if (attach) {
+				$scope.upload(url, attach, data);
+			}
+			else {
+				$http.post(url, data).
+				  success(function(data, status, headers, config) {
+					  alert('성공적으로 저장되었습니다.');
+					  
+				  }).
+				  error(function(data, status, headers, config) {
+				      alert("error");
+				  });
+			}
+			*/
 		}
 		
 		$scope.set_preference = function(pref) {			
@@ -245,10 +264,11 @@ bineControllers.controller('NoteNewControl', ['$rootScope', '$scope', '$sce', '$
 		
 		$scope.select_book = function(book) {
 			$scope.note.book = book;
+			$scope.book_title = book.title;
 			$('#book_search_modal').modal('hide');
 		}
 		
-		function getFormattedDate(date) {
+		$scope.format_date = function(date) {
 			var year = date.getFullYear();
 			var month = (1 + date.getMonth()).toString();
 			month = month.length > 1 ? month : '0' + month;
@@ -256,5 +276,21 @@ bineControllers.controller('NoteNewControl', ['$rootScope', '$scope', '$sce', '$
 			day = day.length > 1 ? day : '0' + day;
 			return year + '-' + month + '-' + day;
 		}
+		
+		$scope.upload = function (url, data, file) {
+	        $upload.upload({
+                    url: url,
+                    method: 'POST',
+                    fields: data,
+                    fileFormDataName: 'attach',
+                    file: file
+                }).progress(function (evt) {
+                    var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
+                    //console.log('progress: ' + progressPercentage + '% ' + evt.config.file.name);
+                }).success(function (data, status, headers, config) {
+                	alert('성공적으로 저장되었습니다.');
+                    //console.log('file ' + config.file.name + 'uploaded. Response: ' + data);
+                });
+	    };
 	}
 ]);
