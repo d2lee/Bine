@@ -20,11 +20,6 @@ body {
 }
 */
 
-.container {
-	padding-left: 4px;
-	padding-right: 4px;
-}
-
 
 /* prevent body from scrolling when modal popup */
 body.modal-open {
