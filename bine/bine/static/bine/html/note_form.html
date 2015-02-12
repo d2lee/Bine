@@ -20,7 +20,7 @@
 		</div>
 		<div class="row">
 		  <div class="col-xs-4 col-sm-3 col-md-2 col-lg-2" ng-repeat="book in books">
-		     <img class="note-book-photo" src="/static/bine/images/book1.jpg" alt="..." ng-click="select_book(book)">
+		     <img class="book-photo" src="{{book.photo}}" alt="{{book.title}}" ng-click="select_book(book)">
 		      <div class="caption">
 		        <p>{{book.title | truncate: 10}} / {{book.author}}</p>
 		      </div>

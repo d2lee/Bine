@@ -6,12 +6,13 @@
 	  <div class="panel-body note-panel-body">		
 	  	<div class='note-info'>
 	    	<span class="glyphicon glyphicon-time"></span><span>{{ note.created_at | date:"yyyy/MM/dd h:mm a" }}</span> |
-	    	<span ng-bind-html="convertPreferenceToHtml(note.preference)"></span> | 
-	   		<span>{{ convertShareToHtml(note.share_to)}}</span>
+	    	<span ng-bind-html="make_html_preference(note.preference)"></span> | 
+	   		<span>{{make_html_share(note.share_to)}}</span> |
+	   		<span ng-bind-html="make_html_attach(note.attach)"></span>
 	   		<span></span>
 	   	</div>
 	   	<a href='#/note/{{note.id}}'> 
-		   	<img class="note-book-photo" src='/static/bine/images/book1.jpg' align="right" width='120px' height='200px'>      
+		   	<img class="book-photo" src='{{note.book.photo}}' align="right" width='120px' height='200px'>      
 		</a>
 	    <p class='note-content'>
 			{{ note.content}}

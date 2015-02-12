@@ -4,19 +4,21 @@ body {
   font-family: AppleSDGothicNeo-Light, sans-serif-light;
 }
 
+/*
 @media screen and (max-width: 400px) {
-	.note-book-photo {
-		width:80px;
-		height:auto;
+	.book-photo {
+		width:auto;
+		height:80px;
 	}
 }
 
 @media screen and (min-width: 400px) {
-	.note-book-photo {
-		width:80px;
-		height:auto;
+	.book-photo {
+		width:auto;
+		height:80px;
 	}
 }
+*/
 
 .container {
 	padding-left: 4px;
@@ -169,8 +171,10 @@ body.modal-open {
 	font-size: 9pt;
 	color: #595959;
 }
-.note-panel > .note-book-photo {
+.note-panel .book-photo {
 	padding: 4px;
+	width:auto;
+	height:80px;
 }
 
 .note-panel > .note-panel-body >.note-content {
@@ -201,6 +205,11 @@ body.modal-open {
 	margin-bottom: 8px;
 }
 
+.note-detail .book-photo {
+	width:80px;
+	height:auto;
+}
+
 .preference_active {
 	font-color: red;
 }
@@ -227,4 +236,9 @@ body.modal-open {
 
 .book-search-modal .caption {
 	font-size: 8pt;
+}
+
+.book-search-modal .book-photo {
+	height: 80px;
+	width: auto;
 }

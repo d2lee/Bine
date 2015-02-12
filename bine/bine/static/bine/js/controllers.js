@@ -1,13 +1,12 @@
-var bineControllers = angular.module('bineControllers', []);
-
 bineControllers.controller('NoteListControl', ['$rootScope', '$scope', '$sce', '$http',
   function ($rootScope, $scope, $sce, $http) {
 		$rootScope.note = null;
-	
-		$http.get('/note/').success(function(data) {
-		$scope.notes = data;
 		
-		$scope.convertPreferenceToHtml = function (preference) {
+		$http.get('/note/').success(function(data) {
+			$scope.notes = data;
+		});
+	
+		$scope.make_html_preference = function (preference) {
 			var spanHtml = "";
 			
 			for (i = 0; i < preference; i++ ) {
@@ -37,7 +36,7 @@ bineControllers.controller('NoteListControl', ['$rootScope', '$scope', '$sce', '
 			});
 		}
 		
-		$scope.convertShareToHtml = function(share_to) {
+		$scope.make_html_share = function(share_to) {
 			var text = "";
 			switch (share_to) {
 			case 'P': 
@@ -53,14 +52,13 @@ bineControllers.controller('NoteListControl', ['$rootScope', '$scope', '$sce', '
 			return text;
 		}
 		
-		$scope.showAttachHtml = function(attach_url) {
+		$scope.make_html_attach = function(attach_url) {
 			var html = "";
 			if (attach_url) {
 				html = "<a href='" + attach_url + "'>첨부파일(1)</a>";
 			}
 			return $sce.trustAsHtml(html);
 		}
-    });
   }]);
 
 bineControllers.controller('NoteDetailControl', ['$scope', '$routeParams', '$http', 
@@ -143,7 +141,7 @@ bineControllers.controller('NoteDetailControl', ['$scope', '$routeParams', '$htt
 		$('#reply_modal').modal('show');
 	}
 	
-	$scope.convertShareToHtml = function(share_to) {
+	$scope.make_html_share = function(share_to) {
 		var text = "";
 		switch (share_to) {
 		case 'P': 
@@ -249,7 +247,7 @@ bineControllers.controller('NoteNewControl', ['$rootScope', '$scope', '$sce', '$
 				return;
 			}
 			else {
-				var url = "/book/?title=" + $scope.book_title;
+				var url = "/book/search/?title=" + $scope.book_title;
 				
 				$http.get(url).
 				  success(function(data, status, headers, config) {

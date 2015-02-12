@@ -18,20 +18,27 @@ def get_book(request):
     book = Book.objects.get(pk=request.POST['book'])
     return book
 
-class BookList(View):
+class BookSearch(APIView):
     def get(self, request):
-        title = request.GET['title']
+        title = request.GET.get('title', None)
         if title is None:
             return HttpResponseNotAllowed(request);
           
-        books = Book.objects.filter(title__icontains=title)
+        books = Book.objects.filter(title__icontains=title)[:10]
+        
+        json_text = list(map(lambda x: x.to_json(), books.all()))
+        return JsonResponse(json_text, safe=False)
+    
+class BookList(APIView):
+    def get(self, request):
+        books = Book.objects.all()[:10]
         
         json_text = list(map(lambda x: x.to_json(), books.all()))
         return JsonResponse(json_text, safe=False)
             
 class BookNoteList(APIView):
     def get(self, request):
-        notes = BookNote.objects.all()
+        notes = BookNote.objects.all()[:20]
         json_text = list(map(lambda x: x.to_json(), notes.all()))
         
         return JsonResponse(json_text, safe=False)
@@ -120,7 +127,7 @@ class BookNoteReplyList(View):
         
         json_data =  json.loads(request.body.decode('utf-8'))
         reply = BookNoteReply()
-        reply.user = get_current_user()
+        reply.user = get_current_user(request)
         reply.note = BookNote.objects.get(pk=note_id)
         reply.content = json_data.get('content')
         reply.save()

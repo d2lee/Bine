@@ -2,14 +2,17 @@ from django.db import models
 from django.db.models.fields import CharField, DateField,TextField,\
     DateTimeField
 from django.db.models.fields.related import ManyToManyField, ForeignKey
-from django.db.models.fields.files import ImageField, FileField
+from django.db.models.fields.files import ImageField
 from django.contrib.auth.models import BaseUserManager, AbstractBaseUser,\
     PermissionsMixin
 from time import strftime, gmtime;
 import os.path
-from uuid import uuid4
 
 
+# common utility functions
+
+
+# class definitions
 class UserManager(BaseUserManager):
     def create_user(self, username, password, is_staff, is_superuser, **kwargs):
         if not username:
@@ -140,6 +143,10 @@ class Book(models.Model):
         json_data = {'id': self.id, 
                     'title': self.title,
                     'author': self.author,
+                    'isbn': self.isbn,
+                    'publisher': self.publisher,
+                    'pub_date': self.pub_date,
+                    'description': self.description,
                     'photo': self.photo.url,
                     }
         return json_data;
