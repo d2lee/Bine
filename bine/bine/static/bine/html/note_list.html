@@ -1,5 +1,5 @@
 <div class="row">
-   	<ul class="col-sm-12 nav nav-pills submenu">
+   	<ul class="col-xs-12 col-sm-12 col-md-12 col-lg-12 nav nav-pills submenu">
    		<li role="presentation" class="dropdown  pull-right">
     <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-expanded="false">
      정렬 <span class="caret"></span>
@@ -23,7 +23,7 @@
 		<li role="presentation" class="pull-right"><a href="#/note/new/">독서노트쓰기</a></li>	
 	</ul>
  </div>
-		 
+
 <div class="alert status-box alert-dismissible fade in" role="alert">
 	<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
 	<h4><span class="glyphicon glyphicon-info-sign"></span> 알림</h4>
@@ -36,28 +36,31 @@
 	</div>
 </div>
 
-<div class="panel panel-default note-panel" ng-repeat="note in notes">
-  <div class="panel-heading">
-    <h4 class="panel-title">{{ note.book.title }}</h4>
-  </div>
-  <div class="panel-body note-panel-body">
-  	<a href='#/note/{{note.id}}'> 
-	   		<img class="book-photo" src='{{note.book.photo}}' align="right" width='120px' height='200px'>      
-		</a>
-  	<div class='note-info'>
-    	<span class="glyphicon glyphicon-time"></span><span>{{ note.created_at | date:"yyyy/MM/dd h:mm a" }}</span> |
-    	<span ng-bind-html="make_html_preference(note.preference)"></span> | 
-   		<span>{{make_html_share(note.share_to)}}</span> |
-   		<span ng-bind-html="make_html_attach(note.attach)"></span>
-   	</div>
-    <p class='note-content'>   	
-		{{ note.content | truncate: 256 }}
-	</p>
-  </div>
-  <div class="panel-footer">
-  	 <a href="" ng-click="update_likeit(note)"><span class="glyphicon glyphicon-heart"></span>좋아요({{note.likeit}})</a> | 
-  	 <a href='#/note/{{note.id}}' class='note-reply-view'>답글({{note.replies_count}})</a> | 
-  	 <a href="" ng-click="edit_note(note)">수정</a> | 
-  	 <a href="" ng-click="delete_note(note, $index)">삭제</a>
-  </div>
+<div class="row note-list-row">		 
+	<div class="col-xs-12 panel panel-default note-panel" ng-repeat="note in notes">
+	  <div class="panel-heading">
+	    <h4 class="panel-title">{{ note.book.title }}</h4>
+	  </div>
+	  <div class="panel-body note-panel-body">
+	  	<a href='#/note/{{note.id}}'> 
+		   		<img class="book-photo" ng-src="{{note.book.photo}}" align="right" width='120px' height='200px'>      
+			</a>
+	  	<div class='note-info'>
+	    	<span class="glyphicon glyphicon-time"></span><span>{{ note.created_at | date:"yyyy/MM/dd h:mm a" }}</span> |
+	    	<span ng-bind-html="make_html_preference(note.preference)"></span> | 
+	   		<span>{{make_html_share(note.share_to)}}</span> |
+	   		<span ng-bind-html="make_html_attach(note.attach)"></span>
+	   	</div>
+	    <p class='note-content'>   	
+			{{ note.content | truncate: 256 }}
+		</p>
+	  </div>
+	  <div class="panel-footer">
+	  	 <a href="" ng-click="update_likeit(note)"><span class="glyphicon glyphicon-heart"></span>좋아요({{note.likeit}})</a> | 
+	  	 <a href='#/note/{{note.id}}' class='note-reply-view'>답글({{note.replies_count}})</a> | 
+	  	 <a href="" ng-click="edit_note(note)">수정</a> | 
+	  	 <a href="" ng-click="delete_note(note, $index)">삭제</a>
+	  </div>
+	</div>
+</div>
 </div>

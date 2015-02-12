@@ -12,7 +12,7 @@
 	   		<span></span>
 	   	</div>
 	   	<a href='#/note/{{note.id}}'> 
-		   	<img class="book-photo" src='{{note.book.photo}}' align="right" width='120px' height='200px'>      
+		   	<img class="book-photo" ng-src="{{note.book.photo}}" align="right" width='120px' height='200px'>      
 		</a>
 	    <p class='note-content'>
 			{{ note.content}}
@@ -25,7 +25,7 @@
 	  </div>
 	</div>
 
-	<div class="panel panel-default note-reply">
+	<div class="panel panel-default note-reply-panel">
 	  <!-- Default panel contents -->
 	  <div class="panel-heading"><span>답글</span> <a class="pull-right" href="" ng-click="create_reply()">답글 작성</a></div>
 	  <ul class="list-group">
