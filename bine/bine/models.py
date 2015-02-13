@@ -14,7 +14,7 @@ import os.path
 
 # class definitions
 class UserManager(BaseUserManager):
-    def create_user(self, username, password, is_staff, is_superuser, **kwargs):
+    def create_user(self, username, password, is_staff = False, is_superuser = False, **kwargs):
         if not username:
             raise ValueError('Users must have a valid authentication name.')
         

@@ -4,12 +4,13 @@ from django.contrib import admin
 from rest_framework.urlpatterns import format_suffix_patterns
 from bine.views import BookList, BookNoteList, BookNoteDetail,\
     BookNoteLikeItUpdate, BookNoteReplyDetail, BookNoteReplyList, BookSearch,\
-    UserAuth
+    Login, Register
 from django.views.generic.base import RedirectView
 
 urlpatterns = [
-    # url(r'^admin/', include(admin.site.urls)),
-    url(r'^auth/login', UserAuth.as_view()),
+    url(r'^admin/', include(admin.site.urls)),
+    url(r'^auth/login/', Login.as_view()),
+    url(r'^auth/register/', Register.as_view()),
     url(r'^book/$', BookList.as_view()),
     url(r'^book/search/$', BookSearch.as_view()),
     url(r'^note/$', BookNoteList.as_view()),

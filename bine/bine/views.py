@@ -9,18 +9,11 @@ from rest_framework.status import HTTP_403_FORBIDDEN, HTTP_400_BAD_REQUEST,\
     HTTP_200_OK
 from rest_framework.response import Response
 
-def get_current_user(request):
-    if request.user:
-        user = request.user
-    else: 
-        user = User.objects.get(pk=2)
-    return user
-
 def get_book(request):
     book = Book.objects.get(pk=request.POST['book'])
     return book
 
-class UserAuth(APIView):
+class Login(APIView):
     def post(self, request):
         username = request.data['username']
         password = request.data['password']
@@ -35,6 +28,32 @@ class UserAuth(APIView):
                 return Response(status=HTTP_200_OK)
         
         return Response(status=HTTP_403_FORBIDDEN)
+    
+class Register(APIView):
+    def post(self, request):
+        username = request.data['username']
+        fullname = request.data['fullname']
+        birthday = request.data['birthday']
+        sex = request.data['sex']
+        email = request.data['email']
+        password = request.data['password']
+        
+        # validation code is required here
+        
+        user = User.objects.create_user(username=username, 
+                                 fullname=fullname,
+                                 birthday=birthday,
+                                 sex=sex,
+                                 email = email,
+                                 password=password)
+        if user is not None:
+            user = authenticate(username=username, password=password)
+            if (user is not None) and user.is_active:
+                login(request, user)
+                return Response(status=HTTP_200_OK)
+        
+        return Response(status=HTTP_403_FORBIDDEN)
+    
 
 class BookSearch(APIView):
     def get(self, request):
@@ -100,8 +119,8 @@ class BookNoteDetail(APIView):
 
 class BookNoteLikeItUpdate(APIView):
     def post(self, request, note_id):
-        user = get_current_user(request)
-        note = BookNote.objects.get(pk=note_id);
+        user = request.user
+        note = BookNote.objects.get(pk=note_id)
         
         if user and note:
             likeit = BookNoteLikeit()
@@ -127,7 +146,7 @@ class BookNoteReplyList(APIView):
             return HttpResponseBadRequest(request);
         
         reply = BookNoteReply()
-        reply.user = get_current_user(request)
+        reply.user = request.user
         reply.note = BookNote.objects.get(pk=note_id)
         reply.content = request.data.get('content')
         reply.save()
