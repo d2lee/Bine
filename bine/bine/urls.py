@@ -18,7 +18,7 @@ urlpatterns = [
     url(r'^note/(?P<note_id>[0-9]+)/reply/$', BookNoteReplyList.as_view()),
     url(r'^note/(?P<note_id>[0-9]+)/reply/(?P<reply_id>[0-9]+)/$', BookNoteReplyDetail.as_view()),
     url(r'^note/(?P<note_id>[0-9]+)/likeit/', BookNoteLikeItUpdate.as_view()),
-    url(r'^.*$', RedirectView.as_view(url='/static/bine/html/bine.html')),
+    #url(r'^.*$', RedirectView.as_view(url='/static/bine/html/bine.html')),
     
 ]
 

@@ -8,11 +8,11 @@
 					class="icon-bar"></span> <span class="icon-bar"></span> <span
 					class="icon-bar"></span>
 			</button>
-			<a class="navbar-brand" href="/">Bine</a>
+			<a class="navbar-brand" href="#/note/">Bine</a>
 		</div>
 		<div id="navbar" class="navbar-collapse collapse">
 			<ul class="nav navbar-nav">
-				<li><a href="/"></a></li>
+				<li><a href="#/note/">독서노트</a></li>
 				<li><a href="#/book/">도서추천</a></li>
 				<li><a href="#">친구찾기</a></li>
 			</ul>
@@ -28,7 +28,7 @@
 					</div>
 				</div>
 				<button class='btn btn-default'>
-					<span class="glyphicon glyphicon-user" aria-hidden="true"></span>
+					<a href="#/login/"><span class="glyphicon glyphicon-user" aria-hidden="true"></span></a>
 				</button>
 			</form>
 		</div>
@@ -76,7 +76,7 @@
 		<span class="glyphicon glyphicon-info-sign"></span> 알림
 	</h4>
 	<p>
-		이도윤님은 이번 주에 <strong>10</strong>권의 책을 읽었습니다.
+		{{user.fullname}} 님은 이번 주에 <strong>10</strong>권의 책을 읽었습니다.
 	</p>
 	<p>
 		목표한 <strong>100</strong>권까지는 이제 <strong>50</strong>권 남았습니다.

@@ -1,6 +1,9 @@
 bineControllers.controller('NoteListControl', ['$rootScope', '$scope', '$sce', '$http',
   function ($rootScope, $scope, $sce, $http) {
 		$rootScope.note = null;
+		$scope.user = $rootScope.user;
+		if (!$scope.user)
+			location.href = "#/login/";
 		
 		$http.get('/note/').success(function(data) {
 			$scope.notes = data;
@@ -64,6 +67,9 @@ bineControllers.controller('NoteListControl', ['$rootScope', '$scope', '$sce', '
 bineControllers.controller('NoteDetailControl', ['$scope', '$routeParams', '$http', 
   function ($scope, $routeParams, $http) {
 	var note_id = $routeParams.note_id;
+	$scope.user = $rootScope.user;
+	if (!$scope.user)
+		location.href = "#/login/";
 	
 	$scope.note_id = note_id;
 	$scope.new_reply_content = "";
@@ -160,6 +166,9 @@ bineControllers.controller('NoteDetailControl', ['$scope', '$routeParams', '$htt
 
 bineControllers.controller('NoteNewControl', ['$rootScope', '$scope', '$sce', '$upload', '$http', 
     function ($rootScope, $scope, $sce, $upload, $http) {
+		$scope.user = $rootScope.user;
+		if (!$scope.user)
+			location.href = "#/login/";
 		
 		if ($rootScope.note == null) {
 			var today = new Date();

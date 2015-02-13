@@ -4,7 +4,7 @@ from rest_framework.views import APIView
 from bine.forms import BookNoteForm
 from django.http.response import JsonResponse, HttpResponseBadRequest,\
     HttpResponseNotAllowed
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, logout
 from rest_framework.status import HTTP_403_FORBIDDEN, HTTP_400_BAD_REQUEST,\
     HTTP_200_OK
 from rest_framework.response import Response
@@ -21,11 +21,14 @@ class Login(APIView):
         if not (username and password):
             return JsonResponse(status=HTTP_400_BAD_REQUEST)
         
+        if request.user:
+            logout(request)
+            
         user = authenticate(username=username, password=password)
         if user is not None:
             if user.is_active:
                 login(request, user)
-                return Response(status=HTTP_200_OK)
+                return Response(user.to_json(), status=HTTP_200_OK)
         
         return Response(status=HTTP_403_FORBIDDEN)
     
@@ -50,7 +53,7 @@ class Register(APIView):
             user = authenticate(username=username, password=password)
             if (user is not None) and user.is_active:
                 login(request, user)
-                return Response(status=HTTP_200_OK)
+                return Response(user.to_json(), status=HTTP_200_OK)
         
         return Response(status=HTTP_403_FORBIDDEN)
     
@@ -75,7 +78,8 @@ class BookList(APIView):
             
 class BookNoteList(APIView):
     def get(self, request):
-        notes = BookNote.objects.all()[:20]
+        notes = request.user.booknotes.all()
+        #notes = BookNote.objects.all()[:20]
         json_text = list(map(lambda x: x.to_json(), notes.all()))
         
         return JsonResponse(json_text, safe=False)

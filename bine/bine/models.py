@@ -71,6 +71,20 @@ class User(AbstractBaseUser, PermissionsMixin):
     USERNAME_FIELD = 'username'
     REQUIRED_FIELDS = ['email', 'fullname', 'birthday', 'sex']
     
+    def to_json(self):
+        json_data = {}
+        if self.photo:
+            json_data.update({'photo':  self.photo.url})
+            
+        json_data.update({'id': self.id, 
+                    'username': self.username,
+                    'fullname': self.fullname,
+                    'birthday': self.birthday,
+                    'sex': self.sex,
+                    'tagline': self.tagline,
+                    })
+        return json_data;
+    
     def __str__(self):
         return self.username
     
@@ -140,15 +154,18 @@ class Book(models.Model):
         return self.title
     
     def to_json(self):
-        json_data = {'id': self.id, 
+        json_data = {}
+        if self.photo:
+            json_data.update({'photo':  self.photo.url})
+            
+        json_data.update({'id': self.id, 
                     'title': self.title,
                     'author': self.author,
                     'isbn': self.isbn,
                     'publisher': self.publisher,
                     'pub_date': self.pub_date,
                     'description': self.description,
-                    'photo': self.photo.url,
-                    }
+                    })
         return json_data;
     
     class Meta:
