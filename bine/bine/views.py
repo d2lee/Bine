@@ -4,6 +4,10 @@ from rest_framework.views import APIView
 from bine.forms import BookNoteForm
 from django.http.response import JsonResponse, HttpResponseBadRequest,\
     HttpResponseNotAllowed
+from django.contrib.auth import authenticate, login
+from rest_framework.status import HTTP_403_FORBIDDEN, HTTP_400_BAD_REQUEST,\
+    HTTP_200_OK
+from rest_framework.response import Response
 
 def get_current_user(request):
     if request.user:
@@ -15,6 +19,22 @@ def get_current_user(request):
 def get_book(request):
     book = Book.objects.get(pk=request.POST['book'])
     return book
+
+class UserAuth(APIView):
+    def post(self, request):
+        username = request.data['username']
+        password = request.data['password']
+        
+        if not (username and password):
+            return JsonResponse(status=HTTP_400_BAD_REQUEST)
+        
+        user = authenticate(username=username, password=password)
+        if user is not None:
+            if user.is_active:
+                login(request, user)
+                return Response(status=HTTP_200_OK)
+        
+        return Response(status=HTTP_403_FORBIDDEN)
 
 class BookSearch(APIView):
     def get(self, request):

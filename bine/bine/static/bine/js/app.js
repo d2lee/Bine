@@ -10,7 +10,15 @@ var bineControllers = angular.module('bineControllers', []);
 bineApp.config(['$routeProvider',
                 function($routeProvider) {
                   $routeProvider.
-                    when('/note/', {
+                    when('/login/', {
+                      templateUrl: '/static/bine/html/login.html',
+                      controller: 'UserAuthControl'
+                    }).
+                    when('/register/', {
+                        templateUrl: '/static/bine/html/register.html',
+                        controller: 'UserAuthControl'
+                      }).
+                  	when('/note/', {
                       templateUrl: '/static/bine/html/note_list.html',
                       controller: 'NoteListControl'
                     }).
@@ -25,13 +33,9 @@ bineApp.config(['$routeProvider',
                     when('/book/', {
                         templateUrl: '/static/bine/html/book_list.html',
                         controller: 'bookListControl'
-	                }). /*
-	                when('/book/:book_id/', {
-	                    templateUrl: '/static/bine/html/book_detail.html',
-	                    controller: 'bookDetailControl'
-	                }). */
-                    otherwise({
-                      redirectTo: '/note/'
+	                }).
+	                otherwise({
+                      redirectTo: '/login/'
                     });
                 }]);
 

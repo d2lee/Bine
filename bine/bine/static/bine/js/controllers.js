@@ -177,7 +177,8 @@ bineControllers.controller('NoteNewControl', ['$rootScope', '$scope', '$sce', '$
 			$scope.note = $rootScope.note;
 			$scope.book_title = $scope.note.book.title;
 			
-			// convert string date to date object to initialize input date object.
+			// convert string date to date object to initialize input date
+			// object.
 			$scope.note.read_date_from = new Date($scope.note.read_date_from);
 			$scope.note.read_date_to = new Date($scope.note.read_date_to);
 		}
@@ -209,21 +210,14 @@ bineControllers.controller('NoteNewControl', ['$rootScope', '$scope', '$sce', '$
 			
 			$scope.upload(url, data, $scope.note.attach)
 			/*
-			var attach = $scope.note.attach;
-			if (attach) {
-				$scope.upload(url, attach, data);
-			}
-			else {
-				$http.post(url, data).
-				  success(function(data, status, headers, config) {
-					  alert('성공적으로 저장되었습니다.');
-					  
-				  }).
-				  error(function(data, status, headers, config) {
-				      alert("error");
-				  });
-			}
-			*/
+			 * var attach = $scope.note.attach; if (attach) { $scope.upload(url,
+			 * attach, data); } else { $http.post(url, data).
+			 * success(function(data, status, headers, config) { alert('성공적으로
+			 * 저장되었습니다.');
+			 * 
+			 * }). error(function(data, status, headers, config) {
+			 * alert("error"); }); }
+			 */
 		}
 		
 		$scope.set_preference = function(pref) {			
@@ -284,10 +278,12 @@ bineControllers.controller('NoteNewControl', ['$rootScope', '$scope', '$sce', '$
                     file: file
                 }).progress(function (evt) {
                     var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
-                    //console.log('progress: ' + progressPercentage + '% ' + evt.config.file.name);
+                    // console.log('progress: ' + progressPercentage + '% ' +
+					// evt.config.file.name);
                 }).success(function (data, status, headers, config) {
                 	alert('성공적으로 저장되었습니다.');
-                    //console.log('file ' + config.file.name + 'uploaded. Response: ' + data);
+                    // console.log('file ' + config.file.name + 'uploaded.
+					// Response: ' + data);
                 });
 	    };
 	}
