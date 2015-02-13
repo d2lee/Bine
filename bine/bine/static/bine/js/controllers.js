@@ -64,8 +64,8 @@ bineControllers.controller('NoteListControl', ['$rootScope', '$scope', '$sce', '
 		}
   }]);
 
-bineControllers.controller('NoteDetailControl', ['$scope', '$routeParams', '$http', 
-  function ($scope, $routeParams, $http) {
+bineControllers.controller('NoteDetailControl', ['$rootScope', '$scope', '$routeParams', '$http', 
+  function ($rootScope, $scope, $routeParams, $http) {
 	var note_id = $routeParams.note_id;
 	$scope.user = $rootScope.user;
 	if (!$scope.user)
