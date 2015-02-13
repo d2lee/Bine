@@ -5,7 +5,6 @@ from bine.forms import BookNoteForm
 from django.http.response import JsonResponse, HttpResponseBadRequest,\
     HttpResponseNotAllowed
 
-
 def get_current_user(request):
     if request.user:
         user = request.user
