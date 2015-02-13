@@ -1,11 +1,10 @@
 from bine.models import BookNote, BookNoteReply, User, Book, BookNoteLikeit
-from django.http.response import JsonResponse, HttpResponseBadRequest,\
-    HttpResponseNotAllowed
-from django.views.generic.base import View
 from bine.serializers import BookNoteWriteSerializer
-import json
 from rest_framework.views import APIView
 from bine.forms import BookNoteForm
+from django.http.response import JsonResponse, HttpResponseBadRequest,\
+    HttpResponseNotAllowed
+
 
 def get_current_user(request):
     if request.user:
@@ -47,27 +46,11 @@ class BookNoteList(APIView):
         form = BookNoteForm(request.POST, request.FILES)
         if form.is_valid():
             note = form.save();
-        """
-        json_data =  request.data
-                            
-        serializer = BookNoteWriteSerializer(data=json_data)
-        if not serializer.is_valid():
-            return HttpResponseBadRequest()
         
-        note = serializer.save()
-        note.user = get_current_user(request)
-        note.book = get_book(json_data.get('book_id'))
-        note.read_date_from = json_data.get('read_date_from')
-        note.read_date_to = json_data.get('read_date_to')
-        note.preference = json_data.get('preference')
-        note.share_to = json_data.get('share_to')
-        note.content = json_data.get('content')
-        note.save()
-        """        
         if form:
             return JsonResponse(note.to_json(), safe=False)
     
-class BookNoteDetail(View):
+class BookNoteDetail(APIView):
     def get(self, request, pk):
         note = BookNote.objects.get(pk=pk)
         json_text = note.to_json();
@@ -78,8 +61,7 @@ class BookNoteDetail(View):
         if note is None:
             return HttpResponseBadRequest()
         
-        json_data = json.loads(request.body.decode('utf-8'))
-        serializer = BookNoteWriteSerializer(instance = note, data=json_data)
+        serializer = BookNoteWriteSerializer(instance = note, data=request.data)
         if not serializer.is_valid():
             return HttpResponseBadRequest(serializer.errors())
         
@@ -97,7 +79,7 @@ class BookNoteDetail(View):
         
         return JsonResponse({'status':'success'})
 
-class BookNoteLikeItUpdate(View):
+class BookNoteLikeItUpdate(APIView):
     def post(self, request, note_id):
         user = get_current_user(request)
         note = BookNote.objects.get(pk=note_id);
@@ -111,7 +93,7 @@ class BookNoteLikeItUpdate(View):
         else:
             return HttpResponseBadRequest();
         
-class BookNoteReplyList(View):
+class BookNoteReplyList(APIView):
     def get(self, request, note_id):
         if note_id is None:
             return HttpResponseBadRequest(request);
@@ -125,16 +107,15 @@ class BookNoteReplyList(View):
         if note_id is None:
             return HttpResponseBadRequest(request);
         
-        json_data =  json.loads(request.body.decode('utf-8'))
         reply = BookNoteReply()
         reply.user = get_current_user(request)
         reply.note = BookNote.objects.get(pk=note_id)
-        reply.content = json_data.get('content')
+        reply.content = request.data.get('content')
         reply.save()
         
         return JsonResponse(reply.to_json(), safe = False)
     
-class BookNoteReplyDetail(View):
+class BookNoteReplyDetail(APIView):
     def post(self, request, note_id, reply_id):
         if reply_id is None:
             return HttpResponseBadRequest(request);
@@ -143,12 +124,10 @@ class BookNoteReplyDetail(View):
         if reply is None:
             return HttpResponseBadRequest(request);
         
-        json_data = json.loads(request.body.decode('utf-8'))
-        reply.content = json_data.get('content')
+        reply.content = request.data.get('content')
         reply.save()
         return JsonResponse(reply.to_json(), safe = False)
     
-        
     def delete(self, request, note_id, reply_id):
         if reply_id is None:
             return HttpResponseBadRequest(request);

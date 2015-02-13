@@ -91,3 +91,10 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 MEDIA_ROOT = "/Users/dolee/dev/git-repo/bine/bine/bine/static/bine/html/"
+
+# Enable all views to have authentication check.
+REST_FRAMEWORK = {
+    'DEFAULT_PERMISSION_CLASSES': (
+        'rest_framework.permissions.IsAuthenticated',
+    )
+}
