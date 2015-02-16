@@ -27,18 +27,16 @@ bineApp.config([ '$routeProvider', function($routeProvider) {
 
 bineApp.service('userService', [ '$http', '$window', 'jwtHelper',
 		function($http, $window, jwtHelper) {
-			this.user = null;
-			this.token = null;
-
+			
 			this.clear = function() {
-				this.user = null;
-				this.token = null;
+				this.set_user(null);
+				this.set_token(null);
 			}
 
 			this.check_auth_and_set_user = function($scope) {
 				var token = this.get_token();
-				if (token && !jwtHelper.isTokenExpired(token)) {
-					$scope.user = this.user;
+				if ((token != null) && !jwtHelper.isTokenExpired(token)) {
+					$scope.user = this.get_user();
 					return true;
 				} else {
 					location.href = "#/login/";
@@ -48,17 +46,23 @@ bineApp.service('userService', [ '$http', '$window', 'jwtHelper',
 
 			this.set_token_and_user_info = function(data) {
 				this.set_token(data.token);
-				this.user = data.user;
+				this.set_user(data.user);
 			}
 
 			this.set_token = function(token) {
-				// $window.sessionStorage.token = token;
-				this.token = token;
+				$window.sessionStorage.token = token;
 			}
 
 			this.get_token = function() {
-				// return $window.sessionStorage.getItem('token');
-				return this.token;
+				return $window.sessionStorage.token;
+			}
+			
+			this.get_user = function() {
+				return angular.fromJson($window.sessionStorage.user);
+			}
+			
+			this.set_user = function(user) {
+				$window.sessionStorage.user = angular.toJson(user);
 			}
 		} ]);
 

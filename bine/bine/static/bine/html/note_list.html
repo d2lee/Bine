@@ -1,5 +1,5 @@
 <nav class="navbar navbar-default navbar-static-top">
-	<div class="container">
+	<div class="container-fluid">
 		<div class="navbar-header">
 			<button type="button" class="navbar-toggle collapsed"
 				data-toggle="collapse" data-target="#navbar" aria-expanded="false"
@@ -12,9 +12,9 @@
 		</div>
 		<div id="navbar" class="navbar-collapse collapse">
 			<ul class="nav navbar-nav">
-				<li><a href="#/note/">독서노트</a></li>
-				<li><a href="#/book/">도서추천</a></li>
-				<li><a href="#">친구찾기</a></li>
+				<li><a href="#/note/" class="active">노트</a></li>
+				<li><a href="#/book/">책</a></li>
+				<li><a href="#">친구</a></li>
 			</ul>
 			<form class="navbar-form navbar-right" role="search">
 				<div class="form-group">
@@ -27,95 +27,75 @@
 						</span>
 					</div>
 				</div>
-				<button class='btn btn-default'>
-					<a href="#/login/"><span class="glyphicon glyphicon-user" aria-hidden="true"></span></a>
-				</button>
 			</form>
 		</div>
 		<!--/.nav-collapse -->
 	</div>
 </nav>
 
-<div class="row">
-	<ul
-		class="col-xs-12 col-sm-12 col-md-12 col-lg-12 nav nav-pills submenu">
-		<li role="presentation" class="dropdown  pull-right"><a
-			class="dropdown-toggle" data-toggle="dropdown" href="#" role="button"
-			aria-expanded="false"> 정렬 <span class="caret"></span>
-		</a>
-			<ul class="dropdown-menu" role="menu">
-				<li role="presentation"><a role="menuitem" tabindex="-1"
-					href="#">최신 날짜순</a></li>
-				<li role="presentation"><a role="menuitem" tabindex="-1"
-					href="#">답글 많은 순</a></li>
-			</ul></li>
-		<li role="presentation" class="dropdown pull-right"><a
-			class="dropdown-toggle" data-toggle="dropdown" href="#" role="button"
-			aria-expanded="false"> 보기 <span class="caret"></span>
-		</a>
-			<ul class="dropdown-menu" role="menu">
-				<li role="presentation" class="active"><a role="menuitem"
-					tabindex="-1" href="#">친구 노트 포함</a></li>
-				<li role="presentation"><a role="menuitem" tabindex="-1"
-					href="#">자기 노트만</a></li>
-				<li role="presentation"><a role="menuitem" tabindex="-1"
-					href="#">새 답글 노트만</a></li>
-				<li role="presentation"><a role="menuitem" tabindex="-1"
-					href="#">새 노트만</a></li>
-			</ul></li>
-		<li role="presentation" class="pull-right"><a href="#/note/new/">독서노트쓰기</a></li>
-	</ul>
-</div>
-
-<div class="alert status-box alert-dismissible fade in" role="alert">
-	<button type="button" class="close" data-dismiss="alert"
-		aria-label="Close">
-		<span aria-hidden="true">×</span>
-	</button>
-	<h4>
-		<span class="glyphicon glyphicon-info-sign"></span> 알림
-	</h4>
-	<p>
-		{{user.fullname}} 님은 이번 주에 <strong>10</strong>권의 책을 읽었습니다.
-	</p>
-	<p>
-		목표한 <strong>100</strong>권까지는 이제 <strong>50</strong>권 남았습니다.
-	</p>
-	<div class="progress">
-		<div class="progress-bar progress-bar-primary" role="progressbar"
-			aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"
-			style="width: 50%">
-			<span class="sr-only">50% 완성</span>
-		</div>
-	</div>
-</div>
-
-<div class="row note-list-row">
-	<div class="col-xs-12 panel panel-default note-panel"
-		ng-repeat="note in notes">
-		<div class="panel-heading">
-			<h4 class="panel-title">{{ note.book.title }}</h4>
-		</div>
-		<div class="panel-body note-panel-body">
-			<a href='#/note/{{note.id}}'> <img class="book-photo"
-				ng-src="{{note.book.photo}}" align="right" width='120px'
-				height='200px'>
-			</a>
-			<div class='note-info'>
-				<span class="glyphicon glyphicon-time"></span><span>{{
-					note.created_at | date:"yyyy/MM/dd h:mm a" }}</span> | <span
-					ng-bind-html="make_html_preference(note.preference)"></span> | <span>{{make_html_share(note.share_to)}}</span>
-				| <span ng-bind-html="make_html_attach(note.attach)"></span>
+<div class="row main-row">
+	<div class="col-md-3">
+		<div class="alert status-box alert-dismissible fade in" role="alert">
+			<button type="button" class="close" data-dismiss="alert"
+				aria-label="Close">
+				<span aria-hidden="true">×</span>
+			</button>
+			<h4>
+				<span class="glyphicon glyphicon-user"></span> {{user.fullname}} 님
+			</h4>
+			<p>
+				이번 주에 읽은 책: <strong>10</strong>권
+			</p>
+			<p>
+				친구 수: <strong>10</strong>명
+			</p>
+			<p>
+				목표: <strong>100</strong>중 <strong>50</strong>권
+			</p>
+			<div class="progress">
+				<div class="progress-bar progress-bar-info" role="progressbar"
+					aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"
+					style="width: 50%">
+					<span class="sr-only">50% 완성</span>
+				</div>
 			</div>
-			<p class='note-content'>{{ note.content | truncate: 256 }}</p>
 		</div>
-		<div class="panel-footer">
-			<a href="" ng-click="update_likeit(note)"><span
-				class="glyphicon glyphicon-heart"></span>좋아요({{note.likeit}})</a> | <a
-				href='#/note/{{note.id}}' class='note-reply-view'>답글({{note.replies_count}})</a>
-			| <a href="" ng-click="edit_note(note)">수정</a> | <a href=""
-				ng-click="delete_note(note, $index)">삭제</a>
+		<div class="list-group">
+			<a href="#/note/new/" class="list-group-item list-item-bottom-double">독서노트 작성</a>
+			<a href="" class="list-group-item">자기 목록 보기</a>
+			<a href="" class="list-group-item">친구 목록만 보기</a>
+			<a href="" class="list-group-item">새로운 답글이 있는 목록만 보기</a>
+		</div>
+
+	</div>
+	<div class="col-md-9">
+		<div class="row note-list-row">
+			<div class="col-xs-12 panel panel-default note-panel"
+				ng-repeat="note in notes">
+				<div class="panel-heading">
+					<h4 class="panel-title">{{ note.book.title }}</h4>
+				</div>
+				<div class="panel-body note-panel-body">
+					<a href='#/note/{{note.id}}'> <img class="book-photo"
+						ng-src="{{note.book.photo}}" align="right" width='120px'
+						height='200px'>
+					</a>
+					<div class='note-info'>
+						<span class="glyphicon glyphicon-time"></span><span>{{
+							note.created_at | date:"yyyy/MM/dd h:mm a" }}</span> | <span
+							ng-bind-html="make_html_preference(note.preference)"></span> | <span>{{make_html_share(note.share_to)}}</span>
+						| <span ng-bind-html="make_html_attach(note.attach)"></span>
+					</div>
+					<p class='note-content'>{{ note.content | truncate: 256 }}</p>
+				</div>
+				<div class="panel-footer">
+					<a href="" ng-click="update_likeit(note)"><span
+						class="glyphicon glyphicon-heart"></span>좋아요({{note.likeit}})</a> | <a
+						href='#/note/{{note.id}}' class='note-reply-view'>답글({{note.replies_count}})</a>
+					| <a href="" ng-click="edit_note(note)">수정</a> | <a href=""
+						ng-click="delete_note(note, $index)">삭제</a>
+				</div>
+			</div>
 		</div>
 	</div>
-</div>
 </div>
