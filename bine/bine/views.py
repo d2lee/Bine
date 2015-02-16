@@ -8,11 +8,26 @@ from django.contrib.auth import authenticate, login, logout
 from rest_framework.status import HTTP_403_FORBIDDEN, HTTP_400_BAD_REQUEST,\
     HTTP_200_OK
 from rest_framework.response import Response
+from django.views.generic.base import View
+from django.shortcuts import render, redirect
+from rest_framework_jwt.serializers import JSONWebTokenSerializer
+from rest_framework import response
 
 def get_book(request):
     book = Book.objects.get(pk=request.POST['book'])
     return book
 
+def auth_response_payload_handler(token, user=None):
+    return {
+        'token': token,
+        'user' : user.to_json()
+    }
+
+
+class IndexView(View):
+    def get(self, request):
+        return redirect('/static/bine/html/bine.html')
+        
 class Login(APIView):
     def post(self, request):
         username = request.data['username']
@@ -41,8 +56,7 @@ class Register(APIView):
         email = request.data['email']
         password = request.data['password']
         
-        # validation code is required here
-        
+        # validation code is required here        
         user = User.objects.create_user(username=username, 
                                  fullname=fullname,
                                  birthday=birthday,
@@ -50,11 +64,12 @@ class Register(APIView):
                                  email = email,
                                  password=password)
         if user is not None:
-            user = authenticate(username=username, password=password)
-            if (user is not None) and user.is_active:
-                login(request, user)
-                return Response(user.to_json(), status=HTTP_200_OK)
-        
+            serializer = self.JSONWebTokenSerializer(data=request.DATA)
+            if serializer.is_valid():
+                token = serializer.object.get('token')
+                response_data = auth_response_payload_handler(token, user)
+                return Response(response_data);
+            return Response(serializer.errors, status=HTTP_400_BAD_REQUEST)
         return Response(status=HTTP_403_FORBIDDEN)
     
 
@@ -78,7 +93,10 @@ class BookList(APIView):
             
 class BookNoteList(APIView):
     def get(self, request):
-        notes = request.user.booknotes.all()
+        if request.user is None:
+            return response(status= HTTP_400_BAD_REQUEST)
+            
+        notes = request.user.booknotes.all();
         #notes = BookNote.objects.all()[:20]
         json_text = list(map(lambda x: x.to_json(), notes.all()))
         

@@ -1,9 +1,12 @@
-bineControllers.controller('NoteListControl', ['$rootScope', '$scope', '$sce', '$http',
-  function ($rootScope, $scope, $sce, $http) {
+bineApp.controller('NoteListControl', ["$rootScope", "$scope", "$sce", 
+                                       "$http", "userService", 
+  function ($rootScope, $scope, $sce, $http, userService) {
 		$rootScope.note = null;
-		$scope.user = $rootScope.user;
-		if (!$scope.user)
-			location.href = "#/login/";
+		
+		// check the authentication
+		if (!userService.check_auth_and_set_user($scope)) {
+			return;
+		}
 		
 		$http.get('/note/').success(function(data) {
 			$scope.notes = data;
@@ -64,12 +67,15 @@ bineControllers.controller('NoteListControl', ['$rootScope', '$scope', '$sce', '
 		}
   }]);
 
-bineControllers.controller('NoteDetailControl', ['$rootScope', '$scope', '$routeParams', '$http', 
-  function ($rootScope, $scope, $routeParams, $http) {
+bineApp.controller('NoteDetailControl', ["$rootScope", "$scope", "$routeParams", 
+                                         "$http", "userService", 
+  function ($rootScope, $scope, $routeParams, $http, userService) {
 	var note_id = $routeParams.note_id;
-	$scope.user = $rootScope.user;
-	if (!$scope.user)
-		location.href = "#/login/";
+	
+	// check the authentication
+	if (!userService.check_auth_and_set_user($scope)) {
+		return;
+	}
 	
 	$scope.note_id = note_id;
 	$scope.new_reply_content = "";
@@ -164,11 +170,13 @@ bineControllers.controller('NoteDetailControl', ['$rootScope', '$scope', '$route
 	}
 }]);
 
-bineControllers.controller('NoteNewControl', ['$rootScope', '$scope', '$sce', '$upload', '$http', 
-    function ($rootScope, $scope, $sce, $upload, $http) {
-		$scope.user = $rootScope.user;
-		if (!$scope.user)
-			location.href = "#/login/";
+bineApp.controller('NoteNewControl', ["$rootScope", "$scope", "$upload", 
+                                      "$http", "userService", 
+    function ($rootScope, $scope, $upload, $http, userService) {
+		// check the authentication
+		if (!userService.check_auth_and_set_user($scope)) {
+			return;
+		}
 		
 		if ($rootScope.note == null) {
 			var today = new Date();

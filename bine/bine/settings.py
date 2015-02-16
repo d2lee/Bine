@@ -93,3 +93,18 @@ STATIC_URL = '/static/'
 MEDIA_ROOT = "/Users/dolee/dev/git-repo/bine/bine/bine/static/bine/html/"
 
 # Enable all views to have authentication check.
+REST_FRAMEWORK = {
+    'DEFAULT_PERMISSION_CLASSES': (
+        'rest_framework.permissions.IsAuthenticated',
+    ),
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+       # 'rest_framework.authentication.SessionAuthentication',
+       # 'rest_framework.authentication.BasicAuthentication',
+        'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
+    ),
+}
+
+JWT_AUTH = {
+    'JWT_RESPONSE_PAYLOAD_HANDLER':
+    'bine.views.auth_response_payload_handler'
+}

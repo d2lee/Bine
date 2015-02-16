@@ -1,10 +1,9 @@
-bineControllers.controller('bookListControl', [ '$rootScope', '$scope', '$sce',
-		'$http', function($rootScope, $scope, $sce, $http) {
+bineApp.controller('bookListControl', [ '$scope', '$http', 'userService', function( $scope, $http, userService) {
 
-			$rootScope.note = null;
-			$scope.user = $rootScope.user;
-			if (!$scope.user)
-				location.href = "#/login/";
+			// check the authentication
+			if (!userService.check_auth_and_set_user($scope)) {
+				return;
+			}
 
 			$scope.load_book_list = function() {
 				$http.get('/book/').success(function(data) {
