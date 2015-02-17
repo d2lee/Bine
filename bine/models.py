@@ -1,5 +1,5 @@
-from time import strftime, gmtime;
 import os.path
+from time import strftime, gmtime
 
 from django.db import models
 from django.db.models.fields import CharField, DateField, TextField, \
@@ -12,10 +12,6 @@ from django.contrib.auth.models import BaseUserManager, AbstractBaseUser, \
 
 
 # common utility functions
-
-# class definitions
-
-
 class UserManager(BaseUserManager):
     def create_user(self, username, password, is_staff=False, is_superuser=False, **kwargs):
         if not username:
@@ -70,12 +66,34 @@ class User(AbstractBaseUser, PermissionsMixin):
     updated_on = models.DateTimeField(auto_now=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
-    # friends = models.ManyToManyField("self", through='Friend')
-
+    friends = models.ManyToManyField('self', through='FriendLation',
+                                     symmetrical=False,
+                                     related_name='related_to+')
     objects = UserManager()
 
     USERNAME_FIELD = 'username'
     REQUIRED_FIELDS = ['email', 'fullname', 'birthday', 'sex']
+
+    def add_friend(self, friend, symm=True):
+        friend_relation, created = FriendLation.objects.get_or_create(
+            from_person=self,
+            to_person=friend)
+        if symm:
+            # avoid recursion by passing `symm=False`
+            friend.add_friend(self, False)
+        return friend_relation
+
+    def remove_friend(self, friend, symm=True):
+        FriendLation.objects.filter(
+            from_person=self,
+            to_person=friend).delete()
+        if symm:
+            # avoid recursion by passing `symm=False`
+            friend.remove_relationship(self, False)
+
+    def get_friends(self):
+        return self.friends.filter(
+            to_user__from_person=self)
 
     def to_json(self):
         json_data = {}
@@ -89,7 +107,7 @@ class User(AbstractBaseUser, PermissionsMixin):
                           'sex': self.sex,
                           'tagline': self.tagline,
         })
-        return json_data;
+        return json_data
 
     def __str__(self):
         return self.username
@@ -106,26 +124,17 @@ class User(AbstractBaseUser, PermissionsMixin):
         db_table = 'users'
 
 
-'''
-class UserRelation(models.Model):
-    user_from = ForeignKey(User)
-    user_to = ForeignKey(User)
-
-    RELATION_CHOICE = (
-        ('F', '친구'),
-        ('M', '멘토'),
-    )
-
-    relation_type = CharField(max_length=1, choices=RELATION_CHOICE, default='F', blank=False)
+class FriendLation(models.Model):
+    from_user = ForeignKey(User, related_name='from_user')
+    to_user = ForeignKey(User, related_name='to_people')
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-            return self.user.username + " - " + self.friend.username
+        return self.from_user.username + " - " + self.to_user.username
 
     class Meta:
-        db_table = 'user_relations'
-        unique_together = ('user_from', 'user_to')
-'''
+        db_table = 'friend_relations'
+        unique_together = ('from_user', 'to_user')
 
 
 class BookCategory(models.Model):
@@ -197,7 +206,7 @@ class Book(models.Model):
                           'pub_date': self.pub_date,
                           'description': self.description,
         })
-        return json_data;
+        return json_data
 
     class Meta:
         db_table = 'books'
@@ -255,7 +264,6 @@ class BookNote(models.Model):
         })
         return json_data
 
-
     def __str__(self):
         return self.user.fullname + " - " + self.book.title
 
@@ -296,7 +304,7 @@ class BookNoteReply(models.Model):
         return json_obj
 
     def __str__(self):
-        return self.content;
+        return self.content
 
     class Meta:
         db_table = 'booknote_replies'  
