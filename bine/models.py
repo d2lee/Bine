@@ -2,6 +2,7 @@ import os.path
 from time import strftime, gmtime
 
 from django.db import models
+from django.db.models import Q
 from django.db.models.fields import CharField, DateField, TextField, \
     DateTimeField
 from django.db.models.fields.related import ManyToManyField, ForeignKey
@@ -10,13 +11,6 @@ from django.contrib.auth.models import BaseUserManager, AbstractBaseUser, \
     PermissionsMixin
 
 
-
-
-
-
-
-
-# common utility functions
 class UserManager(BaseUserManager):
     def create_user(self, username, password, is_staff=False, is_superuser=False, **kwargs):
         if not username:
@@ -71,7 +65,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     updated_on = models.DateTimeField(auto_now=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
-    friends = models.ManyToManyField('self', through='FriendLation',
+    friends = models.ManyToManyField('self', through='FriendRelation',
                                      symmetrical=False,
                                      related_name='related_to+')
     objects = UserManager()
@@ -80,7 +74,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     REQUIRED_FIELDS = ['email', 'fullname', 'birthday', 'sex']
 
     def add_friend(self, friend, symm=True):
-        friend_relation, created = FriendLation.objects.get_or_create(
+        friend_relation, created = FriendRelation.objects.get_or_create(
             from_user=self,
             to_user=friend)
         if symm:
@@ -89,16 +83,30 @@ class User(AbstractBaseUser, PermissionsMixin):
         return friend_relation
 
     def remove_friend(self, friend, symm=True):
-        FriendLation.objects.filter(
+        FriendRelation.objects.filter(
             from_user=self,
             to_user=friend).delete()
         if symm:
             # avoid recursion by passing `symm=False`
-            friend.remove_relationship(self, False)
+            friend.remove_friend(self, False)
 
-    def get_friends(self):
-        return self.friends.filter(
-            to_user__from_person=self)
+    def get_confirmed_friends(self):
+        return FriendRelation.get_confirmed_friends(self)
+
+    def get_unconfirmed_friends(self):
+        return FriendRelation.get_unconfirmed_friends(self)
+
+    def search_friend(self, query):
+        users = User.objects.filter(Q(username__contains=query) | Q(fullname__contains=query))
+
+        # Exclude self from search_list
+        return users.exclude(Q(id=self.id) | Q(friends__id=self.id)).all()
+
+    def get_recommended_friends(self):
+        users = User.objects.all()
+
+        # Exclude self and self's friends
+        return users.exclude(Q(id=self.id) | Q(friends__id=self.id)).all()
 
     def to_json(self):
         json_data = {}
@@ -129,10 +137,25 @@ class User(AbstractBaseUser, PermissionsMixin):
         db_table = 'users'
 
 
-class FriendLation(models.Model):
+class FriendRelation(models.Model):
     from_user = ForeignKey(User, related_name='from_user')
     to_user = ForeignKey(User, related_name='to_people')
+
+    STATUS_CHOICES = (
+        ('N', '대기'),
+        ('Y', '승락'),
+        ('D', '삭제'),
+    )
+    status = models.CharField(max_length=1, choices=STATUS_CHOICES, default='N', blank=False)
     created_at = models.DateTimeField(auto_now_add=True)
+
+    def get_unconfirmed_friends(user):
+        friend_relations = FriendRelation.objects.filter(from_user=user, status='N')
+        return list(map(lambda x: x.to_user, friend_relations))
+
+    def get_confirmed_friends(user):
+        friend_relations = FriendRelation.objects.filter(from_user=user, status='Y')
+        return list(map(lambda x: x.to_user, friend_relations))
 
     def __str__(self):
         return self.from_user.username + " - " + self.to_user.username

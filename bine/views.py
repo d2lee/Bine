@@ -97,14 +97,62 @@ class BookList(APIView):
 
 
 class FriendList(APIView):
-    @staticmethod
-    def get(request):
-        current_user = request.user
-        friends = current_user.friends.all()[:10]
+    def get(self, request, action=None):
+        if action is None:
+            Response(status=HTTP_400_BAD_REQUEST)
 
-        json_text = list(map(lambda x: x.to_json(), friends.all()))
+        user = request.user
+
+        if action == 'recommend':
+            friends = user.get_recommended_friends()
+        elif action == 'search':
+            query = request.GET.get('q')
+            if query is None:
+                return Response(status=HTTP_400_BAD_REQUEST)
+            friends = user.search_friend(query)
+        elif action is None:
+            status = request.GET.get('status')
+            if status == 'Y':
+                friends = user.get_confirmed_friends()
+            elif status == 'N':
+                friends = user.get_unconfirmed_friends()
+            else:
+                return Response(status=HTTP_400_BAD_REQUEST)
+
+        json_text = list(map(lambda x: x.to_json(), friends))
         return Response(data=json_text)
 
+    def put(self, request):
+        friend_id = request.data.get('friend')
+        status = request.data.get('status')
+
+        if friend_id is None or status is None:
+            return Response(status=HTTP_400_BAD_REQUEST)
+
+        return Response(status=HTTP_200_OK)
+
+    def post(self, request):
+        friend_id = request.data.get('friend')
+
+        friend = User.objects.get(pk=friend_id)
+
+        if friend is None:
+            return Response(status=HTTP_400_BAD_REQUEST)
+
+        friend.add_friend(request.user, True)
+
+        return Response(data=friend.to_json())
+
+    def delete(self, request, pk):
+        friend_id = pk
+        friend = User.objects.get(pk=friend_id)
+
+        if friend is None:
+            return Response(status=HTTP_400_BAD_REQUEST)
+
+        friend.remove_friend(request.user, True)
+
+        return Response(data=friend.to_json())
 
 class BookNoteList(APIView):
     def get(self, request):

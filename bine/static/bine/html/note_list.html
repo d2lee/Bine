@@ -5,7 +5,7 @@
             <ul class="nav navbar-nav">
                 <li class="active"><a href="#/book/">노트</a>
                 <li><a href="#/book/">책</a></li>
-                <li><a href="#/friend">친구</a></li>
+                <li><a href="#/friend/">친구</a></li>
             </ul>
         </div>
         <div class="navbar-collapse collapse">
@@ -26,6 +26,7 @@
 </nav>
 
 
+
 <div class="row main-content">
     <div class="col-md-2 left-panel">
         <div class="list-group">
@@ -37,6 +38,13 @@
     </div>
     <div class="col-md-10 right-panel">
         <div class="row note-list-row">
+            <h4>노트 목록 보기</h4>
+        </div>
+        <div class="row note-list-row">
+            <div class="alert alert-warning" ng-show="!notes.length">
+                <span class="glyphicon glyphicon-alert"></span> 작성하신 독서 노트가 없습니다. <a href="#/note/new/">독서노트</a>를 새로
+                작성하세요.
+            </div>
             <div class="col-xs-12 panel panel-default note-panel"
                  ng-repeat="note in notes">
                 <div class="panel-heading">
@@ -53,7 +61,7 @@
                         <span class="glyphicon glyphicon-time"></span>
                         <span>{{ note.created_at | date:"yyyy-MM-dd h:mm a" }}</span> |
                         <span
-                            ng-bind-html="make_html_preference(note.preference)"></span> |
+                                ng-bind-html="make_html_preference(note.preference)"></span> |
                         <span>{{ make_html_share(note.share_to) }}</span> |
                         <span class="glyphicon glyphicon-thumbs-up"></span>
                         <a href="" ng-click="update_likeit(note)">좋아요({{ note.likeit }})</a>

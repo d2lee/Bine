@@ -1,7 +1,7 @@
-var bineApp = angular.module('bineApp', [ 'ngRoute', 'ngCookies', 'ngSanitize',
-    'angular-jwt', 'angularFileUpload' ]);
+var bineApp = angular.module('bineApp', ['ngRoute', 'ngCookies', 'ngSanitize',
+    'angular-jwt', 'angularFileUpload']);
 
-bineApp.config([ '$routeProvider', function ($routeProvider) {
+bineApp.config(['$routeProvider', function ($routeProvider) {
     $routeProvider.when('/login/', {
         templateUrl: '/static/bine/html/login.html',
         controller: 'UserAuthControl'
@@ -21,14 +21,26 @@ bineApp.config([ '$routeProvider', function ($routeProvider) {
         templateUrl: '/static/bine/html/book_list.html',
         controller: 'bookListControl'
     }).when('/friend/', {
-        templateUrl: '/static/bine/html/friend_list.html',
-        controller: 'friendListControl'
+        templateUrl: '/static/bine/html/friend_confirmed.html',
+        controller: 'friendConfirmedListControl'
+    }).when('/friend/confirmed/', {
+        templateUrl: '/static/bine/html/friend_confirmed.html',
+        controller: 'friendConfirmedListControl'
+    }).when('/friend/unconfirmed/', {
+        templateUrl: '/static/bine/html/friend_unconfirmed.html',
+        controller: 'friendUnconfirmedListControl'
+    }).when('/friend/search', {
+        templateUrl: '/static/bine/html/friend_search.html',
+        controller: 'friendSearchControl'
+    }).when('/friend/recommend', {
+        templateUrl: '/static/bine/html/friend_recommend.html',
+        controller: 'friendRecommendControl'
     }).otherwise({
         redirectTo: '/login/'
     });
-} ]);
+}]);
 
-bineApp.service('userService', [ '$http', '$window', 'jwtHelper',
+bineApp.service('userService', ['$http', '$window', 'jwtHelper',
     function ($http, $window, jwtHelper) {
 
         this.clear = function () {
@@ -38,13 +50,20 @@ bineApp.service('userService', [ '$http', '$window', 'jwtHelper',
 
         this.check_auth_and_set_user = function ($scope) {
             var token = this.get_token();
-            if ((token != null) && !jwtHelper.isTokenExpired(token)) {
-                $scope.user = this.get_user();
-                return true;
-            } else {
-                location.href = "#/login/";
-                return false;
+            var isTokenExpired;
+
+            try {
+                isTokenExpired = jwtHelper.isTokenExpired(token);
+                if ((token != null) && !isTokenExpired) {
+                    $scope.user = this.get_user();
+                    return true;
+                }
             }
+            catch (err) {
+            }
+
+            location.href = "#/login/";
+            return false;
         }
 
         this.set_token_and_user_info = function (data) {
@@ -67,14 +86,14 @@ bineApp.service('userService', [ '$http', '$window', 'jwtHelper',
         this.set_user = function (user) {
             $window.sessionStorage.user = angular.toJson(user);
         }
-    } ]);
+    }]);
 
 bineApp.config(function Config($httpProvider, jwtInterceptorProvider) {
     jwtInterceptorProvider.authPrefix = 'JWT ';
-    jwtInterceptorProvider.tokenGetter = [ 'userService',
+    jwtInterceptorProvider.tokenGetter = ['userService',
         function (userService) {
             return userService.get_token();
-        } ];
+        }];
 
     $httpProvider.interceptors.push('jwtInterceptor');
 })

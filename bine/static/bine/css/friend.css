@@ -1,53 +1,30 @@
+
+.friend-title {
+    font-size: 16px;
+    font-weight: bold;
+    margin-top: 8px;
+}
+
+.friend-search-title {
+    margin-top: 15px;
+}
+
 .friend-panel {
     border-radius: 2px;
     margin-bottom: 8px;
 }
 
-.friend-panel .panel-title {
-    font-weight: bold;
-}
-
-.friend-panel > .friend-panel-body > .friend-info {
-    font-size: 9pt;
+.friend-panel .friend-info {
+    font-size: 14px;
     color: #595959;
-}
-
-.friend-panel .friend-photo {
-    padding: 4px;
-    width: auto;
-    height: 80px;
-}
-
-.friend-panel > .friend-panel-body > .friend-content {
-    margin-top: 4px;
-    margin-bottom: 4px;
-}
-
-.friend-panel > .panel-heading {
-    background-color: white;
-    border-bottom: none;
-    font-size: 18pt;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
-
-.friend-panel > .panel-footer {
-    background-color: white;
-}
-
-.friend-panel > .panel-body {
-    padding-top: 0px;
-    padding-bottom: 0px;
-    margin-bottom: 8px;
+    margin-top: 10px;
 }
 
 .user-photo {
-    width: 40px;
-    height: 40px;
+    width: 80px;
+    height: 80px;
 
-    border: 1px solid #777;
-    color: #e7e7e7;
-    border-radius: 50%;
+    color: #595959;
 
     padding: 2px;
 

@@ -35,27 +35,33 @@
             <a href="" class="list-group-item">또래 책장 보기</a>
         </div>
     </div>
-    <div class="col-md-10 right-panel">
-        <div class="panel panel-default book-panel" ng-repeat="book in books">
-            <div class="panel-heading">
-                <h4 class="panel-title">{{ book.title }}</h4>
-            </div>
-            <div class="panel-body book-panel-body">
-                <a href='#/book/{{ book.id }}'> <img class="book-photo"
-                                                     ng-src='{{ book.photo }}' align="right" width='120px'
-                                                     height='200px'>
-                </a>
 
-                <div class='book-info'>
-                    <span>저자: {{ book.author }}</span> | <span>출판사: {{
-                        book.publisher }}</span> | <span>ISBN: {{ book.isbn }}</span> | <span>출판일:
-                    {{ book.pub_date | date:"yyyy/MM/dd" }}</span>
+    <div class="col-md-10 right-panel">
+
+        <div class="row note-list-row">
+            <h4>책 목록 보기</h4>
+
+            <div class="panel panel-default book-panel" ng-repeat="book in books">
+                <div class="panel-heading">
+                    <h4 class="panel-title">{{ book.title }}</h4>
                 </div>
-                <p class='book-content'>{{ book.description | truncate: 256 }}</p>
-            </div>
-            <div class="panel-footer">
-                <a href="">친구들 독후감 보기</a> | <a href="">독후감 쓰기</a> | <a href="">책
-                빌리기</a>
+                <div class="panel-body book-panel-body">
+                    <a href='#/book/{{ book.id }}'> <img class="book-photo"
+                                                         ng-src='{{ book.photo }}' align="right" width='120px'
+                                                         height='200px'>
+                    </a>
+
+                    <div class='book-info'>
+                        <span>저자: {{ book.author }}</span> | <span>출판사: {{
+                            book.publisher }}</span> | <span>ISBN: {{ book.isbn }}</span> | <span>출판일:
+                        {{ book.pub_date | date:"yyyy/MM/dd" }}</span>
+                    </div>
+                    <p class='book-content'>{{ book.description | truncate: 256 }}</p>
+                </div>
+                <div class="panel-footer">
+                    <a href="">친구들 독후감 보기</a> | <a href="">독후감 쓰기</a> | <a href="">책
+                    빌리기</a>
+                </div>
             </div>
         </div>
     </div>

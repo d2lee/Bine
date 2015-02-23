@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <component name="dataSourceStorage">
-  <data-source source="LOCAL" name="Django default" uuid="b85a01d9-867e-48f6-aa61-08d51d9e0ca3">
+  <data-source name="Django default" uuid="b85a01d9-867e-48f6-aa61-08d51d9e0ca3">
     <database-info product="MySQL" version="5.6.22" jdbc-version="4.0" driver-name="MySQL Connector Java" driver-version="mysql-connector-java-5.1.34 ( Revision: jess.balint@oracle.com-20141014163213-wqbwpf1ok2kvo1om )">
       <extra-name-characters>#@</extra-name-characters>
       <identifier-quote-string>`</identifier-quote-string>
@@ -170,15 +170,11 @@
     </table>
     <table name="friend_relations" schema="" catalog="bine" type="TABLE">
       <column name="id" sqlType="INT" precision="10" scale="0" nullable="false" jdbcType="4" autoIncrement="true"/>
+      <column name="status" sqlType="VARCHAR" precision="1" scale="0" nullable="false" jdbcType="12"/>
       <column name="created_at" sqlType="DATETIME" precision="19" scale="0" nullable="false" jdbcType="93"/>
       <column name="from_user_id" sqlType="INT" precision="10" scale="0" nullable="false" jdbcType="4"/>
       <column name="to_user_id" sqlType="INT" precision="10" scale="0" nullable="false" jdbcType="4"/>
       <primary-key name="PRIMARY" columns="id"/>
-      <foreign-key name="friend_relations_from_user_id_2601d2f6dcd35dd1_fk_users_id" columns="from_user_id" ref-table="users" ref-schema="" ref-catalog="bine" ref-columns="id" update-rule="3" delete-rule="3" deferrability="2"/>
-      <foreign-key name="friend_relations_to_user_id_244b1703b9648ee3_fk_users_id" columns="to_user_id" ref-table="users" ref-schema="" ref-catalog="bine" ref-columns="id" update-rule="3" delete-rule="3" deferrability="2"/>
-      <index name="friend_relations_from_user_id_53ecac6f3a25532f_uniq" unique="true" columns="from_user_id,to_user_id"/>
-      <index name="friend_relations_63add04c" unique="false" columns="to_user_id"/>
-      <index name="friend_relations_6b4f059f" unique="false" columns="from_user_id"/>
     </table>
     <table name="users" schema="" catalog="bine" type="TABLE">
       <column name="id" sqlType="INT" precision="10" scale="0" nullable="false" jdbcType="4" autoIncrement="true"/>
@@ -201,8 +197,6 @@
       <exported-key name="booknote_replies_user_id_4c822524a2bf7270_fk_users_id" table="booknote_replies" schema="" catalog="bine" columns="user_id"/>
       <exported-key name="booknotes_user_id_11ba34927a0bd381_fk_users_id" table="booknotes" schema="" catalog="bine" columns="user_id"/>
       <exported-key name="django_admin_log_user_id_67d0f5fafc9a7f2_fk_users_id" table="django_admin_log" schema="" catalog="bine" columns="user_id"/>
-      <exported-key name="friend_relations_from_user_id_2601d2f6dcd35dd1_fk_users_id" table="friend_relations" schema="" catalog="bine" columns="from_user_id"/>
-      <exported-key name="friend_relations_to_user_id_244b1703b9648ee3_fk_users_id" table="friend_relations" schema="" catalog="bine" columns="to_user_id"/>
       <exported-key name="users_groups_user_id_7315125ddd6286a3_fk_users_id" table="users_groups" schema="" catalog="bine" columns="user_id"/>
       <exported-key name="users_user_permissions_user_id_2c6b531faab7544f_fk_users_id" table="users_user_permissions" schema="" catalog="bine" columns="user_id"/>
       <index name="email" unique="true" columns="email"/>
