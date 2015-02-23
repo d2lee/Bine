@@ -7,7 +7,6 @@ from rest_framework.status import HTTP_403_FORBIDDEN, HTTP_400_BAD_REQUEST, \
 from rest_framework.response import Response
 from django.views.generic.base import View
 from django.shortcuts import redirect
-from rest_framework import response
 
 from bine.models import BookNote, BookNoteReply, User, Book, BookNoteLikeit
 from bine.serializers import BookNoteWriteSerializer
@@ -94,6 +93,16 @@ class BookList(APIView):
         books = Book.objects.all()[:10]
 
         json_text = list(map(lambda x: x.to_json(), books.all()))
+        return Response(data=json_text)
+
+
+class FriendList(APIView):
+    @staticmethod
+    def get(request):
+        current_user = request.user
+        friends = current_user.friends.all()[:10]
+
+        json_text = list(map(lambda x: x.to_json(), friends.all()))
         return Response(data=json_text)
 
 

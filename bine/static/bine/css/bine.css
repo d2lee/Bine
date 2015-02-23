@@ -1,35 +1,50 @@
 body {
     min-height: 2000px;
-    background-color: #f5f5f5;
+    /*background-image: url("/static/bine/images/ivy.jpg"); */
     font-family: AppleSDGothicNeo-Light, sans-serif-light;
 }
 
 /*
-@media screen and (max-width: 400px) {
+@media screen and (max-width: 400) {
 	.book-photo {
 		width:auto;
-		height:80px;
+		height:80;
 	}
 }
 
-@media screen and (min-width: 400px) {
+@media screen and (min-width: 400) {
 	.book-photo {
 		width:auto;
-		height:80px;
+		height:120;
 	}
 }
 */
 
-@media (min-width: 768px) {
+@media (min-width: 0) {
+    .right-panel {
+        padding-left: 0;
+        padding-right: 0;
+    }
     .left-panel {
-        padding-right: 15px;
+        padding-left: 0;
+        padding-right: 0;
     }
 }
 
 @media (min-width: 992px) {
-    .left-panel {
-        padding-right: 0px;
+    .right-panel {
+        padding-left: 10px;
+        padding-right: 0;
     }
+    .left-panel {
+        padding-left: 0;
+        padding-right: 0;
+    }
+}
+
+.top-container {
+    padding-left: 0;
+    padding-right: 0;
 }
 
 .navbar-default .navbar-nav > li > a {
@@ -50,13 +65,33 @@ body.modal-open {
     width: 100%;
 }
 
+.navbar-toggle {
+    background-color: white;
+    display: inherit;
+}
+
 .navbar-static-top {
-    margin-bottom: 0px;
+    margin-bottom: 0;
     background-color: #4CAF50;
 }
 
 .navbar-static-top .glyphicon {
     color: #777;
+}
+
+.navbar li a {
+    padding-bottom: 4px;
+    padding-right: 4px;
+    padding-left: 4px;
+    margin-left: 8px;
+    margin-right: 8px;
+
+}
+
+.navbar-default .navbar-nav > .active > a, .navbar-default .navbar-nav > .active > a:focus, .navbar-default .navbar-nav > .active > a:hover {
+    border-bottom: solid 2px;
+    background: #4CAF50;
+    color: white;
 }
 
 /*
@@ -70,21 +105,23 @@ body.modal-open {
     font-size: 16px;
 }
 
-.main-row {
+.main-content {
     margin-top: 8px;
+    padding-left: 8px;
+    padding-right: 8px;
 }
 
-.main-row .list-group {
+.main-content .list-group {
     margin-bottom: 8px;
     border-radius: 2px;
 }
 
-.main-row .list-group-item:first-child {
+.main-content .list-group-item:first-child {
     border-top-left-radius: 2px;
     border-top-right-radius: 2px;
 }
 
-.main-row .list-group-item:last-child {
+.main-content .list-group-item:last-child {
     border-bottom-left-radius: 2px;
     border-bottom-right-radius: 2px;
 }
@@ -93,16 +130,19 @@ body.modal-open {
     border-bottom: double 3px #ddd;
 }
 
+.row {
+    margin-left: 0;
+    margin-right: 0;
+}
+
 .status-box {
-    color: white;
-    background: #337ab7;
+    color: black;
+    background: white;
     margin-bottom: 8px;
     border-radius: 2px;
     padding: 8px;
-    background: #337ab7;
     margin-top: 1px;
-    border-radius: 2px;
-    border: 0px;
+    border: 0;
 }
 
 .status-box > h4 {
@@ -116,7 +156,7 @@ body.modal-open {
 .status-box .panel-heading {
     background: inherit;
     color: white;
-    border: 0px;
+    border: 0;
 
 }
 
@@ -168,8 +208,8 @@ body.modal-open {
 }
 
 .note-list-row {
-    margin-left: 0px;
-    margin-right: 0px;
+    margin-left: 0;
+    margin-right: 0;
 }
 
 .note-panel {
@@ -189,15 +229,20 @@ body.modal-open {
 }
 
 .note-panel .note-content {
-    margin-top: 4px;
+    margin-top: 6px;
     margin-bottom: 4px;
+    font-size: 10pt;
 }
 
 .note-panel > .panel-heading {
     background-color: white;
     border-bottom: none;
-    font-size: 18pt;
     overflow: hidden;
+}
+
+.note-panel .panel-title {
+    font-size: 12pt;
+    font-weight: bold;
     text-overflow: ellipsis;
 }
 
@@ -206,10 +251,18 @@ body.modal-open {
 }
 
 .note-panel > .panel-body {
-    padding-top: 0px;
-    padding-bottom: 0px;
+    padding-top: 0;
+    padding-bottom: 0;
     margin-bottom: 8px;
-    /* height: 150px; */
+    /* height: 150; */
+}
+
+.note-panel .note-submenu .btn {
+    border: 0;
+}
+
+.note-panel .note-submenu .glyphicon {
+    margin-right: -8px;
 }
 
 .note-detail > .note-panel {

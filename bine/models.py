@@ -11,6 +11,11 @@ from django.contrib.auth.models import BaseUserManager, AbstractBaseUser, \
 
 
 
+
+
+
+
+
 # common utility functions
 class UserManager(BaseUserManager):
     def create_user(self, username, password, is_staff=False, is_superuser=False, **kwargs):
@@ -76,8 +81,8 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     def add_friend(self, friend, symm=True):
         friend_relation, created = FriendLation.objects.get_or_create(
-            from_person=self,
-            to_person=friend)
+            from_user=self,
+            to_user=friend)
         if symm:
             # avoid recursion by passing `symm=False`
             friend.add_friend(self, False)
@@ -85,8 +90,8 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     def remove_friend(self, friend, symm=True):
         FriendLation.objects.filter(
-            from_person=self,
-            to_person=friend).delete()
+            from_user=self,
+            to_user=friend).delete()
         if symm:
             # avoid recursion by passing `symm=False`
             friend.remove_relationship(self, False)

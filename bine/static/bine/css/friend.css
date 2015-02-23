@@ -1,29 +1,29 @@
-.book-panel {
+.friend-panel {
     border-radius: 2px;
     margin-bottom: 8px;
 }
 
-.book-panel .panel-title {
+.friend-panel .panel-title {
     font-weight: bold;
 }
 
-.book-panel > .book-panel-body > .book-info {
+.friend-panel > .friend-panel-body > .friend-info {
     font-size: 9pt;
     color: #595959;
 }
 
-.book-panel .book-photo {
+.friend-panel .friend-photo {
     padding: 4px;
     width: auto;
     height: 80px;
 }
 
-.book-panel > .book-panel-body > .book-content {
+.friend-panel > .friend-panel-body > .friend-content {
     margin-top: 4px;
     margin-bottom: 4px;
 }
 
-.book-panel > .panel-heading {
+.friend-panel > .panel-heading {
     background-color: white;
     border-bottom: none;
     font-size: 18pt;
@@ -31,13 +31,24 @@
     text-overflow: ellipsis;
 }
 
-.book-panel > .panel-footer {
+.friend-panel > .panel-footer {
     background-color: white;
 }
 
-.book-panel > .panel-body {
+.friend-panel > .panel-body {
     padding-top: 0px;
     padding-bottom: 0px;
     margin-bottom: 8px;
 }
 
+.user-photo {
+    width: 40px;
+    height: 40px;
+
+    border: 1px solid #777;
+    color: #e7e7e7;
+    border-radius: 50%;
+
+    padding: 2px;
+
+}

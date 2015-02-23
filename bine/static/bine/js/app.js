@@ -20,6 +20,9 @@ bineApp.config([ '$routeProvider', function ($routeProvider) {
     }).when('/book/', {
         templateUrl: '/static/bine/html/book_list.html',
         controller: 'bookListControl'
+    }).when('/friend/', {
+        templateUrl: '/static/bine/html/friend_list.html',
+        controller: 'friendListControl'
     }).otherwise({
         redirectTo: '/login/'
     });
