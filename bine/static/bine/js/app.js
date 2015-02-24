@@ -53,17 +53,45 @@ bineApp.service('userService', ['$http', '$window', 'jwtHelper',
             var isTokenExpired;
 
             try {
+                this.refresh_token(token);
+
                 isTokenExpired = jwtHelper.isTokenExpired(token);
+
                 if ((token != null) && !isTokenExpired) {
                     $scope.user = this.get_user();
                     return true;
                 }
             }
             catch (err) {
+
             }
 
             location.href = "#/login/";
             return false;
+        }
+
+        this.refresh_token = function (token) {
+            var datetime = jwtHelper.getTokenExpirationDate(token);
+            var datetime = new Date(datetime).getTime();
+            var now = new Date().getTime();
+
+            var milisec_diff;
+            if (datetime < now) {
+                milisec_diff = now - datetime;
+            } else {
+                milisec_diff = datetime - now;
+            }
+
+            var mins = Math.floor(milisec_diff / 1000 / 60);
+
+            if (mins <= 2) {
+                var data = {'token': token};
+                var url = "/api-token-refresh/";
+
+                $http.post(url, data).success(function (data) {
+                    $window.sessionStorage.token = data.token;
+                });
+            }
         }
 
         this.set_token_and_user_info = function (data) {
@@ -72,7 +100,10 @@ bineApp.service('userService', ['$http', '$window', 'jwtHelper',
         }
 
         this.set_token = function (token) {
-            $window.sessionStorage.token = token;
+            if (token)
+                $window.sessionStorage.token = token;
+            else
+                delete $window.sessionStorage.token;
         }
 
         this.get_token = function () {
@@ -84,7 +115,10 @@ bineApp.service('userService', ['$http', '$window', 'jwtHelper',
         }
 
         this.set_user = function (user) {
-            $window.sessionStorage.user = angular.toJson(user);
+            if (user)
+                $window.sessionStorage.user = angular.toJson(user);
+            else
+                delete $window.sessionStorage.user;
         }
     }]);
 
