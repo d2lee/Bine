@@ -1,18 +1,15 @@
-bineApp.controller('UserAuthControl', ['$scope', '$http', 'userService',
-    function ($scope, $http, userService) {
-        // initialize
-        $scope.username = "";
-        $scope.password = "";
+bineApp.controller('UserAuthControl', ['$scope', '$http', 'authService',
+    function ($scope, $http, authService) {
 
-        userService.clear();
+        authService.clear();
 
         // login check
         $scope.login = function () {
-            $http.post('/api-token-auth/', {
+            $http.post('/api/auth/login/', {
                 'username': $scope.username,
-                'password': $scope.password,
+                'password': $scope.password
             }).success(function (data) {
-                userService.set_token_and_user_info(data);
+                authService.set_token_and_user_info(data);
                 location.href = "#/note/"
             }).error(function (data) {
                 alert('로그인이 실패했습니다. 사용자 정보를 다시 확인하십시오.');
@@ -40,7 +37,7 @@ bineApp.controller('UserAuthControl', ['$scope', '$http', 'userService',
             if (!$scope.reg_form.$valid)
                 return;
 
-            var url = "/auth/register/";
+            var url = "/api/auth/register/";
 
             $scope.make_birthday();
 
@@ -54,8 +51,8 @@ bineApp.controller('UserAuthControl', ['$scope', '$http', 'userService',
             }
 
             $http.post(url, data).success(function (data) {
-                alert('회원 가입이 성공하였습니다.시작 메뉴로 이동합니다.');
-                userService.set_token_and_user_info(data);
+                alert('회원 가입이 성공하였습니다. 메인 페이지로 이동합니다.');
+                authService.set_token_and_user_info(data);
                 location.href = "#/note/";
             });
         }

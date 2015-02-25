@@ -1,30 +1,3 @@
-<nav class="navbar navbar-default navbar-static-top">
-    <div class="container-fluid">
-        <div class="navbar-header">
-            <a class="navbar-brand" href="#/note/">Bine</a>
-            <ul class="nav navbar-nav">
-                <li><a href="#/note/">노트</a>
-                <li><a href="#/book/">책</a></li>
-                <li class="active"><a href="#/friend">친구</a></li>
-            </ul>
-        </div>
-        <div class="navbar-collapse collapse">
-            <form class="navbar-form navbar-right" role="search">
-                <div class="form-group">
-                    <div class="input-group">
-                        <input type="text" class="form-control" placeholder="책 검색">
-						<span class="input-group-btn">
-							<button class="btn btn-default" type="button">
-                                <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
-                            </button>
-						</span>
-                    </div>
-                </div>
-            </form>
-        </div>
-    </div>
-</nav>
-
 <link href="/static/bine/css/friend.css" rel="stylesheet">
 
 <div class="row main-content">
@@ -59,7 +32,8 @@
                 <div class="media-left">
                     <a href="">
                         <img class="media-object user-photo" ng-src="
-                                {{ friend.photo != null && friend.photo || friend.sex == 'M' && '/static/bine/images/male.jpg' || '/static/bine/images/female.jpg'}}"
+
+                                {{ friend.photo != null && friend.photo || friend.sex == 'M' && '/static/app/images/male.jpg' || '/static/app/images/female.jpg'}}"
                              alt="...">
                     </a>
                 </div>

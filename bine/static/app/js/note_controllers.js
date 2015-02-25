@@ -1,14 +1,14 @@
 bineApp.controller('NoteListControl', ["$rootScope", "$scope", "$sce",
-    "$http", "userService",
-    function ($rootScope, $scope, $sce, $http, userService) {
+    "$http", "authService",
+    function ($rootScope, $scope, $sce, $http, authService) {
         $rootScope.note = null;
 
         // check the authentication
-        if (!userService.check_auth_and_set_user($scope)) {
+        if (!authService.check_auth_and_set_user($scope)) {
             return;
         }
 
-        $http.get('/note/').success(function (data) {
+        $http.get('/api/note/').success(function (data) {
             $scope.notes = data;
         });
 
@@ -28,7 +28,7 @@ bineApp.controller('NoteListControl', ["$rootScope", "$scope", "$sce",
         }
 
         $scope.delete_note = function (note, index) {
-            var url = "/note/" + note.id + "/";
+            var url = "/api/note/" + note.id + "/";
             $http.delete(url).success(function (data) {
                 alert('삭제되었습니다.');
                 $scope.notes.splice(index, 1);
@@ -36,7 +36,7 @@ bineApp.controller('NoteListControl', ["$rootScope", "$scope", "$sce",
         }
 
         $scope.update_likeit = function (note) {
-            var url = "/note/" + note.id + "/likeit/";
+            var url = "/api/note/" + note.id + "/likeit/";
             $http.post(url).success(function (data) {
                 note.likeit = data.likeit;
             });
@@ -67,13 +67,13 @@ bineApp.controller('NoteListControl', ["$rootScope", "$scope", "$sce",
         }
     }]);
 
-bineApp.controller('NoteDetailControl', ["$rootScope", "$scope", "$routeParams",
-    "$http", "userService",
-    function ($rootScope, $scope, $routeParams, $http, userService) {
+bineApp.controller('NoteDetailControl', ["$rootScope", "$scope", "$sce", "$routeParams",
+    "$http", "authService",
+    function ($rootScope, $scope, $sce, $routeParams, $http, authService) {
         var note_id = $routeParams.note_id;
 
         // check the authentication
-        if (!userService.check_auth_and_set_user($scope)) {
+        if (!authService.check_auth_and_set_user($scope)) {
             return;
         }
 
@@ -82,19 +82,19 @@ bineApp.controller('NoteDetailControl', ["$rootScope", "$scope", "$routeParams",
         $scope.current_reply = "";
 
         // fetch the details about current booknote.
-        var note_target_url = '/note/' + note_id + "/";
+        var note_target_url = '/api/note/' + note_id + "/";
         $http.get(note_target_url).success(function (data) {
             $scope.note = data;
         });
 
         // fetch the reply information from server.
-        var note_reply_url = '/note/' + note_id + "/reply/";
+        var note_reply_url = '/api/note/' + note_id + "/reply/";
         $http.get(note_reply_url).success(function (data) {
             $scope.replies = data;
         });
 
         $scope.delete_reply = function (reply, index) {
-            var url = url = '/note/' + $scope.note_id + '/reply/' + reply.id + "/";
+            var url = url = '/api/note/' + $scope.note_id + '/reply/' + reply.id + "/";
 
             $http.delete(url).
                 success(function (data, status, headers, config) {
@@ -124,13 +124,13 @@ bineApp.controller('NoteDetailControl', ["$rootScope", "$scope", "$routeParams",
                     'user': 2,
                     'content': $scope.new_reply_content
                 };
-                url = '/note/' + $scope.note_id + '/reply/';
+                url = '/api/note/' + $scope.note_id + '/reply/';
             }
             else { // update
                 data = {
                     'content': $scope.new_reply_content
                 };
-                url = '/note/' + $scope.note_id + '/reply/' + $scope.current_reply.id + "/";
+                url = '/api/note/' + $scope.note_id + '/reply/' + $scope.current_reply.id + "/";
             }
 
 
@@ -153,6 +153,16 @@ bineApp.controller('NoteDetailControl', ["$rootScope", "$scope", "$routeParams",
             $('#reply_modal').modal('show');
         }
 
+        $scope.make_html_preference = function (preference) {
+            var spanHtml = "";
+
+            for (i = 0; i < preference; i++) {
+                spanHtml = spanHtml + "<span class='glyphicon glyphicon-star'></span>";
+            }
+
+            return $sce.trustAsHtml(spanHtml);
+        }
+
         $scope.make_html_share = function (share_to) {
             var text = "";
             switch (share_to) {
@@ -168,13 +178,21 @@ bineApp.controller('NoteDetailControl', ["$rootScope", "$scope", "$routeParams",
             }
             return text;
         }
+
+        $scope.make_html_attach = function (attach_url) {
+            var html = "";
+            if (attach_url) {
+                html = "| <a href='" + attach_url + "'>첨부파일(1)</a>";
+            }
+            return $sce.trustAsHtml(html);
+        }
     }]);
 
 bineApp.controller('NoteNewControl', ["$rootScope", "$scope", "$upload",
-    "$http", "userService",
-    function ($rootScope, $scope, $upload, $http, userService) {
+    "$http", "authService",
+    function ($rootScope, $scope, $upload, $http, authService) {
         // check the authentication
-        if (!userService.check_auth_and_set_user($scope)) {
+        if (!authService.check_auth_and_set_user($scope)) {
             return;
         }
 
@@ -219,7 +237,7 @@ bineApp.controller('NoteNewControl', ["$rootScope", "$scope", "$upload",
                 'attach': note.attach,
             };
 
-            var url = '/note/';
+            var url = '/api/note/';
 
             if ($scope.note.id != null) { // update
                 url = url + $scope.note.id + "/";
@@ -258,7 +276,7 @@ bineApp.controller('NoteNewControl', ["$rootScope", "$scope", "$upload",
                 return;
             }
             else {
-                var url = "/book/search/?title=" + $scope.book_title;
+                var url = "/api/book/search/?title=" + $scope.book_title;
 
                 $http.get(url).
                     success(function (data, status, headers, config) {

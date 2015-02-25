@@ -2,45 +2,42 @@ var bineApp = angular.module('bineApp', ['ngRoute', 'ngCookies', 'ngSanitize',
     'angular-jwt', 'angularFileUpload']);
 
 bineApp.config(['$routeProvider', function ($routeProvider) {
-    $routeProvider.when('/login/', {
-        templateUrl: '/static/bine/html/login.html',
-        controller: 'UserAuthControl'
-    }).when('/register/', {
-        templateUrl: '/static/bine/html/register.html',
-        controller: 'UserAuthControl'
-    }).when('/note/', {
-        templateUrl: '/static/bine/html/note_list.html',
+    $routeProvider.when('/note/', {
+        templateUrl: '/s/app/note_list.html',
         controller: 'NoteListControl'
+    }).when('/login/', {
+        templateUrl: '/s/app/login.html',
+        controller: 'UserAuthControl'
     }).when('/note/new/', {
-        templateUrl: '/static/bine/html/note_form.html',
+        templateUrl: '/s/app/note_form.html',
         controller: 'NoteNewControl'
     }).when('/note/:note_id/', {
-        templateUrl: '/static/bine/html/note_detail.html',
+        templateUrl: '/s/app/note_detail.html',
         controller: 'NoteDetailControl'
     }).when('/book/', {
-        templateUrl: '/static/bine/html/book_list.html',
+        templateUrl: '/s/app/book_list.html',
         controller: 'bookListControl'
     }).when('/friend/', {
-        templateUrl: '/static/bine/html/friend_confirmed.html',
+        templateUrl: '/s/app/friend_confirmed.html',
         controller: 'friendConfirmedListControl'
     }).when('/friend/confirmed/', {
-        templateUrl: '/static/bine/html/friend_confirmed.html',
+        templateUrl: '/s/app/friend_confirmed.html',
         controller: 'friendConfirmedListControl'
     }).when('/friend/unconfirmed/', {
-        templateUrl: '/static/bine/html/friend_unconfirmed.html',
+        templateUrl: '/s/friend_unconfirmed.html',
         controller: 'friendUnconfirmedListControl'
     }).when('/friend/search', {
-        templateUrl: '/static/bine/html/friend_search.html',
+        templateUrl: '/s/app/friend_search.html',
         controller: 'friendSearchControl'
     }).when('/friend/recommend', {
-        templateUrl: '/static/bine/html/friend_recommend.html',
+        templateUrl: '/s/app/friend_recommend.html',
         controller: 'friendRecommendControl'
     }).otherwise({
-        redirectTo: '/login/'
+        redirectTo: '/note/'
     });
 }]);
 
-bineApp.service('userService', ['$http', '$window', 'jwtHelper',
+bineApp.service('authService', ['$http', '$window', 'jwtHelper',
     function ($http, $window, jwtHelper) {
 
         this.clear = function () {
@@ -86,7 +83,7 @@ bineApp.service('userService', ['$http', '$window', 'jwtHelper',
 
             if (mins <= 2) {
                 var data = {'token': token};
-                var url = "/api-token-refresh/";
+                var url = "/api/auth/refresh_token/";
 
                 $http.post(url, data).success(function (data) {
                     $window.sessionStorage.token = data.token;
@@ -124,9 +121,9 @@ bineApp.service('userService', ['$http', '$window', 'jwtHelper',
 
 bineApp.config(function Config($httpProvider, jwtInterceptorProvider) {
     jwtInterceptorProvider.authPrefix = 'JWT ';
-    jwtInterceptorProvider.tokenGetter = ['userService',
-        function (userService) {
-            return userService.get_token();
+    jwtInterceptorProvider.tokenGetter = ['authService',
+        function (authService) {
+            return authService.get_token();
         }];
 
     $httpProvider.interceptors.push('jwtInterceptor');

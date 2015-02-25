@@ -1,3 +1,4 @@
+from django.contrib.auth.decorators import login_required
 from rest_framework.views import APIView
 from django.http.response import JsonResponse, HttpResponseBadRequest, \
     HttpResponseNotAllowed
@@ -6,7 +7,7 @@ from rest_framework.status import HTTP_403_FORBIDDEN, HTTP_400_BAD_REQUEST, \
     HTTP_200_OK
 from rest_framework.response import Response
 from django.views.generic.base import View
-from django.shortcuts import redirect
+from django.shortcuts import render
 
 from bine.models import BookNote, BookNoteReply, User, Book, BookNoteLikeit
 from bine.serializers import BookNoteWriteSerializer
@@ -25,9 +26,21 @@ def auth_response_payload_handler(token, user=None):
     }
 
 
+class LoginRequiredMixin(object):
+    @classmethod
+    def as_view(cls, **initkwargs):
+        view = super(LoginRequiredMixin, cls).as_view(**initkwargs)
+        return login_required(view, None)
+
+
 class IndexView(View):
     def get(self, request):
-        return redirect('/static/bine/html/bine.html')
+        return render(request, 'bine.html')
+
+
+class LoginView(View):
+    def get(self, request):
+        return render(request, 'login.html')
 
 
 class Login(APIView):
@@ -153,6 +166,7 @@ class FriendList(APIView):
         friend.remove_friend(request.user, True)
 
         return Response(data=friend.to_json())
+
 
 class BookNoteList(APIView):
     def get(self, request):

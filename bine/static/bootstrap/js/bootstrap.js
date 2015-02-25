@@ -4,80 +4,19 @@
  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
  */
 
+/*!
+ * Generated using the Bootstrap Customizer (http://getbootstrap.com/customize/?id=358221a50f6a33a23814)
+ * Config saved to config.json and https://gist.github.com/358221a50f6a33a23814
+ */
 if (typeof jQuery === 'undefined') {
     throw new Error('Bootstrap\'s JavaScript requires jQuery')
 }
-
 +function ($) {
     'use strict';
     var version = $.fn.jquery.split(' ')[0].split('.')
     if ((version[0] < 2 && version[1] < 9) || (version[0] == 1 && version[1] == 9 && version[2] < 1)) {
         throw new Error('Bootstrap\'s JavaScript requires jQuery version 1.9.1 or higher')
     }
-}(jQuery);
-
-/* ========================================================================
- * Bootstrap: transition.js v3.3.2
- * http://getbootstrap.com/javascript/#transitions
- * ========================================================================
- * Copyright 2011-2015 Twitter, Inc.
- * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
- * ======================================================================== */
-
-
-+function ($) {
-    'use strict';
-
-    // CSS TRANSITION SUPPORT (Shoutout: http://www.modernizr.com/)
-    // ============================================================
-
-    function transitionEnd() {
-        var el = document.createElement('bootstrap')
-
-        var transEndEventNames = {
-            WebkitTransition: 'webkitTransitionEnd',
-            MozTransition: 'transitionend',
-            OTransition: 'oTransitionEnd otransitionend',
-            transition: 'transitionend'
-        }
-
-        for (var name in transEndEventNames) {
-            if (el.style[name] !== undefined) {
-                return { end: transEndEventNames[name] }
-            }
-        }
-
-        return false // explicit for ie8 (  ._.)
-    }
-
-    // http://blog.alexmaccaw.com/css-transitions
-    $.fn.emulateTransitionEnd = function (duration) {
-        var called = false
-        var $el = this
-        $(this).one('bsTransitionEnd', function () {
-            called = true
-        })
-        var callback = function () {
-            if (!called) $($el).trigger($.support.transition.end)
-        }
-        setTimeout(callback, duration)
-        return this
-    }
-
-    $(function () {
-        $.support.transition = transitionEnd()
-
-        if (!$.support.transition) return
-
-        $.event.special.bsTransitionEnd = {
-            bindType: $.support.transition.end,
-            delegateType: $.support.transition.end,
-            handle: function (e) {
-                if ($(e.target).is(this)) return e.handleObj.handler.apply(this, arguments)
-            }
-        }
-    })
-
 }(jQuery);
 
 /* ========================================================================
@@ -111,7 +50,7 @@ if (typeof jQuery === 'undefined') {
         if (!selector) {
             selector = $this.attr('href')
             selector = selector && selector.replace(/.*(?=#[^\s]*$)/, '') // strip for ie7
-        }
+    }
 
         var $parent = $(selector)
 
@@ -119,7 +58,7 @@ if (typeof jQuery === 'undefined') {
 
         if (!$parent.length) {
             $parent = $this.closest('.alert')
-        }
+    }
 
         $parent.trigger(e = $.Event('close.bs.alert'))
 
@@ -130,7 +69,7 @@ if (typeof jQuery === 'undefined') {
         function removeElement() {
             // detach from parent, fire event then clean up data
             $parent.detach().trigger('closed.bs.alert').remove()
-        }
+    }
 
         $.support.transition && $parent.hasClass('fade') ?
             $parent
@@ -239,7 +178,7 @@ if (typeof jQuery === 'undefined') {
             if (changed) $input.prop('checked', !this.$element.hasClass('active')).trigger('change')
         } else {
             this.$element.attr('aria-pressed', !this.$element.hasClass('active'))
-        }
+    }
 
         if (changed) this.$element.toggleClass('active')
     }
@@ -346,7 +285,7 @@ if (typeof jQuery === 'undefined') {
                 break
             default:
                 return
-        }
+    }
 
         e.preventDefault()
     }
@@ -398,7 +337,7 @@ if (typeof jQuery === 'undefined') {
         if (this.$element.find('.next, .prev').length && $.support.transition) {
             this.$element.trigger($.support.transition.end)
             this.cycle(true)
-        }
+    }
 
         this.interval = clearInterval(this.interval)
 
@@ -442,7 +381,7 @@ if (typeof jQuery === 'undefined') {
             $nextIndicator && $nextIndicator.addClass('active')
         }
 
-        var slidEvent = $.Event('slid.bs.carousel', { relatedTarget: relatedTarget, direction: direction }) // yes, "slid"
+        var slidEvent = $.Event('slid.bs.carousel', {relatedTarget: relatedTarget, direction: direction}) // yes, "slid"
         if ($.support.transition && this.$element.hasClass('slide')) {
             $next.addClass(type)
             $next[0].offsetWidth // force reflow
@@ -463,7 +402,7 @@ if (typeof jQuery === 'undefined') {
             $next.addClass('active')
             this.sliding = false
             this.$element.trigger(slidEvent)
-        }
+    }
 
         isCycling && this.cycle()
 
@@ -519,7 +458,7 @@ if (typeof jQuery === 'undefined') {
 
         if (slideIndex) {
             $target.data('bs.carousel').to(slideIndex)
-        }
+    }
 
         e.preventDefault()
     }
@@ -532,219 +471,7 @@ if (typeof jQuery === 'undefined') {
         $('[data-ride="carousel"]').each(function () {
             var $carousel = $(this)
             Plugin.call($carousel, $carousel.data())
-        })
     })
-
-}(jQuery);
-
-/* ========================================================================
- * Bootstrap: collapse.js v3.3.2
- * http://getbootstrap.com/javascript/#collapse
- * ========================================================================
- * Copyright 2011-2015 Twitter, Inc.
- * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
- * ======================================================================== */
-
-
-+function ($) {
-    'use strict';
-
-    // COLLAPSE PUBLIC CLASS DEFINITION
-    // ================================
-
-    var Collapse = function (element, options) {
-        this.$element = $(element)
-        this.options = $.extend({}, Collapse.DEFAULTS, options)
-        this.$trigger = $(this.options.trigger).filter('[href="#' + element.id + '"], [data-target="#' + element.id + '"]')
-        this.transitioning = null
-
-        if (this.options.parent) {
-            this.$parent = this.getParent()
-        } else {
-            this.addAriaAndCollapsedClass(this.$element, this.$trigger)
-        }
-
-        if (this.options.toggle) this.toggle()
-    }
-
-    Collapse.VERSION = '3.3.2'
-
-    Collapse.TRANSITION_DURATION = 350
-
-    Collapse.DEFAULTS = {
-        toggle: true,
-        trigger: '[data-toggle="collapse"]'
-    }
-
-    Collapse.prototype.dimension = function () {
-        var hasWidth = this.$element.hasClass('width')
-        return hasWidth ? 'width' : 'height'
-    }
-
-    Collapse.prototype.show = function () {
-        if (this.transitioning || this.$element.hasClass('in')) return
-
-        var activesData
-        var actives = this.$parent && this.$parent.children('.panel').children('.in, .collapsing')
-
-        if (actives && actives.length) {
-            activesData = actives.data('bs.collapse')
-            if (activesData && activesData.transitioning) return
-        }
-
-        var startEvent = $.Event('show.bs.collapse')
-        this.$element.trigger(startEvent)
-        if (startEvent.isDefaultPrevented()) return
-
-        if (actives && actives.length) {
-            Plugin.call(actives, 'hide')
-            activesData || actives.data('bs.collapse', null)
-        }
-
-        var dimension = this.dimension()
-
-        this.$element
-            .removeClass('collapse')
-            .addClass('collapsing')[dimension](0)
-            .attr('aria-expanded', true)
-
-        this.$trigger
-            .removeClass('collapsed')
-            .attr('aria-expanded', true)
-
-        this.transitioning = 1
-
-        var complete = function () {
-            this.$element
-                .removeClass('collapsing')
-                .addClass('collapse in')[dimension]('')
-            this.transitioning = 0
-            this.$element
-                .trigger('shown.bs.collapse')
-        }
-
-        if (!$.support.transition) return complete.call(this)
-
-        var scrollSize = $.camelCase(['scroll', dimension].join('-'))
-
-        this.$element
-            .one('bsTransitionEnd', $.proxy(complete, this))
-            .emulateTransitionEnd(Collapse.TRANSITION_DURATION)[dimension](this.$element[0][scrollSize])
-    }
-
-    Collapse.prototype.hide = function () {
-        if (this.transitioning || !this.$element.hasClass('in')) return
-
-        var startEvent = $.Event('hide.bs.collapse')
-        this.$element.trigger(startEvent)
-        if (startEvent.isDefaultPrevented()) return
-
-        var dimension = this.dimension()
-
-        this.$element[dimension](this.$element[dimension]())[0].offsetHeight
-
-        this.$element
-            .addClass('collapsing')
-            .removeClass('collapse in')
-            .attr('aria-expanded', false)
-
-        this.$trigger
-            .addClass('collapsed')
-            .attr('aria-expanded', false)
-
-        this.transitioning = 1
-
-        var complete = function () {
-            this.transitioning = 0
-            this.$element
-                .removeClass('collapsing')
-                .addClass('collapse')
-                .trigger('hidden.bs.collapse')
-        }
-
-        if (!$.support.transition) return complete.call(this)
-
-        this.$element
-            [dimension](0)
-            .one('bsTransitionEnd', $.proxy(complete, this))
-            .emulateTransitionEnd(Collapse.TRANSITION_DURATION)
-    }
-
-    Collapse.prototype.toggle = function () {
-        this[this.$element.hasClass('in') ? 'hide' : 'show']()
-    }
-
-    Collapse.prototype.getParent = function () {
-        return $(this.options.parent)
-            .find('[data-toggle="collapse"][data-parent="' + this.options.parent + '"]')
-            .each($.proxy(function (i, element) {
-                var $element = $(element)
-                this.addAriaAndCollapsedClass(getTargetFromTrigger($element), $element)
-            }, this))
-            .end()
-    }
-
-    Collapse.prototype.addAriaAndCollapsedClass = function ($element, $trigger) {
-        var isOpen = $element.hasClass('in')
-
-        $element.attr('aria-expanded', isOpen)
-        $trigger
-            .toggleClass('collapsed', !isOpen)
-            .attr('aria-expanded', isOpen)
-    }
-
-    function getTargetFromTrigger($trigger) {
-        var href
-        var target = $trigger.attr('data-target')
-            || (href = $trigger.attr('href')) && href.replace(/.*(?=#[^\s]+$)/, '') // strip for ie7
-
-        return $(target)
-    }
-
-
-    // COLLAPSE PLUGIN DEFINITION
-    // ==========================
-
-    function Plugin(option) {
-        return this.each(function () {
-            var $this = $(this)
-            var data = $this.data('bs.collapse')
-            var options = $.extend({}, Collapse.DEFAULTS, $this.data(), typeof option == 'object' && option)
-
-            if (!data && options.toggle && option == 'show') options.toggle = false
-            if (!data) $this.data('bs.collapse', (data = new Collapse(this, options)))
-            if (typeof option == 'string') data[option]()
-        })
-    }
-
-    var old = $.fn.collapse
-
-    $.fn.collapse = Plugin
-    $.fn.collapse.Constructor = Collapse
-
-
-    // COLLAPSE NO CONFLICT
-    // ====================
-
-    $.fn.collapse.noConflict = function () {
-        $.fn.collapse = old
-        return this
-    }
-
-
-    // COLLAPSE DATA-API
-    // =================
-
-    $(document).on('click.bs.collapse.data-api', '[data-toggle="collapse"]', function (e) {
-        var $this = $(this)
-
-        if (!$this.attr('data-target')) e.preventDefault()
-
-        var $target = getTargetFromTrigger($this)
-        var data = $target.data('bs.collapse')
-        var option = data ? 'toggle' : $.extend({}, $this.data(), { trigger: this })
-
-        Plugin.call($target, option)
     })
 
 }(jQuery);
@@ -788,7 +515,7 @@ if (typeof jQuery === 'undefined') {
                 $('<div class="dropdown-backdrop"/>').insertAfter($(this)).on('click', clearMenus)
             }
 
-            var relatedTarget = { relatedTarget: this }
+            var relatedTarget = {relatedTarget: this}
             $parent.trigger(e = $.Event('show.bs.dropdown', relatedTarget))
 
             if (e.isDefaultPrevented()) return
@@ -821,7 +548,7 @@ if (typeof jQuery === 'undefined') {
         if ((!isActive && e.which != 27) || (isActive && e.which == 27)) {
             if (e.which == 27) $parent.find(toggle).trigger('focus')
             return $this.trigger('click')
-        }
+    }
 
         var desc = ' li:not(.divider):visible a'
         var $items = $parent.find('[role="menu"]' + desc + ', [role="listbox"]' + desc)
@@ -843,7 +570,7 @@ if (typeof jQuery === 'undefined') {
         $(toggle).each(function () {
             var $this = $(this)
             var $parent = getParent($this)
-            var relatedTarget = { relatedTarget: this }
+            var relatedTarget = {relatedTarget: this}
 
             if (!$parent.hasClass('open')) return
 
@@ -862,7 +589,7 @@ if (typeof jQuery === 'undefined') {
         if (!selector) {
             selector = $this.attr('href')
             selector = selector && /#[A-Za-z]/.test(selector) && selector.replace(/.*(?=#[^\s]*$)/, '') // strip for ie7
-        }
+    }
 
         var $parent = selector && $(selector)
 
@@ -942,7 +669,7 @@ if (typeof jQuery === 'undefined') {
                 .load(this.options.remote, $.proxy(function () {
                     this.$element.trigger('loaded.bs.modal')
                 }, this))
-        }
+    }
     }
 
     Modal.VERSION = '3.3.2'
@@ -962,7 +689,7 @@ if (typeof jQuery === 'undefined') {
 
     Modal.prototype.show = function (_relatedTarget) {
         var that = this
-        var e = $.Event('show.bs.modal', { relatedTarget: _relatedTarget })
+        var e = $.Event('show.bs.modal', {relatedTarget: _relatedTarget})
 
         this.$element.trigger(e)
 
@@ -1003,7 +730,7 @@ if (typeof jQuery === 'undefined') {
 
             that.enforceFocus()
 
-            var e = $.Event('shown.bs.modal', { relatedTarget: _relatedTarget })
+            var e = $.Event('shown.bs.modal', {relatedTarget: _relatedTarget})
 
             transition ?
                 that.$element.find('.modal-dialog') // wait for modal to slide in
@@ -1049,7 +776,7 @@ if (typeof jQuery === 'undefined') {
             .on('focusin.bs.modal', $.proxy(function (e) {
                 if (this.$element[0] !== e.target && !this.$element.has(e.target).length) {
                     this.$element.trigger('focus')
-                }
+        }
             }, this))
     }
 
@@ -1060,7 +787,7 @@ if (typeof jQuery === 'undefined') {
             }, this))
         } else if (!this.isShown) {
             this.$element.off('keydown.dismiss.bs.modal')
-        }
+    }
     }
 
     Modal.prototype.resize = function () {
@@ -1068,7 +795,7 @@ if (typeof jQuery === 'undefined') {
             $(window).on('resize.bs.modal', $.proxy(this.handleUpdate, this))
         } else {
             $(window).off('resize.bs.modal')
-        }
+    }
     }
 
     Modal.prototype.hideModal = function () {
@@ -1130,7 +857,7 @@ if (typeof jQuery === 'undefined') {
 
         } else if (callback) {
             callback()
-        }
+    }
     }
 
     // these following methods are used to handle overflowing modals
@@ -1223,7 +950,7 @@ if (typeof jQuery === 'undefined') {
         var $this = $(this)
         var href = $this.attr('href')
         var $target = $($this.attr('data-target') || (href && href.replace(/.*(?=#[^\s]+$)/, ''))) // strip for ie7
-        var option = $target.data('bs.modal') ? 'toggle' : $.extend({ remote: !/#/.test(href) && href }, $target.data(), $this.data())
+        var option = $target.data('bs.modal') ? 'toggle' : $.extend({remote: !/#/.test(href) && href}, $target.data(), $this.data())
 
         if ($this.is('a')) e.preventDefault()
 
@@ -1282,7 +1009,7 @@ if (typeof jQuery === 'undefined') {
         viewport: {
             selector: 'body',
             padding: 0
-        }
+    }
     }
 
     Tooltip.prototype.init = function (type, element, options) {
@@ -1309,7 +1036,7 @@ if (typeof jQuery === 'undefined') {
         }
 
         this.options.selector ?
-            (this._options = $.extend({}, this.options, { trigger: 'manual', selector: '' })) :
+            (this._options = $.extend({}, this.options, {trigger: 'manual', selector: ''})) :
             this.fixTitle()
     }
 
@@ -1325,7 +1052,7 @@ if (typeof jQuery === 'undefined') {
                 show: options.delay,
                 hide: options.delay
             }
-        }
+    }
 
         return options
     }
@@ -1348,12 +1075,12 @@ if (typeof jQuery === 'undefined') {
         if (self && self.$tip && self.$tip.is(':visible')) {
             self.hoverState = 'in'
             return
-        }
+    }
 
         if (!self) {
             self = new this.constructor(obj.currentTarget, this.getDelegateOptions())
             $(obj.currentTarget).data('bs.' + this.type, self)
-        }
+    }
 
         clearTimeout(self.timeout)
 
@@ -1373,7 +1100,7 @@ if (typeof jQuery === 'undefined') {
         if (!self) {
             self = new this.constructor(obj.currentTarget, this.getDelegateOptions())
             $(obj.currentTarget).data('bs.' + this.type, self)
-        }
+    }
 
         clearTimeout(self.timeout)
 
@@ -1416,7 +1143,7 @@ if (typeof jQuery === 'undefined') {
 
             $tip
                 .detach()
-                .css({ top: 0, left: 0, display: 'block' })
+                .css({top: 0, left: 0, display: 'block'})
                 .addClass(placement)
                 .data('bs.' + this.type, this)
 
@@ -1432,10 +1159,10 @@ if (typeof jQuery === 'undefined') {
                 var containerDim = this.getPosition($container)
 
                 placement = placement == 'bottom' && pos.bottom + actualHeight > containerDim.bottom ? 'top' :
-                        placement == 'top' && pos.top - actualHeight < containerDim.top ? 'bottom' :
+                    placement == 'top' && pos.top - actualHeight < containerDim.top ? 'bottom' :
                         placement == 'right' && pos.right + actualWidth > containerDim.width ? 'left' :
-                        placement == 'left' && pos.left - actualWidth < containerDim.left ? 'right' :
-                    placement
+                            placement == 'left' && pos.left - actualWidth < containerDim.left ? 'right' :
+                                placement
 
                 $tip
                     .removeClass(orgPlacement)
@@ -1459,7 +1186,7 @@ if (typeof jQuery === 'undefined') {
                     .one('bsTransitionEnd', complete)
                     .emulateTransitionEnd(Tooltip.TRANSITION_DURATION) :
                 complete()
-        }
+    }
     }
 
     Tooltip.prototype.applyPlacement = function (offset, placement) {
@@ -1485,7 +1212,7 @@ if (typeof jQuery === 'undefined') {
                 $tip.css({
                     top: Math.round(props.top),
                     left: Math.round(props.left)
-                })
+        })
             }
         }, offset), 0)
 
@@ -1537,7 +1264,7 @@ if (typeof jQuery === 'undefined') {
                 .removeAttr('aria-describedby')
                 .trigger('hidden.bs.' + that.type)
             callback && callback()
-        }
+    }
 
         this.$element.trigger(e)
 
@@ -1576,25 +1303,28 @@ if (typeof jQuery === 'undefined') {
         var elRect = el.getBoundingClientRect()
         if (elRect.width == null) {
             // width and height are missing in IE8, so compute them manually; see https://github.com/twbs/bootstrap/issues/14093
-            elRect = $.extend({}, elRect, { width: elRect.right - elRect.left, height: elRect.bottom - elRect.top })
+            elRect = $.extend({}, elRect, {width: elRect.right - elRect.left, height: elRect.bottom - elRect.top})
         }
-        var elOffset = isBody ? { top: 0, left: 0 } : $element.offset()
-        var scroll = { scroll: isBody ? document.documentElement.scrollTop || document.body.scrollTop : $element.scrollTop() }
-        var outerDims = isBody ? { width: $(window).width(), height: $(window).height() } : null
+        var elOffset = isBody ? {top: 0, left: 0} : $element.offset()
+        var scroll = {scroll: isBody ? document.documentElement.scrollTop || document.body.scrollTop : $element.scrollTop()}
+        var outerDims = isBody ? {width: $(window).width(), height: $(window).height()} : null
 
         return $.extend({}, elRect, scroll, outerDims, elOffset)
     }
 
     Tooltip.prototype.getCalculatedOffset = function (placement, pos, actualWidth, actualHeight) {
-        return placement == 'bottom' ? { top: pos.top + pos.height, left: pos.left + pos.width / 2 - actualWidth / 2 } :
-                placement == 'top' ? { top: pos.top - actualHeight, left: pos.left + pos.width / 2 - actualWidth / 2 } :
-                placement == 'left' ? { top: pos.top + pos.height / 2 - actualHeight / 2, left: pos.left - actualWidth } :
-            /* placement == 'right' */ { top: pos.top + pos.height / 2 - actualHeight / 2, left: pos.left + pos.width }
+        return placement == 'bottom' ? {top: pos.top + pos.height, left: pos.left + pos.width / 2 - actualWidth / 2} :
+            placement == 'top' ? {top: pos.top - actualHeight, left: pos.left + pos.width / 2 - actualWidth / 2} :
+                placement == 'left' ? {top: pos.top + pos.height / 2 - actualHeight / 2, left: pos.left - actualWidth} :
+                    /* placement == 'right' */ {
+                    top: pos.top + pos.height / 2 - actualHeight / 2,
+                    left: pos.left + pos.width
+                }
 
     }
 
     Tooltip.prototype.getViewportAdjustedDelta = function (placement, pos, actualWidth, actualHeight) {
-        var delta = { top: 0, left: 0 }
+        var delta = {top: 0, left: 0}
         if (!this.$viewport) return delta
 
         var viewportPadding = this.options.viewport && this.options.viewport.padding || 0
@@ -1616,7 +1346,7 @@ if (typeof jQuery === 'undefined') {
             } else if (rightEdgeOffset > viewportDimensions.width) { // right overflow
                 delta.left = viewportDimensions.left + viewportDimensions.width - rightEdgeOffset
             }
-        }
+    }
 
         return delta
     }
@@ -1627,7 +1357,7 @@ if (typeof jQuery === 'undefined') {
         var o = this.options
 
         title = $e.attr('data-original-title')
-            || (typeof o.title == 'function' ? o.title.call($e[0]) : o.title)
+        || (typeof o.title == 'function' ? o.title.call($e[0]) : o.title)
 
         return title
     }
@@ -1666,7 +1396,7 @@ if (typeof jQuery === 'undefined') {
                 self = new this.constructor(e.currentTarget, this.getDelegateOptions())
                 $(e.currentTarget).data('bs.' + this.type, self)
             }
-        }
+    }
 
         self.tip().hasClass('in') ? self.leave(self) : self.enter(self)
     }
@@ -1826,186 +1556,6 @@ if (typeof jQuery === 'undefined') {
 }(jQuery);
 
 /* ========================================================================
- * Bootstrap: scrollspy.js v3.3.2
- * http://getbootstrap.com/javascript/#scrollspy
- * ========================================================================
- * Copyright 2011-2015 Twitter, Inc.
- * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
- * ======================================================================== */
-
-
-+function ($) {
-    'use strict';
-
-    // SCROLLSPY CLASS DEFINITION
-    // ==========================
-
-    function ScrollSpy(element, options) {
-        var process = $.proxy(this.process, this)
-
-        this.$body = $('body')
-        this.$scrollElement = $(element).is('body') ? $(window) : $(element)
-        this.options = $.extend({}, ScrollSpy.DEFAULTS, options)
-        this.selector = (this.options.target || '') + ' .nav li > a'
-        this.offsets = []
-        this.targets = []
-        this.activeTarget = null
-        this.scrollHeight = 0
-
-        this.$scrollElement.on('scroll.bs.scrollspy', process)
-        this.refresh()
-        this.process()
-    }
-
-    ScrollSpy.VERSION = '3.3.2'
-
-    ScrollSpy.DEFAULTS = {
-        offset: 10
-    }
-
-    ScrollSpy.prototype.getScrollHeight = function () {
-        return this.$scrollElement[0].scrollHeight || Math.max(this.$body[0].scrollHeight, document.documentElement.scrollHeight)
-    }
-
-    ScrollSpy.prototype.refresh = function () {
-        var offsetMethod = 'offset'
-        var offsetBase = 0
-
-        if (!$.isWindow(this.$scrollElement[0])) {
-            offsetMethod = 'position'
-            offsetBase = this.$scrollElement.scrollTop()
-        }
-
-        this.offsets = []
-        this.targets = []
-        this.scrollHeight = this.getScrollHeight()
-
-        var self = this
-
-        this.$body
-            .find(this.selector)
-            .map(function () {
-                var $el = $(this)
-                var href = $el.data('target') || $el.attr('href')
-                var $href = /^#./.test(href) && $(href)
-
-                return ($href
-                    && $href.length
-                    && $href.is(':visible')
-                    && [
-                        [$href[offsetMethod]().top + offsetBase, href]
-                    ]) || null
-            })
-            .sort(function (a, b) {
-                return a[0] - b[0]
-            })
-            .each(function () {
-                self.offsets.push(this[0])
-                self.targets.push(this[1])
-            })
-    }
-
-    ScrollSpy.prototype.process = function () {
-        var scrollTop = this.$scrollElement.scrollTop() + this.options.offset
-        var scrollHeight = this.getScrollHeight()
-        var maxScroll = this.options.offset + scrollHeight - this.$scrollElement.height()
-        var offsets = this.offsets
-        var targets = this.targets
-        var activeTarget = this.activeTarget
-        var i
-
-        if (this.scrollHeight != scrollHeight) {
-            this.refresh()
-        }
-
-        if (scrollTop >= maxScroll) {
-            return activeTarget != (i = targets[targets.length - 1]) && this.activate(i)
-        }
-
-        if (activeTarget && scrollTop < offsets[0]) {
-            this.activeTarget = null
-            return this.clear()
-        }
-
-        for (i = offsets.length; i--;) {
-            activeTarget != targets[i]
-            && scrollTop >= offsets[i]
-            && (!offsets[i + 1] || scrollTop <= offsets[i + 1])
-            && this.activate(targets[i])
-        }
-    }
-
-    ScrollSpy.prototype.activate = function (target) {
-        this.activeTarget = target
-
-        this.clear()
-
-        var selector = this.selector +
-            '[data-target="' + target + '"],' +
-            this.selector + '[href="' + target + '"]'
-
-        var active = $(selector)
-            .parents('li')
-            .addClass('active')
-
-        if (active.parent('.dropdown-menu').length) {
-            active = active
-                .closest('li.dropdown')
-                .addClass('active')
-        }
-
-        active.trigger('activate.bs.scrollspy')
-    }
-
-    ScrollSpy.prototype.clear = function () {
-        $(this.selector)
-            .parentsUntil(this.options.target, '.active')
-            .removeClass('active')
-    }
-
-
-    // SCROLLSPY PLUGIN DEFINITION
-    // ===========================
-
-    function Plugin(option) {
-        return this.each(function () {
-            var $this = $(this)
-            var data = $this.data('bs.scrollspy')
-            var options = typeof option == 'object' && option
-
-            if (!data) $this.data('bs.scrollspy', (data = new ScrollSpy(this, options)))
-            if (typeof option == 'string') data[option]()
-        })
-    }
-
-    var old = $.fn.scrollspy
-
-    $.fn.scrollspy = Plugin
-    $.fn.scrollspy.Constructor = ScrollSpy
-
-
-    // SCROLLSPY NO CONFLICT
-    // =====================
-
-    $.fn.scrollspy.noConflict = function () {
-        $.fn.scrollspy = old
-        return this
-    }
-
-
-    // SCROLLSPY DATA-API
-    // ==================
-
-    $(window).on('load.bs.scrollspy.data-api', function () {
-        $('[data-spy="scroll"]').each(function () {
-            var $spy = $(this)
-            Plugin.call($spy, $spy.data())
-        })
-    })
-
-}(jQuery);
-
-/* ========================================================================
  * Bootstrap: tab.js v3.3.2
  * http://getbootstrap.com/javascript/#tabs
  * ========================================================================
@@ -2043,7 +1593,7 @@ if (typeof jQuery === 'undefined') {
         var $previous = $ul.find('.active:last a')
         var hideEvent = $.Event('hide.bs.tab', {
             relatedTarget: $this[0]
-        })
+    })
         var showEvent = $.Event('show.bs.tab', {
             relatedTarget: $previous[0]
         })
@@ -2105,7 +1655,7 @@ if (typeof jQuery === 'undefined') {
             }
 
             callback && callback()
-        }
+    }
 
         $active.length && transition ?
             $active
@@ -2264,13 +1814,13 @@ if (typeof jQuery === 'undefined') {
                 .removeClass(Affix.RESET)
                 .addClass(affixType)
                 .trigger(affixType.replace('affix', 'affixed') + '.bs.affix')
-        }
+    }
 
         if (affix == 'bottom') {
             this.$element.offset({
                 top: scrollHeight - height - offsetBottom
             })
-        }
+    }
     }
 
 
@@ -2317,7 +1867,461 @@ if (typeof jQuery === 'undefined') {
             if (data.offsetTop != null) data.offset.top = data.offsetTop
 
             Plugin.call($spy, data)
+    })
+    })
+
+}(jQuery);
+
+/* ========================================================================
+ * Bootstrap: collapse.js v3.3.2
+ * http://getbootstrap.com/javascript/#collapse
+ * ========================================================================
+ * Copyright 2011-2015 Twitter, Inc.
+ * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
+ * ======================================================================== */
+
+
++function ($) {
+    'use strict';
+
+    // COLLAPSE PUBLIC CLASS DEFINITION
+    // ================================
+
+    var Collapse = function (element, options) {
+        this.$element = $(element)
+        this.options = $.extend({}, Collapse.DEFAULTS, options)
+        this.$trigger = $(this.options.trigger).filter('[href="#' + element.id + '"], [data-target="#' + element.id + '"]')
+        this.transitioning = null
+
+        if (this.options.parent) {
+            this.$parent = this.getParent()
+        } else {
+            this.addAriaAndCollapsedClass(this.$element, this.$trigger)
+    }
+
+        if (this.options.toggle) this.toggle()
+    }
+
+    Collapse.VERSION = '3.3.2'
+
+    Collapse.TRANSITION_DURATION = 350
+
+    Collapse.DEFAULTS = {
+        toggle: true,
+        trigger: '[data-toggle="collapse"]'
+    }
+
+    Collapse.prototype.dimension = function () {
+        var hasWidth = this.$element.hasClass('width')
+        return hasWidth ? 'width' : 'height'
+    }
+
+    Collapse.prototype.show = function () {
+        if (this.transitioning || this.$element.hasClass('in')) return
+
+        var activesData
+        var actives = this.$parent && this.$parent.children('.panel').children('.in, .collapsing')
+
+        if (actives && actives.length) {
+            activesData = actives.data('bs.collapse')
+            if (activesData && activesData.transitioning) return
+        }
+
+        var startEvent = $.Event('show.bs.collapse')
+        this.$element.trigger(startEvent)
+        if (startEvent.isDefaultPrevented()) return
+
+        if (actives && actives.length) {
+            Plugin.call(actives, 'hide')
+            activesData || actives.data('bs.collapse', null)
+    }
+
+        var dimension = this.dimension()
+
+        this.$element
+            .removeClass('collapse')
+            .addClass('collapsing')[dimension](0)
+            .attr('aria-expanded', true)
+
+        this.$trigger
+            .removeClass('collapsed')
+            .attr('aria-expanded', true)
+
+        this.transitioning = 1
+
+        var complete = function () {
+            this.$element
+                .removeClass('collapsing')
+                .addClass('collapse in')[dimension]('')
+            this.transitioning = 0
+            this.$element
+                .trigger('shown.bs.collapse')
+        }
+
+        if (!$.support.transition) return complete.call(this)
+
+        var scrollSize = $.camelCase(['scroll', dimension].join('-'))
+
+        this.$element
+            .one('bsTransitionEnd', $.proxy(complete, this))
+            .emulateTransitionEnd(Collapse.TRANSITION_DURATION)[dimension](this.$element[0][scrollSize])
+    }
+
+    Collapse.prototype.hide = function () {
+        if (this.transitioning || !this.$element.hasClass('in')) return
+
+        var startEvent = $.Event('hide.bs.collapse')
+        this.$element.trigger(startEvent)
+        if (startEvent.isDefaultPrevented()) return
+
+        var dimension = this.dimension()
+
+        this.$element[dimension](this.$element[dimension]())[0].offsetHeight
+
+        this.$element
+            .addClass('collapsing')
+            .removeClass('collapse in')
+            .attr('aria-expanded', false)
+
+        this.$trigger
+            .addClass('collapsed')
+            .attr('aria-expanded', false)
+
+        this.transitioning = 1
+
+        var complete = function () {
+            this.transitioning = 0
+            this.$element
+                .removeClass('collapsing')
+                .addClass('collapse')
+                .trigger('hidden.bs.collapse')
+    }
+
+        if (!$.support.transition) return complete.call(this)
+
+        this.$element
+            [dimension](0)
+            .one('bsTransitionEnd', $.proxy(complete, this))
+            .emulateTransitionEnd(Collapse.TRANSITION_DURATION)
+    }
+
+    Collapse.prototype.toggle = function () {
+        this[this.$element.hasClass('in') ? 'hide' : 'show']()
+    }
+
+    Collapse.prototype.getParent = function () {
+        return $(this.options.parent)
+            .find('[data-toggle="collapse"][data-parent="' + this.options.parent + '"]')
+            .each($.proxy(function (i, element) {
+                var $element = $(element)
+                this.addAriaAndCollapsedClass(getTargetFromTrigger($element), $element)
+            }, this))
+            .end()
+    }
+
+    Collapse.prototype.addAriaAndCollapsedClass = function ($element, $trigger) {
+        var isOpen = $element.hasClass('in')
+
+        $element.attr('aria-expanded', isOpen)
+        $trigger
+            .toggleClass('collapsed', !isOpen)
+            .attr('aria-expanded', isOpen)
+    }
+
+    function getTargetFromTrigger($trigger) {
+        var href
+        var target = $trigger.attr('data-target')
+            || (href = $trigger.attr('href')) && href.replace(/.*(?=#[^\s]+$)/, '') // strip for ie7
+
+        return $(target)
+    }
+
+
+    // COLLAPSE PLUGIN DEFINITION
+    // ==========================
+
+    function Plugin(option) {
+        return this.each(function () {
+            var $this = $(this)
+            var data = $this.data('bs.collapse')
+            var options = $.extend({}, Collapse.DEFAULTS, $this.data(), typeof option == 'object' && option)
+
+            if (!data && options.toggle && option == 'show') options.toggle = false
+            if (!data) $this.data('bs.collapse', (data = new Collapse(this, options)))
+            if (typeof option == 'string') data[option]()
         })
+    }
+
+    var old = $.fn.collapse
+
+    $.fn.collapse = Plugin
+    $.fn.collapse.Constructor = Collapse
+
+
+    // COLLAPSE NO CONFLICT
+    // ====================
+
+    $.fn.collapse.noConflict = function () {
+        $.fn.collapse = old
+        return this
+    }
+
+
+    // COLLAPSE DATA-API
+    // =================
+
+    $(document).on('click.bs.collapse.data-api', '[data-toggle="collapse"]', function (e) {
+        var $this = $(this)
+
+        if (!$this.attr('data-target')) e.preventDefault()
+
+        var $target = getTargetFromTrigger($this)
+        var data = $target.data('bs.collapse')
+        var option = data ? 'toggle' : $.extend({}, $this.data(), {trigger: this})
+
+        Plugin.call($target, option)
+    })
+
+}(jQuery);
+
+/* ========================================================================
+ * Bootstrap: scrollspy.js v3.3.2
+ * http://getbootstrap.com/javascript/#scrollspy
+ * ========================================================================
+ * Copyright 2011-2015 Twitter, Inc.
+ * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
+ * ======================================================================== */
+
+
++function ($) {
+    'use strict';
+
+    // SCROLLSPY CLASS DEFINITION
+    // ==========================
+
+    function ScrollSpy(element, options) {
+        var process = $.proxy(this.process, this)
+
+        this.$body = $('body')
+        this.$scrollElement = $(element).is('body') ? $(window) : $(element)
+        this.options = $.extend({}, ScrollSpy.DEFAULTS, options)
+        this.selector = (this.options.target || '') + ' .nav li > a'
+        this.offsets = []
+        this.targets = []
+        this.activeTarget = null
+        this.scrollHeight = 0
+
+        this.$scrollElement.on('scroll.bs.scrollspy', process)
+        this.refresh()
+        this.process()
+    }
+
+    ScrollSpy.VERSION = '3.3.2'
+
+    ScrollSpy.DEFAULTS = {
+        offset: 10
+    }
+
+    ScrollSpy.prototype.getScrollHeight = function () {
+        return this.$scrollElement[0].scrollHeight || Math.max(this.$body[0].scrollHeight, document.documentElement.scrollHeight)
+    }
+
+    ScrollSpy.prototype.refresh = function () {
+        var offsetMethod = 'offset'
+        var offsetBase = 0
+
+        if (!$.isWindow(this.$scrollElement[0])) {
+            offsetMethod = 'position'
+            offsetBase = this.$scrollElement.scrollTop()
+    }
+
+        this.offsets = []
+        this.targets = []
+        this.scrollHeight = this.getScrollHeight()
+
+        var self = this
+
+        this.$body
+            .find(this.selector)
+            .map(function () {
+                var $el = $(this)
+                var href = $el.data('target') || $el.attr('href')
+                var $href = /^#./.test(href) && $(href)
+
+                return ($href
+                    && $href.length
+                    && $href.is(':visible')
+                    && [[$href[offsetMethod]().top + offsetBase, href]]) || null
+            })
+            .sort(function (a, b) {
+                return a[0] - b[0]
+            })
+            .each(function () {
+                self.offsets.push(this[0])
+                self.targets.push(this[1])
+            })
+    }
+
+    ScrollSpy.prototype.process = function () {
+        var scrollTop = this.$scrollElement.scrollTop() + this.options.offset
+        var scrollHeight = this.getScrollHeight()
+        var maxScroll = this.options.offset + scrollHeight - this.$scrollElement.height()
+        var offsets = this.offsets
+        var targets = this.targets
+        var activeTarget = this.activeTarget
+        var i
+
+        if (this.scrollHeight != scrollHeight) {
+            this.refresh()
+    }
+
+        if (scrollTop >= maxScroll) {
+            return activeTarget != (i = targets[targets.length - 1]) && this.activate(i)
+    }
+
+        if (activeTarget && scrollTop < offsets[0]) {
+            this.activeTarget = null
+            return this.clear()
+    }
+
+        for (i = offsets.length; i--;) {
+            activeTarget != targets[i]
+            && scrollTop >= offsets[i]
+            && (!offsets[i + 1] || scrollTop <= offsets[i + 1])
+            && this.activate(targets[i])
+        }
+    }
+
+    ScrollSpy.prototype.activate = function (target) {
+        this.activeTarget = target
+
+        this.clear()
+
+        var selector = this.selector +
+            '[data-target="' + target + '"],' +
+            this.selector + '[href="' + target + '"]'
+
+        var active = $(selector)
+            .parents('li')
+            .addClass('active')
+
+        if (active.parent('.dropdown-menu').length) {
+            active = active
+                .closest('li.dropdown')
+                .addClass('active')
+        }
+
+        active.trigger('activate.bs.scrollspy')
+    }
+
+    ScrollSpy.prototype.clear = function () {
+        $(this.selector)
+            .parentsUntil(this.options.target, '.active')
+            .removeClass('active')
+    }
+
+
+    // SCROLLSPY PLUGIN DEFINITION
+    // ===========================
+
+    function Plugin(option) {
+        return this.each(function () {
+            var $this = $(this)
+            var data = $this.data('bs.scrollspy')
+            var options = typeof option == 'object' && option
+
+            if (!data) $this.data('bs.scrollspy', (data = new ScrollSpy(this, options)))
+            if (typeof option == 'string') data[option]()
+        })
+    }
+
+    var old = $.fn.scrollspy
+
+    $.fn.scrollspy = Plugin
+    $.fn.scrollspy.Constructor = ScrollSpy
+
+
+    // SCROLLSPY NO CONFLICT
+    // =====================
+
+    $.fn.scrollspy.noConflict = function () {
+        $.fn.scrollspy = old
+        return this
+    }
+
+
+    // SCROLLSPY DATA-API
+    // ==================
+
+    $(window).on('load.bs.scrollspy.data-api', function () {
+        $('[data-spy="scroll"]').each(function () {
+            var $spy = $(this)
+            Plugin.call($spy, $spy.data())
+        })
+    })
+
+}(jQuery);
+
+/* ========================================================================
+ * Bootstrap: transition.js v3.3.2
+ * http://getbootstrap.com/javascript/#transitions
+ * ========================================================================
+ * Copyright 2011-2015 Twitter, Inc.
+ * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
+ * ======================================================================== */
+
+
++function ($) {
+    'use strict';
+
+    // CSS TRANSITION SUPPORT (Shoutout: http://www.modernizr.com/)
+    // ============================================================
+
+    function transitionEnd() {
+        var el = document.createElement('bootstrap')
+
+        var transEndEventNames = {
+            WebkitTransition: 'webkitTransitionEnd',
+            MozTransition: 'transitionend',
+            OTransition: 'oTransitionEnd otransitionend',
+            transition: 'transitionend'
+    }
+
+        for (var name in transEndEventNames) {
+            if (el.style[name] !== undefined) {
+                return {end: transEndEventNames[name]}
+            }
+        }
+
+        return false // explicit for ie8 (  ._.)
+    }
+
+    // http://blog.alexmaccaw.com/css-transitions
+    $.fn.emulateTransitionEnd = function (duration) {
+        var called = false
+        var $el = this
+        $(this).one('bsTransitionEnd', function () {
+            called = true
+        })
+        var callback = function () {
+            if (!called) $($el).trigger($.support.transition.end)
+        }
+        setTimeout(callback, duration)
+        return this
+    }
+
+    $(function () {
+        $.support.transition = transitionEnd()
+
+        if (!$.support.transition) return
+
+        $.event.special.bsTransitionEnd = {
+            bindType: $.support.transition.end,
+            delegateType: $.support.transition.end,
+            handle: function (e) {
+                if ($(e.target).is(this)) return e.handleObj.handler.apply(this, arguments)
+            }
+        }
     })
 
 }(jQuery);

@@ -1,18 +1,18 @@
-bineApp.controller('friendConfirmedListControl', ['$scope', '$http', 'userService', function ($scope, $http, userService) {
+bineApp.controller('friendConfirmedListControl', ['$scope', '$http', 'authService', function ($scope, $http, authService) {
 
     // check the authentication
-    if (!userService.check_auth_and_set_user($scope)) {
+    if (!authService.check_auth_and_set_user($scope)) {
         return;
     }
 
     $scope.load_friend_list = function () {
-        $http.get('/friend/?status=Y').success(function (data) {
+        $http.get('/api/friend/?status=Y').success(function (data) {
             $scope.friends = data;
         });
     }
 
     $scope.remove_friend = function (friend, index) {
-        var url = "/friend/" + friend.id + "/";
+        var url = "/api/friend/" + friend.id + "/";
 
         $http.delete(url).success(function (data) {
             alert(friend.fullname + "님을 친구목록에서 삭제하였습니다.");
@@ -23,21 +23,21 @@ bineApp.controller('friendConfirmedListControl', ['$scope', '$http', 'userServic
     $scope.load_friend_list();
 }]);
 
-bineApp.controller('friendUnconfirmedListControl', ['$scope', '$http', 'userService', function ($scope, $http, userService) {
+bineApp.controller('friendUnconfirmedListControl', ['$scope', '$http', 'authService', function ($scope, $http, authService) {
 
     // check the authentication
-    if (!userService.check_auth_and_set_user($scope)) {
+    if (!authService.check_auth_and_set_user($scope)) {
         return;
     }
 
     $scope.load_friend_list = function () {
-        $http.get('/friend/?status=N').success(function (data) {
+        $http.get('/api/friend/?status=N').success(function (data) {
             $scope.friends = data;
         });
     }
 
     $scope.confirm_friend = function (friend, index) {
-        var url = "/friend/";
+        var url = "/api/friend/";
         var data = {
             'friend': friend.id,
             'status': 'Y'
@@ -50,7 +50,7 @@ bineApp.controller('friendUnconfirmedListControl', ['$scope', '$http', 'userServ
     }
 
     $scope.unconfirm_friend = function (friend, index) {
-        var url = "/friend/";
+        var url = "/api/friend/";
         var data = {
             'friend': friend.id,
             'status': 'N'
@@ -66,22 +66,22 @@ bineApp.controller('friendUnconfirmedListControl', ['$scope', '$http', 'userServ
 }]);
 
 
-bineApp.controller('friendSearchControl', ['$scope', '$http', 'userService', function ($scope, $http, userService) {
+bineApp.controller('friendSearchControl', ['$scope', '$http', 'authService', function ($scope, $http, authService) {
 
     // check the authentication
-    if (!userService.check_auth_and_set_user($scope)) {
+    if (!authService.check_auth_and_set_user($scope)) {
         return;
     }
 
     $scope.search_friend = function () {
-        var url = "/friend/search/?q=" + $scope.friend_query;
+        var url = "/api/friend/search/?q=" + $scope.friend_query;
         $http.get(url).success(function (data) {
             $scope.search_friends = data;
         });
     }
 
     $scope.add_friend = function (friend, index) {
-        var url = "/friend/";
+        var url = "/api/friend/";
         var data = {'friend': friend.id};
 
         $http.post(url, data).success(function (data) {
@@ -91,21 +91,21 @@ bineApp.controller('friendSearchControl', ['$scope', '$http', 'userService', fun
     }
 }]);
 
-bineApp.controller('friendRecommendControl', ['$scope', '$http', 'userService', function ($scope, $http, userService) {
+bineApp.controller('friendRecommendControl', ['$scope', '$http', 'authService', function ($scope, $http, authService) {
 
     // check the authentication
-    if (!userService.check_auth_and_set_user($scope)) {
+    if (!authService.check_auth_and_set_user($scope)) {
         return;
     }
 
     $scope.load_friend_list = function () {
-        $http.get('/friend/recommend/').success(function (data) {
+        $http.get('/api/friend/recommend/').success(function (data) {
             $scope.friends = data;
         });
     }
 
     $scope.add_friend = function (friend, index) {
-        var url = "/friend/";
+        var url = "/api/friend/";
         var data = {'friend': friend.id};
 
         $http.post(url, data).success(function (data) {

@@ -1,0 +1,124 @@
+@media screen and (max-width: 480px) {
+    .menu_caption {
+        display: none;
+    }
+
+    .search-icon-only {
+        display: inline;
+    }
+}
+
+@media screen and (min-width: 481px) {
+    .menu_caption {
+        display: inline;
+    }
+
+    .search-icon-only {
+        display: none;
+    }
+}
+
+.container-fluid .navbar {
+    margin-left: -8px;
+    margin-right: -8px;
+}
+
+.navbar-brand {
+    font-size: 22px;
+    font-weight: bold;
+    margin-right: 30px;
+}
+
+.navbar-nav > li {
+    font-size: 16px;
+}
+
+/* 화면이 모바일 크기로 줄어들었을 때 책 검색 input box가 다음 줄로 가는 것을 방지하는 기능*/
+.navbar-form .form-control, .navbar-form .input-group-btn {
+    width: auto !important;
+}
+
+.navbar .form-group {
+    margin-bottom: 0;
+}
+
+/* 모바일 화면에서 서브 메뉴을 위한 스타일 */
+.float-menu {
+    padding: 14px;
+    color: white;
+    font-size: 16px;
+    z-index: 1;
+    width: 40px;
+    height: 40px;
+    /*
+    background: #F44336;
+
+    border-radius: 50%;
+   margin-top: -10px;
+    margin-right: -10px; */
+}
+
+/*
+Active인 메뉴 표시
+*/
+.navbar-default .navbar-nav > .active > a, .navbar-default .navbar-nav > .active > a:focus, .navbar-default .navbar-nav > .active > a:hover {
+    border-bottom: solid 3px white;
+}
+
+.panel-container {
+    background: #fff;
+    border-radius: 4px;
+}
+
+.page-title {
+    margin-left: 4px;
+    margin-bottom: 20px;
+    border-bottom: solid 1px #ddd;
+    padding-bottom: 8px;
+}
+
+.panel {
+    margin-bottom: 8px;
+    border: none;
+}
+
+.panel > .panel-heading {
+    background-color: white;
+    border-bottom: none;
+}
+
+.panel .panel-title {
+    font-size: 12pt;
+    font-weight: bold;
+    text-overflow: ellipsis;
+}
+
+.panel > .panel-footer {
+    background-color: white;
+    border-top: none;
+    border-bottom: 1px solid #ddd;
+    border-radius: 0;
+}
+
+.panel > .panel-body {
+    padding-top: 0;
+    padding-bottom: 0;
+    margin-bottom: 0;
+}
+
+.panel-detail {
+    font-size: 9pt;
+    color: #595959;
+}
+
+.panel .panel-content {
+    margin-top: 6px;
+    margin-bottom: 4px;
+    font-size: 14px;
+}
+
+.book-photo {
+    padding: 4px 4px 4px 8px;
+    width: auto;
+    height: 100px;
+}
