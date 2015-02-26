@@ -1,6 +1,6 @@
 <nav class="navbar navbar-default navbar-static-top">
     <div class="container-fluid">
-        <a class="navbar-brand" href="#">Bine</a>
+        <a class="navbar-brand" href="">Bine</a>
         <ul class="nav navbar-nav visible-sm visible-md visible-lg">
             <li class="active"><a href="#/note/"><span class="glyphicon glyphicon-edit"></span><span
                     class="menu_caption"> 노트</span></a></li>
@@ -57,21 +57,20 @@
         <a href="" class="list-group-item">친구 독서노트만 보기</a>
         <a href="" class="list-group-item">새 독서노트만 보기</a>
         <a href="#/note/new/" class="list-group-item">독서노트 작성</a>
-
     </div>
 </div>
 
 
-<div class="col-xs-12 col-sm-9 col-md-10 panel-container">
+<div class="col-xs-12 col-sm-9 col-md-10 list-container">
     <div class="col-xs-12">
-        <h4 class="page-title">전체 녹서노트 목록</h4>
+        <h4 class="list-title">전체 녹서노트 목록</h4>
 
-        <div class="alert alert-warning" ng-show="!notes.length">
-            <span class="glyphicon glyphicon-alert"></span> 작성하신 독서 노트가 없습니다. <a href="#/note/new/">독서노트</a>를 새로
-            작성하세요.
+        <div class="ng-hide alert alert-warning" ng-show="noData">
+            <span class="glyphicon glyphicon-alert"></span> 아직 독서 노트를 작성하지 않으셨네요. 새로 독서노트를 작성하려면 <a href="#/note/new/">여기</a>를
+            눌러주세요.
         </div>
     </div>
-    <div class="panel panel-default" ng-repeat="note in notes">
+    <div class="list-item panel panel-default" ng-repeat="note in notes">
         <div class="panel-heading">
             <h4 class="panel-title">
                 <a href="#/note/{{ note.id }}">{{ note.book.title }}</a></h4>

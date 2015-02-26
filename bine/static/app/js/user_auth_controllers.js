@@ -3,6 +3,8 @@ bineApp.controller('UserAuthControl', ['$scope', '$http', 'authService',
 
         authService.clear();
 
+        $scope.register_step1 = true;
+
         // login check
         $scope.login = function () {
             $http.post('/api/auth/login/', {
@@ -10,29 +12,15 @@ bineApp.controller('UserAuthControl', ['$scope', '$http', 'authService',
                 'password': $scope.password
             }).success(function (data) {
                 authService.set_token_and_user_info(data);
-                location.href = "#/note/"
+                location.href = "#/note/";
             }).error(function (data) {
                 alert('로그인이 실패했습니다. 사용자 정보를 다시 확인하십시오.');
             });
         }
 
-        $scope.make_birthday = function () {
-            var year = $scope.birth_year;
-            var month = $scope.birth_month;
-            var day = $scope.birth_day;
-
-            if (year.v != null && month.v != null && day.v != null) {
-                $scope.birthday = year.name + '-' + month.name + '-' + day.name;
-            }
-            else {
-                $scope.birthday = '';
-            }
-        }
-
-        $scope.equal_password = function () {
-            return $scope.password1 == $scope.password2;
-        }
-
+        /*
+         새 사용자 등록 함수
+         */
         $scope.register = function () {
             if (!$scope.reg_form.$valid)
                 return;
@@ -51,10 +39,27 @@ bineApp.controller('UserAuthControl', ['$scope', '$http', 'authService',
             }
 
             $http.post(url, data).success(function (data) {
-                alert('회원 가입이 성공하였습니다. 메인 페이지로 이동합니다.');
                 authService.set_token_and_user_info(data);
-                location.href = "#/note/";
+                $scope.register_step1 = false;
+                $scope.register_step2 = true;
             });
+        }
+
+        $scope.make_birthday = function () {
+            var year = $scope.birth_year;
+            var month = $scope.birth_month;
+            var day = $scope.birth_day;
+
+            if (year.v != null && month.v != null && day.v != null) {
+                $scope.birthday = year.name + '-' + month.name + '-' + day.name;
+            }
+            else {
+                $scope.birthday = '';
+            }
+        }
+
+        $scope.equal_password = function () {
+            return $scope.password1 == $scope.password2;
         }
 
         $scope.set_sex = function (sex) {

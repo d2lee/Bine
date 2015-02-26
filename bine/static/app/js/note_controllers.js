@@ -10,6 +10,7 @@ bineApp.controller('NoteListControl', ["$rootScope", "$scope", "$sce",
 
         $http.get('/api/note/').success(function (data) {
             $scope.notes = data;
+            $scope.noData = !$scope.notes.length;
         });
 
         $scope.make_html_preference = function (preference) {
@@ -196,7 +197,7 @@ bineApp.controller('NoteNewControl', ["$rootScope", "$scope", "$upload",
             return;
         }
 
-        if ($rootScope.note == null) {
+        if (!$rootScope.note) {
             var today = new Date();
 
             $scope.note = {
@@ -218,17 +219,26 @@ bineApp.controller('NoteNewControl', ["$rootScope", "$scope", "$upload",
             $scope.note.read_date_to = new Date($scope.note.read_date_to);
         }
 
+        $scope.strip_book_title = function (book) {
+            if (book.title)
+                book.title = book.title.replace(/[(&lt;b&gt;)(&lt;/b&gt)]/g, '');
+            return book.title;
+        }
+
+        /*
+         기존 BookNote를 수정하거나 새로운 노트를 저장한다.
+         */
         $scope.save = function () {
             var note = $scope.note;
             var id = null;
 
-            if (note.id != null)
+            if (note.id)
                 id = note.id;
 
             var data = {
                 'id': id,
                 'user': note.user.id,
-                'book': note.book.id,
+                'book': $scope.note.book,
                 'content': note.content,
                 'read_date_from': $scope.format_date(note.read_date_from),
                 'read_date_to': $scope.format_date(note.read_date_to),
@@ -272,15 +282,22 @@ bineApp.controller('NoteNewControl', ["$rootScope", "$scope", "$upload",
             var title = $scope.book_title;
 
             if (title == '') {
-                alert('검색할 책 이름을 입력하십시오.')
+                $('#book_search_modal').modal('show');
                 return;
             }
             else {
-                var url = "/api/book/search/?title=" + $scope.book_title;
+                // var url = "/api/book/search/?title=" + $scope.book_title;
+                var url = "https://apis.daum.net/search/book";
+                var api_key = "3cf83b5f4a7062c5e99173f7759b6a2e";
 
-                $http.get(url).
+                url += "?output=json&result=10&sort=popular";
+                url += "&apikey=" + api_key;
+                url += "&q=" + title;
+                url += "&callback=JSON_CALLBACK"
+
+                $http.jsonp(url).
                     success(function (data, status, headers, config) {
-                        $scope.books = data;
+                        $scope.books = data.channel.item;
                         $('#book_search_modal').modal('show');
                     }).
                     error(function (data, status, headers, config) {

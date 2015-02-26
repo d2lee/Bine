@@ -1,13 +1,14 @@
 from django.contrib.auth.decorators import login_required
+from rest_framework.permissions import AllowAny
 from rest_framework.views import APIView
-from django.http.response import JsonResponse, HttpResponseBadRequest, \
-    HttpResponseNotAllowed
+from django.http.response import JsonResponse, HttpResponseBadRequest
 from django.contrib.auth import authenticate, login, logout
 from rest_framework.status import HTTP_403_FORBIDDEN, HTTP_400_BAD_REQUEST, \
     HTTP_200_OK
 from rest_framework.response import Response
 from django.views.generic.base import View
 from django.shortcuts import render
+from rest_framework_jwt.serializers import JSONWebTokenSerializer
 
 from bine.models import BookNote, BookNoteReply, User, Book, BookNoteLikeit
 from bine.serializers import BookNoteWriteSerializer
@@ -44,6 +45,8 @@ class LoginView(View):
 
 
 class Login(APIView):
+    permission_classes = (AllowAny,)
+
     def post(self, request):
         username = request.data['username']
         password = request.data['password']
@@ -64,6 +67,9 @@ class Login(APIView):
 
 
 class Register(APIView):
+    permission_classes = (AllowAny,)
+
+    @staticmethod
     def post(self, request):
         username = request.data['username']
         fullname = request.data['fullname']
@@ -80,7 +86,7 @@ class Register(APIView):
                                         email=email,
                                         password=password)
         if user is not None:
-            serializer = self.JSONWebTokenSerializer(data=request.DATA)
+            serializer = JSONWebTokenSerializer(data=request.DATA)
             if serializer.is_valid():
                 token = serializer.object.get('token')
                 response_data = auth_response_payload_handler(token, user)
@@ -89,24 +95,29 @@ class Register(APIView):
         return Response(status=HTTP_403_FORBIDDEN)
 
 
-class BookSearch(APIView):
-    def get(self, request):
-        title = request.GET.get('title', None)
-        if title is None:
-            return HttpResponseNotAllowed(request)
-
-        books = Book.objects.filter(title__icontains=title)[:10]
-
-        json_text = list(map(lambda x: x.to_json(), books.all()))
-        return Response(data=json_text)
-
-
 class BookList(APIView):
-    def get(self, request):
-        books = Book.objects.all()[:10]
+    @staticmethod
+    def get(request):
+        title = request.GET.get('title', None)
+        isbn = request.GET.get('isbn', None)
+
+        if not (title or isbn):
+            return Response(status=HTTP_400_BAD_REQUEST)
+        if title is not None:
+            books = Book.objects.filter(title__icontains=title)[:10]
+
+        if isbn is not None:
+            if books:
+                books.filter(isbn=isbn)[:10]
+            else:
+                books = Book.objects.filter(isbn=isbn)[:10]
 
         json_text = list(map(lambda x: x.to_json(), books.all()))
         return Response(data=json_text)
+
+    @staticmethod
+    def post(request):
+        book_json = request.data.book
 
 
 class FriendList(APIView):
@@ -173,7 +184,7 @@ class BookNoteList(APIView):
         if request.user is None:
             return Response(status=HTTP_400_BAD_REQUEST)
 
-        notes = request.user.booknotes.all();
+        notes = request.user.booknotes.all()
         # notes = BookNote.objects.all()[:20]
         json_text = list(map(lambda x: x.to_json(), notes.all()))
 

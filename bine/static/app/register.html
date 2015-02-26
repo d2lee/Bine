@@ -1,18 +1,18 @@
-<link href="/static/bine/css/register.css" rel="stylesheet">
+<link href="/s/app/css/register.css" rel="stylesheet">
 
 <div class="site-wrapper">
     <div class="site-wrapper-inner">
         <div class="cover-container">
             <div class="inner cover">
-                <div class="panel panel-primary register">
+                <div class="panel panel-primary register" ng-show="register_step1">
                     <div class="panel-heading">
-                        <h4 class="panel-caption">회원 가입</h4>
+                        <h4 class="panel-caption">STEP 1 - 회원 가입</h4>
                     </div>
                     <div class="panel-body">
                         <form name="reg_form" novalidate>
                             <div class="form-group">
                                 <input type="text" class="form-control" ng-model="username"
-                                       ng-minlength="6" name="username" placeholder="아이디" required>
+                                       ng-minlength="5" name="username" placeholder="아이디" required>
 
                                 <div class="error-msg"
                                      ng-show="reg_form.$submitted || reg_form.username.$touched">
@@ -21,7 +21,7 @@
                                         항목입니다.
                                     </div>
                                     <div ng-show="reg_form.username.$error.minlength">
-                                        <span class='glyphicon glyphicon-info-sign'></span>아이디는 최소 6자
+                                        <span class='glyphicon glyphicon-info-sign'></span>아이디는 최소 5자
                                         이상이어야 합니다.
                                     </div>
                                 </div>
@@ -138,6 +138,18 @@
                                     ng-click="register()">가입하기
                             </button>
                         </form>
+                    </div>
+                </div>
+                <div class="panel panel-primary" ng-show="register_step2">
+                    <div class="panel-heading">
+                        <h4 class="panel-caption">STEP 2 - 회원 추가 정보 입력</h4>
+                    </div>
+                    <div class="panel-body">
+                        <div class="alert alert-info"> {{ fullname }} 님, Bine 회원이 되신걸 환영합니다! <br>
+                            친구찾기, 연령대에 맞는 책을 추천 받으시려면 아래 정보를 입력해 주시기 바랍니다. 추후에도 입력하거나 수정할 수 있습니다.
+                        </div>
+                        <a href="#/note/">메인 화면으로 이동</a>
+
                     </div>
                 </div>
             </div>

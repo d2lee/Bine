@@ -50,75 +50,98 @@
     z-index: 1;
     width: 40px;
     height: 40px;
-    /*
-    background: #F44336;
-
-    border-radius: 50%;
-   margin-top: -10px;
-    margin-right: -10px; */
 }
 
 /*
-Active인 메뉴 표시
+    Active인 메뉴 표시
 */
 .navbar-default .navbar-nav > .active > a, .navbar-default .navbar-nav > .active > a:focus, .navbar-default .navbar-nav > .active > a:hover {
     border-bottom: solid 3px white;
 }
 
-.panel-container {
+.list-container {
     background: #fff;
     border-radius: 4px;
 }
 
-.page-title {
+.list-title {
     margin-left: 4px;
     margin-bottom: 20px;
     border-bottom: solid 1px #ddd;
     padding-bottom: 8px;
 }
 
-.panel {
+.list-item {
     margin-bottom: 8px;
     border: none;
 }
 
-.panel > .panel-heading {
+.list-item > .panel-heading {
     background-color: white;
     border-bottom: none;
 }
 
-.panel .panel-title {
+.list-item .panel-title {
     font-size: 12pt;
     font-weight: bold;
     text-overflow: ellipsis;
 }
 
-.panel > .panel-footer {
+.list-item > .panel-footer {
     background-color: white;
     border-top: none;
     border-bottom: 1px solid #ddd;
     border-radius: 0;
 }
 
-.panel > .panel-body {
+.list-item > .panel-body {
     padding-top: 0;
     padding-bottom: 0;
     margin-bottom: 0;
 }
 
-.panel-detail {
+.list-item .panel-detail {
     font-size: 9pt;
     color: #595959;
 }
 
-.panel .panel-content {
+.list-item .panel-content {
     margin-top: 6px;
     margin-bottom: 4px;
     font-size: 14px;
 }
 
-.book-photo {
+.list-item .book-photo {
     padding: 4px 4px 4px 8px;
     width: auto;
     height: 100px;
+}
+
+.note-new-panel {
+    margin-top: 10px;
+}
+
+.book-search-modal .book-photo {
+    width: 72px;
+    height: 100px;
+}
+
+.book-search-modal .book-caption {
+    font-size: 10px;
+    color: #595959;
+    text-align: center;
+}
+
+.book-search-modal .book-caption .book-title {
+    font-size: 12px;
+    margin-bottom: 2px;
+}
+
+.book-search-modal .row {
+    margin-top: 10px;
+}
+
+.book-search-modal .thumbnail {
+    background: white;
+    border: 0;
 }

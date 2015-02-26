@@ -47,11 +47,12 @@ class UserSimpleSerializer(serializers.ModelSerializer):
         read_only_fields = ('username', 'fullname')
 
 
-class BookSimpleSerializer(serializers.ModelSerializer):
+class BookSerializer(serializers.ModelSerializer):
     class Meta:
         model = Book
-        fields = ('id', 'title', 'photo')
-        read_only_fields = ('title', 'photo')
+
+        fields = ('id', 'categories', 'title', 'isbn', 'author', 'illustrator', 'translator',
+                  'publisher', 'pub_date', 'page', 'description', 'content', 'photo')
 
 
 class BookNoteSerializerMixin(object):

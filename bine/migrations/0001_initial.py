@@ -2,9 +2,9 @@
 from __future__ import unicode_literals
 
 from django.db import models, migrations
-import bine.models
 from django.conf import settings
 import django.utils.timezone
+import bine.models
 
 
 class Migration(migrations.Migration):
@@ -17,12 +17,12 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='User',
             fields=[
-                ('id', models.AutoField(verbose_name='ID', serialize=False, primary_key=True, auto_created=True)),
+                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('password', models.CharField(verbose_name='password', max_length=128)),
                 ('last_login', models.DateTimeField(verbose_name='last login', default=django.utils.timezone.now)),
-                ('is_superuser', models.BooleanField(verbose_name='superuser status', default=False, help_text='Designates that this user has all permissions without explicitly assigning them.')),
-                ('username', models.CharField(unique=True, max_length=40)),
-                ('email', models.EmailField(unique=True, max_length=75)),
+                ('is_superuser', models.BooleanField(help_text='Designates that this user has all permissions without explicitly assigning them.', verbose_name='superuser status', default=False)),
+                ('username', models.CharField(max_length=40, unique=True)),
+                ('email', models.EmailField(max_length=75, unique=True)),
                 ('fullname', models.CharField(max_length=80)),
                 ('birthday', models.DateField()),
                 ('sex', models.CharField(choices=[('M', '남자'), ('F', '여자')], max_length=1)),
@@ -34,8 +34,8 @@ class Migration(migrations.Migration):
                 ('created_at', models.DateTimeField(auto_now_add=True)),
             ],
             options={
-                'verbose_name': 'user',
                 'db_table': 'users',
+                'verbose_name': 'user',
                 'verbose_name_plural': 'users',
             },
             bases=(models.Model,),
@@ -43,20 +43,23 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Book',
             fields=[
-                ('id', models.AutoField(verbose_name='ID', serialize=False, primary_key=True, auto_created=True)),
+                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('title', models.CharField(max_length=128)),
-                ('isbn', models.CharField(unique=True, max_length=15)),
+                ('category', models.CharField(blank=True, max_length=128)),
+                ('isbn', models.CharField(max_length=10, unique=True)),
+                ('barcode', models.CharField(max_length=16, default='KOR0000000000000', unique=True)),
                 ('author', models.CharField(max_length=50)),
+                ('isbn13', models.CharField(blank=True, max_length=13)),
+                ('author_etc', models.CharField(blank=True, max_length=50)),
                 ('illustrator', models.CharField(blank=True, max_length=50)),
                 ('translator', models.CharField(blank=True, max_length=50)),
                 ('publisher', models.CharField(blank=True, max_length=128)),
                 ('pub_date', models.DateField(blank=True, null=True)),
                 ('page', models.CharField(blank=True, max_length=4)),
                 ('description', models.TextField(blank=True)),
-                ('content', models.TextField(blank=True)),
-                ('photo', models.ImageField(upload_to='book/%Y/%m/%d', blank=True)),
-                ('language', models.CharField(choices=[('ko', '한국어'), ('en', '영어'), ('jp', '일어'), ('cn', '중국')], default='ko', max_length=2)),
-                ('age_level', models.CharField(choices=[('1', '0-3세'), ('2', '4-7세'), ('3', '초등1-2'), ('4', '초등3-4'), ('5', '초등5-6'), ('6', '청소년'), ('7', '성인'), ('8', '유아전체'), ('9', '초등전체')], default='9', max_length=1)),
+                ('photo', models.URLField(blank=True)),
+                ('link', models.URLField(blank=True)),
+                ('language', models.CharField(choices=[('ko', '한국어'), ('en', '영어'), ('jp', '일어'), ('cn', '중국')], max_length=2, default='ko')),
                 ('updated_on', models.DateTimeField(auto_now=True)),
                 ('created_at', models.DateTimeField(auto_now_add=True)),
             ],
@@ -68,7 +71,7 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='BookCategory',
             fields=[
-                ('id', models.AutoField(verbose_name='ID', serialize=False, primary_key=True, auto_created=True)),
+                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('name', models.CharField(max_length=50)),
                 ('updated_on', models.DateTimeField(auto_now=True)),
                 ('created_at', models.DateTimeField(auto_now_add=True)),
@@ -81,13 +84,13 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='BookNote',
             fields=[
-                ('id', models.AutoField(verbose_name='ID', serialize=False, primary_key=True, auto_created=True)),
+                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('read_date_from', models.DateField()),
                 ('read_date_to', models.DateField()),
                 ('content', models.TextField(blank=True)),
-                ('preference', models.CharField(default=3, max_length=1)),
+                ('preference', models.CharField(max_length=1, default=3)),
                 ('attach', models.ImageField(upload_to=bine.models.get_file_name, null=True)),
-                ('share_to', models.CharField(choices=[('P', '개인'), ('F', '친구'), ('A', '모두')], default='F', max_length=1)),
+                ('share_to', models.CharField(choices=[('P', '개인'), ('F', '친구'), ('A', '모두')], max_length=1, default='F')),
                 ('updated_on', models.DateTimeField(auto_now=True)),
                 ('created_at', models.DateTimeField(auto_now_add=True)),
                 ('book', models.ForeignKey(related_name='booknotes', to='bine.Book')),
@@ -101,7 +104,7 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='BookNoteLikeit',
             fields=[
-                ('id', models.AutoField(verbose_name='ID', serialize=False, primary_key=True, auto_created=True)),
+                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('created_at', models.DateTimeField(auto_now_add=True)),
                 ('note', models.ForeignKey(related_name='likeit', to='bine.BookNote')),
                 ('user', models.ForeignKey(related_name='likeit', to=settings.AUTH_USER_MODEL)),
@@ -114,7 +117,7 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='BookNoteReply',
             fields=[
-                ('id', models.AutoField(verbose_name='ID', serialize=False, primary_key=True, auto_created=True)),
+                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('content', models.CharField(max_length=258)),
                 ('updated_on', models.DateTimeField(auto_now=True)),
                 ('created_at', models.DateTimeField(auto_now_add=True)),
@@ -129,8 +132,8 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='FriendRelation',
             fields=[
-                ('id', models.AutoField(verbose_name='ID', serialize=False, primary_key=True, auto_created=True)),
-                ('status', models.CharField(choices=[('N', '대기'), ('Y', '승락'), ('D', '삭제')], default='N', max_length=1)),
+                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('status', models.CharField(choices=[('N', '대기'), ('Y', '승락'), ('D', '삭제')], max_length=1, default='N')),
                 ('created_at', models.DateTimeField(auto_now_add=True)),
                 ('from_user', models.ForeignKey(related_name='from_user', to=settings.AUTH_USER_MODEL)),
                 ('to_user', models.ForeignKey(related_name='to_people', to=settings.AUTH_USER_MODEL)),
@@ -149,12 +152,6 @@ class Migration(migrations.Migration):
             unique_together=set([('user', 'note')]),
         ),
         migrations.AddField(
-            model_name='book',
-            name='categories',
-            field=models.ManyToManyField(related_name='books', to='bine.BookCategory'),
-            preserve_default=True,
-        ),
-        migrations.AddField(
             model_name='user',
             name='friends',
             field=models.ManyToManyField(related_name='related_to+', to=settings.AUTH_USER_MODEL, through='bine.FriendRelation'),
@@ -163,13 +160,13 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='user',
             name='groups',
-            field=models.ManyToManyField(verbose_name='groups', blank=True, to='auth.Group', related_name='user_set', related_query_name='user', help_text='The groups this user belongs to. A user will get all permissions granted to each of his/her group.'),
+            field=models.ManyToManyField(to='auth.Group', blank=True, help_text='The groups this user belongs to. A user will get all permissions granted to each of his/her group.', related_query_name='user', related_name='user_set', verbose_name='groups'),
             preserve_default=True,
         ),
         migrations.AddField(
             model_name='user',
             name='user_permissions',
-            field=models.ManyToManyField(verbose_name='user permissions', blank=True, to='auth.Permission', related_name='user_set', related_query_name='user', help_text='Specific permissions for this user.'),
+            field=models.ManyToManyField(to='auth.Permission', blank=True, help_text='Specific permissions for this user.', related_query_name='user', related_name='user_set', verbose_name='user permissions'),
             preserve_default=True,
         ),
     ]

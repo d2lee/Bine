@@ -16,8 +16,8 @@
       <column name="id" sqlType="INT" precision="10" scale="0" nullable="false" jdbcType="4" autoIncrement="true"/>
       <column name="name" sqlType="VARCHAR" precision="80" scale="0" nullable="false" jdbcType="12"/>
       <primary-key name="PRIMARY" columns="id"/>
-      <exported-key name="auth_group_permission_group_id_7d1c2b81c89f019a_fk_auth_group_id" table="auth_group_permissions" schema="" catalog="bine" columns="group_id"/>
-      <exported-key name="users_groups_group_id_48592ad351ef3a76_fk_auth_group_id" table="users_groups" schema="" catalog="bine" columns="group_id"/>
+      <exported-key name="auth_group_permission_group_id_4f164a7742f578d3_fk_auth_group_id" table="auth_group_permissions" schema="" catalog="bine" columns="group_id"/>
+      <exported-key name="users_groups_group_id_28746dd295fc9c3b_fk_auth_group_id" table="users_groups" schema="" catalog="bine" columns="group_id"/>
       <index name="name" unique="true" columns="name"/>
     </table>
     <table name="auth_group_permissions" schema="" catalog="bine" type="TABLE">
@@ -25,8 +25,8 @@
       <column name="group_id" sqlType="INT" precision="10" scale="0" nullable="false" jdbcType="4"/>
       <column name="permission_id" sqlType="INT" precision="10" scale="0" nullable="false" jdbcType="4"/>
       <primary-key name="PRIMARY" columns="id"/>
-      <foreign-key name="auth_group__permission_id_2550a35a4f58b393_fk_auth_permission_id" columns="permission_id" ref-table="auth_permission" ref-schema="" ref-catalog="bine" ref-columns="id" update-rule="3" delete-rule="3" deferrability="2"/>
-      <foreign-key name="auth_group_permission_group_id_7d1c2b81c89f019a_fk_auth_group_id" columns="group_id" ref-table="auth_group" ref-schema="" ref-catalog="bine" ref-columns="id" update-rule="3" delete-rule="3" deferrability="2"/>
+      <foreign-key name="auth_group__permission_id_29255b6fad168d9a_fk_auth_permission_id" columns="permission_id" ref-table="auth_permission" ref-schema="" ref-catalog="bine" ref-columns="id" update-rule="3" delete-rule="3" deferrability="2"/>
+      <foreign-key name="auth_group_permission_group_id_4f164a7742f578d3_fk_auth_group_id" columns="group_id" ref-table="auth_group" ref-schema="" ref-catalog="bine" ref-columns="id" update-rule="3" delete-rule="3" deferrability="2"/>
       <index name="group_id" unique="true" columns="permission_id"/>
       <index name="auth_group_permissions_0e939a4f" unique="false" columns="group_id"/>
       <index name="auth_group_permissions_8373b171" unique="false" columns="permission_id"/>
@@ -37,9 +37,9 @@
       <column name="content_type_id" sqlType="INT" precision="10" scale="0" nullable="false" jdbcType="4"/>
       <column name="codename" sqlType="VARCHAR" precision="100" scale="0" nullable="false" jdbcType="12"/>
       <primary-key name="PRIMARY" columns="id"/>
-      <foreign-key name="auth__content_type_id_560c3bb41e57f256_fk_django_content_type_id" columns="content_type_id" ref-table="django_content_type" ref-schema="" ref-catalog="bine" ref-columns="id" update-rule="3" delete-rule="3" deferrability="2"/>
-      <exported-key name="auth_group__permission_id_2550a35a4f58b393_fk_auth_permission_id" table="auth_group_permissions" schema="" catalog="bine" columns="permission_id"/>
-      <exported-key name="users_user__permission_id_349975fd3e152223_fk_auth_permission_id" table="users_user_permissions" schema="" catalog="bine" columns="permission_id"/>
+      <foreign-key name="auth__content_type_id_3b268bbec820cf1a_fk_django_content_type_id" columns="content_type_id" ref-table="django_content_type" ref-schema="" ref-catalog="bine" ref-columns="id" update-rule="3" delete-rule="3" deferrability="2"/>
+      <exported-key name="auth_group__permission_id_29255b6fad168d9a_fk_auth_permission_id" table="auth_group_permissions" schema="" catalog="bine" columns="permission_id"/>
+      <exported-key name="users_user__permission_id_688ca5f40a0de0c6_fk_auth_permission_id" table="users_user_permissions" schema="" catalog="bine" columns="permission_id"/>
       <index name="content_type_id" unique="true" columns="codename"/>
       <index name="auth_permission_417f1b1c" unique="false" columns="content_type_id"/>
     </table>
@@ -49,7 +49,6 @@
       <column name="updated_on" sqlType="DATETIME" precision="19" scale="0" nullable="false" jdbcType="93"/>
       <column name="created_at" sqlType="DATETIME" precision="19" scale="0" nullable="false" jdbcType="93"/>
       <primary-key name="PRIMARY" columns="id"/>
-      <exported-key name="books_cat_bookcategory_id_79e2cde6091f4ba5_fk_book_categories_id" table="books_categories" schema="" catalog="bine" columns="bookcategory_id"/>
     </table>
     <table name="booknote_likeit" schema="" catalog="bine" type="TABLE">
       <column name="id" sqlType="INT" precision="10" scale="0" nullable="false" jdbcType="4" autoIncrement="true"/>
@@ -57,9 +56,9 @@
       <column name="note_id" sqlType="INT" precision="10" scale="0" nullable="false" jdbcType="4"/>
       <column name="user_id" sqlType="INT" precision="10" scale="0" nullable="false" jdbcType="4"/>
       <primary-key name="PRIMARY" columns="id"/>
-      <foreign-key name="booknote_likeit_note_id_7f35bf973173d324_fk_booknotes_id" columns="note_id" ref-table="booknotes" ref-schema="" ref-catalog="bine" ref-columns="id" update-rule="3" delete-rule="3" deferrability="2"/>
-      <foreign-key name="booknote_likeit_user_id_28c8a350f0ebb9ab_fk_users_id" columns="user_id" ref-table="users" ref-schema="" ref-catalog="bine" ref-columns="id" update-rule="3" delete-rule="3" deferrability="2"/>
-      <index name="booknote_likeit_user_id_3ac23bdb39a2b2eb_uniq" unique="true" columns="user_id,note_id"/>
+      <foreign-key name="booknote_likeit_note_id_63649d70b5bdfe02_fk_booknotes_id" columns="note_id" ref-table="booknotes" ref-schema="" ref-catalog="bine" ref-columns="id" update-rule="3" delete-rule="3" deferrability="2"/>
+      <foreign-key name="booknote_likeit_user_id_52607eb214b450b2_fk_users_id" columns="user_id" ref-table="users" ref-schema="" ref-catalog="bine" ref-columns="id" update-rule="3" delete-rule="3" deferrability="2"/>
+      <index name="booknote_likeit_user_id_1a765a69dfae5899_uniq" unique="true" columns="user_id,note_id"/>
       <index name="booknote_likeit_2115813b" unique="false" columns="note_id"/>
       <index name="booknote_likeit_e8701ad4" unique="false" columns="user_id"/>
     </table>
@@ -71,8 +70,8 @@
       <column name="note_id" sqlType="INT" precision="10" scale="0" nullable="false" jdbcType="4"/>
       <column name="user_id" sqlType="INT" precision="10" scale="0" nullable="false" jdbcType="4"/>
       <primary-key name="PRIMARY" columns="id"/>
-      <foreign-key name="booknote_replies_note_id_4ffab7f4b7d90f26_fk_booknotes_id" columns="note_id" ref-table="booknotes" ref-schema="" ref-catalog="bine" ref-columns="id" update-rule="3" delete-rule="3" deferrability="2"/>
-      <foreign-key name="booknote_replies_user_id_4c822524a2bf7270_fk_users_id" columns="user_id" ref-table="users" ref-schema="" ref-catalog="bine" ref-columns="id" update-rule="3" delete-rule="3" deferrability="2"/>
+      <foreign-key name="booknote_replies_note_id_33c47b6b5934a9e0_fk_booknotes_id" columns="note_id" ref-table="booknotes" ref-schema="" ref-catalog="bine" ref-columns="id" update-rule="3" delete-rule="3" deferrability="2"/>
+      <foreign-key name="booknote_replies_user_id_24d7e530db8b4e90_fk_users_id" columns="user_id" ref-table="users" ref-schema="" ref-catalog="bine" ref-columns="id" update-rule="3" delete-rule="3" deferrability="2"/>
       <index name="booknote_replies_2115813b" unique="false" columns="note_id"/>
       <index name="booknote_replies_e8701ad4" unique="false" columns="user_id"/>
     </table>
@@ -89,45 +88,36 @@
       <column name="book_id" sqlType="INT" precision="10" scale="0" nullable="false" jdbcType="4"/>
       <column name="user_id" sqlType="INT" precision="10" scale="0" nullable="false" jdbcType="4"/>
       <primary-key name="PRIMARY" columns="id"/>
-      <foreign-key name="booknotes_book_id_3e1d4a4028f461dd_fk_books_id" columns="book_id" ref-table="books" ref-schema="" ref-catalog="bine" ref-columns="id" update-rule="3" delete-rule="3" deferrability="2"/>
-      <foreign-key name="booknotes_user_id_11ba34927a0bd381_fk_users_id" columns="user_id" ref-table="users" ref-schema="" ref-catalog="bine" ref-columns="id" update-rule="3" delete-rule="3" deferrability="2"/>
-      <exported-key name="booknote_likeit_note_id_7f35bf973173d324_fk_booknotes_id" table="booknote_likeit" schema="" catalog="bine" columns="note_id"/>
-      <exported-key name="booknote_replies_note_id_4ffab7f4b7d90f26_fk_booknotes_id" table="booknote_replies" schema="" catalog="bine" columns="note_id"/>
+      <foreign-key name="booknotes_book_id_5dff373359001de4_fk_books_id" columns="book_id" ref-table="books" ref-schema="" ref-catalog="bine" ref-columns="id" update-rule="3" delete-rule="3" deferrability="2"/>
+      <foreign-key name="booknotes_user_id_14e72c8af653efbe_fk_users_id" columns="user_id" ref-table="users" ref-schema="" ref-catalog="bine" ref-columns="id" update-rule="3" delete-rule="3" deferrability="2"/>
+      <exported-key name="booknote_likeit_note_id_63649d70b5bdfe02_fk_booknotes_id" table="booknote_likeit" schema="" catalog="bine" columns="note_id"/>
+      <exported-key name="booknote_replies_note_id_33c47b6b5934a9e0_fk_booknotes_id" table="booknote_replies" schema="" catalog="bine" columns="note_id"/>
       <index name="booknotes_0a4572cc" unique="false" columns="book_id"/>
       <index name="booknotes_e8701ad4" unique="false" columns="user_id"/>
     </table>
     <table name="books" schema="" catalog="bine" type="TABLE">
       <column name="id" sqlType="INT" precision="10" scale="0" nullable="false" jdbcType="4" autoIncrement="true"/>
       <column name="title" sqlType="VARCHAR" precision="128" scale="0" nullable="false" jdbcType="12"/>
-      <column name="isbn" sqlType="VARCHAR" precision="15" scale="0" nullable="false" jdbcType="12"/>
+      <column name="category" sqlType="VARCHAR" precision="128" scale="0" nullable="false" jdbcType="12"/>
+      <column name="isbn" sqlType="VARCHAR" precision="10" scale="0" nullable="false" jdbcType="12"/>
+      <column name="barcode" sqlType="VARCHAR" precision="16" scale="0" nullable="false" jdbcType="12"/>
       <column name="author" sqlType="VARCHAR" precision="50" scale="0" nullable="false" jdbcType="12"/>
+      <column name="isbn13" sqlType="VARCHAR" precision="13" scale="0" nullable="false" jdbcType="12"/>
+      <column name="author_etc" sqlType="VARCHAR" precision="50" scale="0" nullable="false" jdbcType="12"/>
       <column name="illustrator" sqlType="VARCHAR" precision="50" scale="0" nullable="false" jdbcType="12"/>
       <column name="translator" sqlType="VARCHAR" precision="50" scale="0" nullable="false" jdbcType="12"/>
       <column name="publisher" sqlType="VARCHAR" precision="128" scale="0" nullable="false" jdbcType="12"/>
       <column name="pub_date" sqlType="DATE" precision="10" scale="0" nullable="true" jdbcType="91"/>
-      <column name="page" sqlType="VARCHAR" precision="4" scale="0" nullable="false" jdbcType="12"/>
       <column name="description" sqlType="LONGTEXT" precision="2147483647" scale="0" nullable="false" jdbcType="-1"/>
-      <column name="content" sqlType="LONGTEXT" precision="2147483647" scale="0" nullable="false" jdbcType="-1"/>
-      <column name="photo" sqlType="VARCHAR" precision="100" scale="0" nullable="false" jdbcType="12"/>
+      <column name="photo" sqlType="VARCHAR" precision="200" scale="0" nullable="false" jdbcType="12"/>
+      <column name="link" sqlType="VARCHAR" precision="200" scale="0" nullable="false" jdbcType="12"/>
       <column name="language" sqlType="VARCHAR" precision="2" scale="0" nullable="false" jdbcType="12"/>
-      <column name="age_level" sqlType="VARCHAR" precision="1" scale="0" nullable="false" jdbcType="12"/>
       <column name="updated_on" sqlType="DATETIME" precision="19" scale="0" nullable="false" jdbcType="93"/>
       <column name="created_at" sqlType="DATETIME" precision="19" scale="0" nullable="false" jdbcType="93"/>
       <primary-key name="PRIMARY" columns="id"/>
-      <exported-key name="booknotes_book_id_3e1d4a4028f461dd_fk_books_id" table="booknotes" schema="" catalog="bine" columns="book_id"/>
-      <exported-key name="books_categories_book_id_74f8a70170531fb8_fk_books_id" table="books_categories" schema="" catalog="bine" columns="book_id"/>
+      <exported-key name="booknotes_book_id_5dff373359001de4_fk_books_id" table="booknotes" schema="" catalog="bine" columns="book_id"/>
+      <index name="barcode" unique="true" columns="barcode"/>
       <index name="isbn" unique="true" columns="isbn"/>
-    </table>
-    <table name="books_categories" schema="" catalog="bine" type="TABLE">
-      <column name="id" sqlType="INT" precision="10" scale="0" nullable="false" jdbcType="4" autoIncrement="true"/>
-      <column name="book_id" sqlType="INT" precision="10" scale="0" nullable="false" jdbcType="4"/>
-      <column name="bookcategory_id" sqlType="INT" precision="10" scale="0" nullable="false" jdbcType="4"/>
-      <primary-key name="PRIMARY" columns="id"/>
-      <foreign-key name="books_cat_bookcategory_id_79e2cde6091f4ba5_fk_book_categories_id" columns="bookcategory_id" ref-table="book_categories" ref-schema="" ref-catalog="bine" ref-columns="id" update-rule="3" delete-rule="3" deferrability="2"/>
-      <foreign-key name="books_categories_book_id_74f8a70170531fb8_fk_books_id" columns="book_id" ref-table="books" ref-schema="" ref-catalog="bine" ref-columns="id" update-rule="3" delete-rule="3" deferrability="2"/>
-      <index name="book_id" unique="true" columns="bookcategory_id"/>
-      <index name="books_categories_0a4572cc" unique="false" columns="book_id"/>
-      <index name="books_categories_eb30ae6e" unique="false" columns="bookcategory_id"/>
     </table>
     <table name="django_admin_log" schema="" catalog="bine" type="TABLE">
       <column name="id" sqlType="INT" precision="10" scale="0" nullable="false" jdbcType="4" autoIncrement="true"/>
@@ -139,8 +129,8 @@
       <column name="content_type_id" sqlType="INT" precision="10" scale="0" nullable="true" jdbcType="4"/>
       <column name="user_id" sqlType="INT" precision="10" scale="0" nullable="false" jdbcType="4"/>
       <primary-key name="PRIMARY" columns="id"/>
-      <foreign-key name="djang_content_type_id_59708855da07c0bb_fk_django_content_type_id" columns="content_type_id" ref-table="django_content_type" ref-schema="" ref-catalog="bine" ref-columns="id" update-rule="3" delete-rule="3" deferrability="2"/>
-      <foreign-key name="django_admin_log_user_id_67d0f5fafc9a7f2_fk_users_id" columns="user_id" ref-table="users" ref-schema="" ref-catalog="bine" ref-columns="id" update-rule="3" delete-rule="3" deferrability="2"/>
+      <foreign-key name="djang_content_type_id_32126fdf0ca5a0b4_fk_django_content_type_id" columns="content_type_id" ref-table="django_content_type" ref-schema="" ref-catalog="bine" ref-columns="id" update-rule="3" delete-rule="3" deferrability="2"/>
+      <foreign-key name="django_admin_log_user_id_2b941859b33e9eaf_fk_users_id" columns="user_id" ref-table="users" ref-schema="" ref-catalog="bine" ref-columns="id" update-rule="3" delete-rule="3" deferrability="2"/>
       <index name="django_admin_log_417f1b1c" unique="false" columns="content_type_id"/>
       <index name="django_admin_log_e8701ad4" unique="false" columns="user_id"/>
     </table>
@@ -150,9 +140,9 @@
       <column name="app_label" sqlType="VARCHAR" precision="100" scale="0" nullable="false" jdbcType="12"/>
       <column name="model" sqlType="VARCHAR" precision="100" scale="0" nullable="false" jdbcType="12"/>
       <primary-key name="PRIMARY" columns="id"/>
-      <exported-key name="auth__content_type_id_560c3bb41e57f256_fk_django_content_type_id" table="auth_permission" schema="" catalog="bine" columns="content_type_id"/>
-      <exported-key name="djang_content_type_id_59708855da07c0bb_fk_django_content_type_id" table="django_admin_log" schema="" catalog="bine" columns="content_type_id"/>
-      <index name="django_content_type_app_label_43ff40e2f7850317_uniq" unique="true" columns="app_label,model"/>
+      <exported-key name="auth__content_type_id_3b268bbec820cf1a_fk_django_content_type_id" table="auth_permission" schema="" catalog="bine" columns="content_type_id"/>
+      <exported-key name="djang_content_type_id_32126fdf0ca5a0b4_fk_django_content_type_id" table="django_admin_log" schema="" catalog="bine" columns="content_type_id"/>
+      <index name="django_content_type_app_label_4a0c9236c3001a9c_uniq" unique="true" columns="app_label,model"/>
     </table>
     <table name="django_migrations" schema="" catalog="bine" type="TABLE">
       <column name="id" sqlType="INT" precision="10" scale="0" nullable="false" jdbcType="4" autoIncrement="true"/>
@@ -175,14 +165,19 @@
       <column name="from_user_id" sqlType="INT" precision="10" scale="0" nullable="false" jdbcType="4"/>
       <column name="to_user_id" sqlType="INT" precision="10" scale="0" nullable="false" jdbcType="4"/>
       <primary-key name="PRIMARY" columns="id"/>
+      <foreign-key name="friend_relations_from_user_id_2af9bb50fe6065fd_fk_users_id" columns="from_user_id" ref-table="users" ref-schema="" ref-catalog="bine" ref-columns="id" update-rule="3" delete-rule="3" deferrability="2"/>
+      <foreign-key name="friend_relations_to_user_id_34b531ea7717960a_fk_users_id" columns="to_user_id" ref-table="users" ref-schema="" ref-catalog="bine" ref-columns="id" update-rule="3" delete-rule="3" deferrability="2"/>
+      <index name="friend_relations_from_user_id_1d9478a3e7179053_uniq" unique="true" columns="from_user_id,to_user_id"/>
+      <index name="friend_relations_63add04c" unique="false" columns="to_user_id"/>
+      <index name="friend_relations_6b4f059f" unique="false" columns="from_user_id"/>
     </table>
     <table name="users" schema="" catalog="bine" type="TABLE">
       <column name="id" sqlType="INT" precision="10" scale="0" nullable="false" jdbcType="4" autoIncrement="true"/>
       <column name="password" sqlType="VARCHAR" precision="128" scale="0" nullable="false" jdbcType="12"/>
       <column name="last_login" sqlType="DATETIME" precision="19" scale="0" nullable="false" jdbcType="93"/>
       <column name="is_superuser" sqlType="TINYINT" precision="3" scale="0" nullable="false" jdbcType="-6"/>
-      <column name="email" sqlType="VARCHAR" precision="75" scale="0" nullable="false" jdbcType="12"/>
       <column name="username" sqlType="VARCHAR" precision="40" scale="0" nullable="false" jdbcType="12"/>
+      <column name="email" sqlType="VARCHAR" precision="75" scale="0" nullable="false" jdbcType="12"/>
       <column name="fullname" sqlType="VARCHAR" precision="80" scale="0" nullable="false" jdbcType="12"/>
       <column name="birthday" sqlType="DATE" precision="10" scale="0" nullable="false" jdbcType="91"/>
       <column name="sex" sqlType="VARCHAR" precision="1" scale="0" nullable="false" jdbcType="12"/>
@@ -193,12 +188,14 @@
       <column name="updated_on" sqlType="DATETIME" precision="19" scale="0" nullable="false" jdbcType="93"/>
       <column name="created_at" sqlType="DATETIME" precision="19" scale="0" nullable="false" jdbcType="93"/>
       <primary-key name="PRIMARY" columns="id"/>
-      <exported-key name="booknote_likeit_user_id_28c8a350f0ebb9ab_fk_users_id" table="booknote_likeit" schema="" catalog="bine" columns="user_id"/>
-      <exported-key name="booknote_replies_user_id_4c822524a2bf7270_fk_users_id" table="booknote_replies" schema="" catalog="bine" columns="user_id"/>
-      <exported-key name="booknotes_user_id_11ba34927a0bd381_fk_users_id" table="booknotes" schema="" catalog="bine" columns="user_id"/>
-      <exported-key name="django_admin_log_user_id_67d0f5fafc9a7f2_fk_users_id" table="django_admin_log" schema="" catalog="bine" columns="user_id"/>
-      <exported-key name="users_groups_user_id_7315125ddd6286a3_fk_users_id" table="users_groups" schema="" catalog="bine" columns="user_id"/>
-      <exported-key name="users_user_permissions_user_id_2c6b531faab7544f_fk_users_id" table="users_user_permissions" schema="" catalog="bine" columns="user_id"/>
+      <exported-key name="booknote_likeit_user_id_52607eb214b450b2_fk_users_id" table="booknote_likeit" schema="" catalog="bine" columns="user_id"/>
+      <exported-key name="booknote_replies_user_id_24d7e530db8b4e90_fk_users_id" table="booknote_replies" schema="" catalog="bine" columns="user_id"/>
+      <exported-key name="booknotes_user_id_14e72c8af653efbe_fk_users_id" table="booknotes" schema="" catalog="bine" columns="user_id"/>
+      <exported-key name="django_admin_log_user_id_2b941859b33e9eaf_fk_users_id" table="django_admin_log" schema="" catalog="bine" columns="user_id"/>
+      <exported-key name="friend_relations_from_user_id_2af9bb50fe6065fd_fk_users_id" table="friend_relations" schema="" catalog="bine" columns="from_user_id"/>
+      <exported-key name="friend_relations_to_user_id_34b531ea7717960a_fk_users_id" table="friend_relations" schema="" catalog="bine" columns="to_user_id"/>
+      <exported-key name="users_groups_user_id_54b7f528c96206e1_fk_users_id" table="users_groups" schema="" catalog="bine" columns="user_id"/>
+      <exported-key name="users_user_permissions_user_id_3865176b021c3da5_fk_users_id" table="users_user_permissions" schema="" catalog="bine" columns="user_id"/>
       <index name="email" unique="true" columns="email"/>
       <index name="username" unique="true" columns="username"/>
     </table>
@@ -207,8 +204,8 @@
       <column name="user_id" sqlType="INT" precision="10" scale="0" nullable="false" jdbcType="4"/>
       <column name="group_id" sqlType="INT" precision="10" scale="0" nullable="false" jdbcType="4"/>
       <primary-key name="PRIMARY" columns="id"/>
-      <foreign-key name="users_groups_group_id_48592ad351ef3a76_fk_auth_group_id" columns="group_id" ref-table="auth_group" ref-schema="" ref-catalog="bine" ref-columns="id" update-rule="3" delete-rule="3" deferrability="2"/>
-      <foreign-key name="users_groups_user_id_7315125ddd6286a3_fk_users_id" columns="user_id" ref-table="users" ref-schema="" ref-catalog="bine" ref-columns="id" update-rule="3" delete-rule="3" deferrability="2"/>
+      <foreign-key name="users_groups_group_id_28746dd295fc9c3b_fk_auth_group_id" columns="group_id" ref-table="auth_group" ref-schema="" ref-catalog="bine" ref-columns="id" update-rule="3" delete-rule="3" deferrability="2"/>
+      <foreign-key name="users_groups_user_id_54b7f528c96206e1_fk_users_id" columns="user_id" ref-table="users" ref-schema="" ref-catalog="bine" ref-columns="id" update-rule="3" delete-rule="3" deferrability="2"/>
       <index name="user_id" unique="true" columns="group_id"/>
       <index name="users_groups_0e939a4f" unique="false" columns="group_id"/>
       <index name="users_groups_e8701ad4" unique="false" columns="user_id"/>
@@ -218,8 +215,8 @@
       <column name="user_id" sqlType="INT" precision="10" scale="0" nullable="false" jdbcType="4"/>
       <column name="permission_id" sqlType="INT" precision="10" scale="0" nullable="false" jdbcType="4"/>
       <primary-key name="PRIMARY" columns="id"/>
-      <foreign-key name="users_user__permission_id_349975fd3e152223_fk_auth_permission_id" columns="permission_id" ref-table="auth_permission" ref-schema="" ref-catalog="bine" ref-columns="id" update-rule="3" delete-rule="3" deferrability="2"/>
-      <foreign-key name="users_user_permissions_user_id_2c6b531faab7544f_fk_users_id" columns="user_id" ref-table="users" ref-schema="" ref-catalog="bine" ref-columns="id" update-rule="3" delete-rule="3" deferrability="2"/>
+      <foreign-key name="users_user__permission_id_688ca5f40a0de0c6_fk_auth_permission_id" columns="permission_id" ref-table="auth_permission" ref-schema="" ref-catalog="bine" ref-columns="id" update-rule="3" delete-rule="3" deferrability="2"/>
+      <foreign-key name="users_user_permissions_user_id_3865176b021c3da5_fk_users_id" columns="user_id" ref-table="users" ref-schema="" ref-catalog="bine" ref-columns="id" update-rule="3" delete-rule="3" deferrability="2"/>
       <index name="user_id" unique="true" columns="permission_id"/>
       <index name="users_user_permissions_8373b171" unique="false" columns="permission_id"/>
       <index name="users_user_permissions_e8701ad4" unique="false" columns="user_id"/>

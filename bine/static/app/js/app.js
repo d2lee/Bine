@@ -8,6 +8,9 @@ bineApp.config(['$routeProvider', function ($routeProvider) {
     }).when('/login/', {
         templateUrl: '/s/app/login.html',
         controller: 'UserAuthControl'
+    }).when('/register/', {
+        templateUrl: '/s/app/register.html',
+        controller: 'UserAuthControl'
     }).when('/note/new/', {
         templateUrl: '/s/app/note_form.html',
         controller: 'NoteNewControl'

@@ -5,7 +5,7 @@ from django.db import models
 from django.db.models import Q
 from django.db.models.fields import CharField, DateField, TextField, \
     DateTimeField
-from django.db.models.fields.related import ManyToManyField, ForeignKey
+from django.db.models.fields.related import ForeignKey
 from django.db.models.fields.files import ImageField
 from django.contrib.auth.models import BaseUserManager, AbstractBaseUser, \
     PermissionsMixin
@@ -179,18 +179,20 @@ class BookCategory(models.Model):
 
 
 class Book(models.Model):
-    categories = ManyToManyField(BookCategory, related_name='books')
     title = CharField(max_length=128, blank=False)
-    isbn = CharField(max_length=15, blank=False, unique=True)
+    category = CharField(max_length=128, blank=True)
+    isbn = CharField(max_length=10, blank=False, unique=True)
+    barcode = models.CharField(max_length=16, blank=False, default='KOR0000000000000', unique=True)
     author = CharField(max_length=50, blank=False)
+    isbn13 = CharField(max_length=13, blank=True)
+    author_etc = CharField(max_length=50, blank=True)
     illustrator = CharField(max_length=50, blank=True)
     translator = CharField(max_length=50, blank=True)
     publisher = CharField(max_length=128, blank=True)
     pub_date = DateField(blank=True, null=True)
-    page = CharField(max_length=4, blank=True)
     description = TextField(blank=True)
-    content = TextField(blank=True)
-    photo = ImageField(upload_to='book/%Y/%m/%d', blank=True)
+    photo = models.URLField(blank=True)
+    link = models.URLField(blank=True)
 
     LANGUAGE_CHOICES = (
         ('ko', '한국어'),
@@ -200,20 +202,6 @@ class Book(models.Model):
     )
 
     language = CharField(max_length=2, choices=LANGUAGE_CHOICES, default='ko', blank=False)
-
-    AGE_LEVEL_CHOICES = (
-        ('1', '0-3세'),
-        ('2', '4-7세'),
-        ('3', '초등1-2'),
-        ('4', '초등3-4'),
-        ('5', '초등5-6'),
-        ('6', '청소년'),
-        ('7', '성인'),
-        ('8', '유아전체'),
-        ('9', '초등전체'),
-    )
-
-    age_level = CharField(max_length=1, choices=AGE_LEVEL_CHOICES, default='9', blank=False)
 
     updated_on = DateTimeField(auto_now=True)
     created_at = DateTimeField(auto_now_add=True)

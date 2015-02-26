@@ -8,6 +8,7 @@ bineApp.controller('bookListControl', ['$scope', '$http', 'authService', functio
     $scope.load_book_list = function () {
         $http.get('/api/book/').success(function (data) {
             $scope.books = data;
+            $scope.noData = !$scope.books.length;
         });
     }
 
