@@ -225,12 +225,35 @@ bineApp.controller('NoteNewControl', ["$rootScope", "$scope", "$upload",
             return book.title;
         }
 
+        $scope.upload = function (url, data, file) {
+            $upload.upload({
+                url: url,
+                method: 'POST',
+                fields: data,
+                fileFormDataName: 'attach',
+                file: file
+            }).progress(function (evt) {
+                var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
+                // console.log('progress: ' + progressPercentage + '% ' +
+                // evt.config.file.name);
+            }).success(function (data, status, headers, config) {
+                alert('성공적으로 저장되었습니다.');
+                // console.log('file ' + config.file.name + 'uploaded.
+                // Response: ' + data);
+            });
+        };
+
         /*
          기존 BookNote를 수정하거나 새로운 노트를 저장한다.
          */
         $scope.save = function () {
             var note = $scope.note;
-            var id = null;
+            var id = '';
+
+            if (!note.book) {
+                alert('책을 선택해 주십시오');
+                return;
+            }
 
             if (note.id)
                 id = note.id;
@@ -238,13 +261,13 @@ bineApp.controller('NoteNewControl', ["$rootScope", "$scope", "$upload",
             var data = {
                 'id': id,
                 'user': note.user.id,
-                'book': $scope.note.book,
+                'book': note.book.id,
                 'content': note.content,
                 'read_date_from': $scope.format_date(note.read_date_from),
                 'read_date_to': $scope.format_date(note.read_date_to),
                 'preference': note.preference,
                 'share_to': note.share_to,
-                'attach': note.attach,
+                'attach': note.attach
             };
 
             var url = '/api/note/';
@@ -254,15 +277,6 @@ bineApp.controller('NoteNewControl', ["$rootScope", "$scope", "$upload",
             }
 
             $scope.upload(url, data, $scope.note.attach)
-            /*
-             * var attach = $scope.note.attach; if (attach) { $scope.upload(url,
-             * attach, data); } else { $http.post(url, data).
-             * success(function(data, status, headers, config) { alert('성공적으로
-             * 저장되었습니다.');
-             *
-             * }). error(function(data, status, headers, config) {
-             * alert("error"); }); }
-             */
         }
 
         $scope.set_preference = function (pref) {
@@ -306,10 +320,57 @@ bineApp.controller('NoteNewControl', ["$rootScope", "$scope", "$upload",
             }
         }
 
+        $scope.add_dash_to_date = function (d) {
+            return d.substr(0, 4) + "-" + d.substr(4, 2) + "-" + d.substr(6, 2)
+        }
+
+        $scope.save_book = function (book) {
+            // 새로운 책이기 때문에 데이터베이스에 저장.
+            var book_data = {
+                'author': book.author,
+                'title': book.title,
+                'isbn': book.isbn,
+                'isbn13': book.isbn,
+                'barcode': book.barcode,
+                'author_etc': book.etc_author,
+                'translator': book.translator,
+                'photo': book.cover_s_url,
+                'description': book.description,
+                'category': book.category,
+                'publisher': book.pub_nm,
+                'pub_date': $scope.add_dash_to_date(book.pub_date),
+                'link': book.link
+            };
+
+            url = '/api/book/';
+            $http.post(url, book_data).success(function (data, status, headers, config) {
+                $scope.note.book = data;
+                $scope.book_title = book.title;
+                $('#book_search_modal').modal('hide');
+            }).error(function (data, status, headers, config) {
+                alert("서버에 이상이 있습니다. 잠시후에 다시 시도해 주십시오.");
+                return;
+            });
+        }
+
+        // 사용자가 책을 선택했을 때 실행되는 함수
         $scope.select_book = function (book) {
-            $scope.note.book = book;
-            $scope.book_title = book.title;
-            $('#book_search_modal').modal('hide');
+
+            // 이미 데이터베이스에 존재하는지 유무 확인
+            var url = "/api/book/isbn/" + book.isbn + "/";
+            $http.get(url).success(function (data, status, headers, config) {
+                $scope.note.book = data;
+                $scope.book_title = book.title;
+                $('#book_search_modal').modal('hide');
+            }).error(function (data, status, headers, config) {
+                if (status == 404) {
+                    // 새로운 책이기 때문에 데이터베이스에 저장.
+                    $scope.save_book(book);
+                }
+                else {
+                    alert('서버에 이상이 있습니다. 잠시후에 다시 시도해 주십시오.');
+                }
+            });
         }
 
         $scope.format_date = function (date) {
@@ -321,22 +382,6 @@ bineApp.controller('NoteNewControl', ["$rootScope", "$scope", "$upload",
             return year + '-' + month + '-' + day;
         }
 
-        $scope.upload = function (url, data, file) {
-            $upload.upload({
-                url: url,
-                method: 'POST',
-                fields: data,
-                fileFormDataName: 'attach',
-                file: file
-            }).progress(function (evt) {
-                var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
-                // console.log('progress: ' + progressPercentage + '% ' +
-                // evt.config.file.name);
-            }).success(function (data, status, headers, config) {
-                alert('성공적으로 저장되었습니다.');
-                // console.log('file ' + config.file.name + 'uploaded.
-                // Response: ' + data);
-            });
-        };
+
     }
 ]);

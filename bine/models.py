@@ -182,27 +182,17 @@ class Book(models.Model):
     title = CharField(max_length=128, blank=False)
     category = CharField(max_length=128, blank=True)
     isbn = CharField(max_length=10, blank=False, unique=True)
-    barcode = models.CharField(max_length=16, blank=False, default='KOR0000000000000', unique=True)
-    author = CharField(max_length=50, blank=False)
+    barcode = models.CharField(max_length=16, blank=False)
+    author = CharField(max_length=128, blank=False)
     isbn13 = CharField(max_length=13, blank=True)
-    author_etc = CharField(max_length=50, blank=True)
-    illustrator = CharField(max_length=50, blank=True)
+    author_etc = CharField(max_length=128, blank=True)
+    illustrator = CharField(max_length=128, blank=True)
     translator = CharField(max_length=50, blank=True)
     publisher = CharField(max_length=128, blank=True)
     pub_date = DateField(blank=True, null=True)
     description = TextField(blank=True)
     photo = models.URLField(blank=True)
     link = models.URLField(blank=True)
-
-    LANGUAGE_CHOICES = (
-        ('ko', '한국어'),
-        ('en', '영어'),
-        ('jp', '일어'),
-        ('cn', '중국'),
-    )
-
-    language = CharField(max_length=2, choices=LANGUAGE_CHOICES, default='ko', blank=False)
-
     updated_on = DateTimeField(auto_now=True)
     created_at = DateTimeField(auto_now_add=True)
 
@@ -244,7 +234,7 @@ class BookNote(models.Model):
 
     content = TextField(blank=True)
     preference = CharField(max_length=1, blank=False, default=3)
-    attach = ImageField(upload_to=get_file_name, null=True)
+    attach = ImageField(upload_to=get_file_name, blank=True, null=True)
 
     SHARE_CHOICES = (
         ('P', '개인'),
@@ -285,6 +275,7 @@ class BookNote(models.Model):
 
     class Meta:
         db_table = 'booknotes'
+        ordering = ['-created_at']
 
 
 class BookNoteLikeit(models.Model):

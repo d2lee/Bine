@@ -1,4 +1,7 @@
 from django.contrib.auth.decorators import login_required
+from django.core.exceptions import ObjectDoesNotExist
+from django.views.decorators.csrf import csrf_exempt
+from rest_framework import status
 from rest_framework.permissions import AllowAny
 from rest_framework.views import APIView
 from django.http.response import JsonResponse, HttpResponseBadRequest
@@ -11,8 +14,7 @@ from django.shortcuts import render
 from rest_framework_jwt.serializers import JSONWebTokenSerializer
 
 from bine.models import BookNote, BookNoteReply, User, Book, BookNoteLikeit
-from bine.serializers import BookNoteWriteSerializer
-from bine.forms import BookNoteForm
+from bine.serializers import BookSerializer, BookNoteSerializer
 
 
 def get_book(request):
@@ -69,7 +71,6 @@ class Login(APIView):
 class Register(APIView):
     permission_classes = (AllowAny,)
 
-    @staticmethod
     def post(self, request):
         username = request.data['username']
         fullname = request.data['fullname']
@@ -78,7 +79,7 @@ class Register(APIView):
         email = request.data['email']
         password = request.data['password']
 
-        # validation code is required here        
+        # validation code is required here
         user = User.objects.create_user(username=username,
                                         fullname=fullname,
                                         birthday=birthday,
@@ -95,29 +96,48 @@ class Register(APIView):
         return Response(status=HTTP_403_FORBIDDEN)
 
 
+class BookDetail(APIView):
+    @staticmethod
+    def get(request, pk=None, isbn=None):
+        if pk is not None:
+            try:
+                book = Book.objects.get(pk=pk)
+            except ObjectDoesNotExist:
+                return Response(status=status.HTTP_404_NOT_FOUND)
+
+        if isbn is not None:
+            try:
+                book = Book.objects.get(isbn=isbn)
+            except ObjectDoesNotExist:
+                return Response(status=status.HTTP_404_NOT_FOUND)
+
+        if book:
+            serializer = BookSerializer(book)
+            return Response(serializer.data)
+        else:
+            return Response(status=HTTP_400_BAD_REQUEST)
+
+
 class BookList(APIView):
     @staticmethod
     def get(request):
         title = request.GET.get('title', None)
-        isbn = request.GET.get('isbn', None)
 
-        if not (title or isbn):
+        if title is None:
             return Response(status=HTTP_400_BAD_REQUEST)
-        if title is not None:
-            books = Book.objects.filter(title__icontains=title)[:10]
 
-        if isbn is not None:
-            if books:
-                books.filter(isbn=isbn)[:10]
-            else:
-                books = Book.objects.filter(isbn=isbn)[:10]
+        books = Book.objects.filter(title__icontains=title)[:10]
+        serializer = BookSerializer(books, many=True)
 
-        json_text = list(map(lambda x: x.to_json(), books.all()))
-        return Response(data=json_text)
+        return Response(serializer.data)
 
     @staticmethod
     def post(request):
-        book_json = request.data.book
+        serializer = BookSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(status=HTTP_400_BAD_REQUEST)
 
 
 class FriendList(APIView):
@@ -180,23 +200,45 @@ class FriendList(APIView):
 
 
 class BookNoteList(APIView):
-    def get(self, request):
+    @staticmethod
+    def get(request):
         if request.user is None:
             return Response(status=HTTP_400_BAD_REQUEST)
 
-        notes = request.user.booknotes.all()
+        notes = request.user.booknotes.all()[:10]
+        serializer = BookNoteSerializer(notes, many=True)
         # notes = BookNote.objects.all()[:20]
-        json_text = list(map(lambda x: x.to_json(), notes.all()))
+        # json_text = list(map(lambda x: x.to_json(), notes.all()))
 
-        return Response(data=json_text)
+        return Response(serializer.data)
 
-    def post(self, request):
+    @staticmethod
+    @csrf_exempt
+    def post(request):
+        # set current user to the user although user is sent from client.
+        request.POST['user'] = request.user.id
+
+        serializer = BookNoteSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        else:
+            return Response(status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+        '''
         form = BookNoteForm(request.POST, request.FILES)
+
+        form.fields["user"].initial = request.user
+
+        note = None
         if form.is_valid():
             note = form.save()
 
-        if form:
+        if note:
             return Response(data=note.to_json())
+        else:
+            return Response(status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        '''
 
 
 class BookNoteDetail(APIView):
@@ -210,7 +252,7 @@ class BookNoteDetail(APIView):
         if note is None:
             return HttpResponseBadRequest()
 
-        serializer = BookNoteWriteSerializer(instance=note, data=request.data)
+        serializer = BookNoteSerializer(instance=note, data=request.data)
         if not serializer.is_valid():
             return Response(serializer.errors, status=HTTP_400_BAD_REQUEST)
 

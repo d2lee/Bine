@@ -51,33 +51,33 @@ class BookSerializer(serializers.ModelSerializer):
     class Meta:
         model = Book
 
-        fields = ('id', 'categories', 'title', 'isbn', 'author', 'illustrator', 'translator',
-                  'publisher', 'pub_date', 'page', 'description', 'content', 'photo')
+        fields = ('id', 'category', 'title', 'isbn', 'isbn13', 'author', 'author_etc', 'illustrator', 'translator',
+                  'publisher', 'pub_date', 'description', 'photo', 'link')
 
 
-class BookNoteSerializerMixin(object):
-    def get_serializer_class(self):
-        if self.request.method in SAFE_METHODS:
-            return BookNoteViewSerializer
-        else:
-            return BookNoteWriteSerializer
-
-
-class BookNoteViewSerializer(serializers.ModelSerializer):
+class BookNoteSerializer(serializers.ModelSerializer):
     user = UserSimpleSerializer()
-    book = BookSimpleSerializer()
+
+    def create(self, validated_data):
+        user_id = self.initial_data.get('user')
+        book_id = self.initial_data.get('book')
+        if user_id:
+            validated_data['user'] = User.objects.get(pk=user_id)
+
+        if book_id:
+            validated_data['book'] = Book.objects.get(pk=book_id)
+
+        instance = BookNote.objects.create(**validated_data)
+
+        instance.save()
+
+        return instance
 
     class Meta:
         model = BookNote
         fields = ('id', 'user', 'book', 'content', 'read_date_from', 'read_date_to', 'preference',
-                  'likeit', 'attach', 'share_to', 'created_at', 'updated_on')
-
-
-class BookNoteWriteSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = BookNote
-        fields = ('id', 'user', 'book', 'content', 'read_date_from', 'read_date_to', 'preference',
-                  'attach', 'share_to')
+                  'attach', 'share_to', 'created_at')
+        depth = 1
 
 
 class BookNoteReplySerializerMixin(object):
