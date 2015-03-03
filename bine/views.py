@@ -14,7 +14,7 @@ from django.shortcuts import render
 from rest_framework_jwt.serializers import JSONWebTokenSerializer
 
 from bine.models import BookNote, BookNoteReply, User, Book, BookNoteLikeit
-from bine.serializers import BookSerializer, BookNoteSerializer
+from bine.serializers import BookSerializer, BookNoteSerializer, UserSerializer
 
 
 def get_book(request):
@@ -25,7 +25,7 @@ def get_book(request):
 def auth_response_payload_handler(token, user=None):
     return {
         'token': token,
-        'user': user.to_json()
+        'user': UserSerializer(user).data,
     }
 
 
@@ -71,7 +71,8 @@ class Login(APIView):
 class Register(APIView):
     permission_classes = (AllowAny,)
 
-    def post(self, request):
+    @staticmethod
+    def post(request):
         username = request.data['username']
         fullname = request.data['fullname']
         birthday = request.data['birthday']
@@ -98,16 +99,16 @@ class Register(APIView):
 
 class BookDetail(APIView):
     @staticmethod
-    def get(request, pk=None, isbn=None):
+    def get(request, pk=None, isbn13=None):
         if pk is not None:
             try:
                 book = Book.objects.get(pk=pk)
             except ObjectDoesNotExist:
                 return Response(status=status.HTTP_404_NOT_FOUND)
 
-        if isbn is not None:
+        if isbn13 is not None:
             try:
-                book = Book.objects.get(isbn=isbn)
+                book = Book.objects.get(isbn13=isbn13)
             except ObjectDoesNotExist:
                 return Response(status=status.HTTP_404_NOT_FOUND)
 
@@ -202,15 +203,11 @@ class FriendList(APIView):
 class BookNoteList(APIView):
     @staticmethod
     def get(request):
-        if request.user is None:
-            return Response(status=HTTP_400_BAD_REQUEST)
-
-        notes = request.user.booknotes.all()[:10]
-        serializer = BookNoteSerializer(notes, many=True)
-        # notes = BookNote.objects.all()[:20]
-        # json_text = list(map(lambda x: x.to_json(), notes.all()))
-
-        return Response(serializer.data)
+        """
+        현재 사용자와 친구들의 책 노트 목록을 보여준다.
+        """
+        notes = request.user.get_user_and_friend_notes()
+        return Response(BookNoteSerializer(notes, many=True).data)
 
     @staticmethod
     @csrf_exempt
@@ -223,31 +220,22 @@ class BookNoteList(APIView):
             serializer.save()
             return Response(serializer.data)
         else:
-            return Response(status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-
-        '''
-        form = BookNoteForm(request.POST, request.FILES)
-
-        form.fields["user"].initial = request.user
-
-        note = None
-        if form.is_valid():
-            note = form.save()
-
-        if note:
-            return Response(data=note.to_json())
-        else:
-            return Response(status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-        '''
+            return Response(status=status.HTTP_400_BAD_REQUEST)
 
 
 class BookNoteDetail(APIView):
-    def get(self, request, pk):
-        note = BookNote.objects.get(pk=pk)
-        json_text = note.to_json()
-        return JsonResponse(json_text, safe=False)
+    @staticmethod
+    def get(request, pk):
+        try:
+            note = BookNote.objects.get(pk=pk)
+        except ObjectDoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)
 
-    def post(self, request, pk):
+        serializer = BookNoteSerializer(note)
+        return Response(serializer.data)
+
+    @staticmethod
+    def post(request, pk):
         note = BookNote.objects.get(pk=pk)
         if note is None:
             return HttpResponseBadRequest()
@@ -256,12 +244,13 @@ class BookNoteDetail(APIView):
         if not serializer.is_valid():
             return Response(serializer.errors, status=HTTP_400_BAD_REQUEST)
 
-        note = serializer.save();
+        note = serializer.save()
 
         if note:
-            return Response(data=note.to_json())
+            return Response(serializer.data)
 
-    def delete(self, request, pk):
+    @staticmethod
+    def delete(request, pk):
         note = BookNote.objects.get(pk=pk)
         if note is None:
             return Response(status=HTTP_400_BAD_REQUEST)

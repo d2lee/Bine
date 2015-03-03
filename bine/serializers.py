@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from django.contrib.auth import update_session_auth_hash
+from rest_framework.exceptions import ValidationError
 
 from bine.models import User, Book, BookNote, BookNoteReply
 
@@ -43,8 +44,8 @@ class UserSerializer(serializers.ModelSerializer):
 class UserSimpleSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ('id', 'username', 'fullname')
-        read_only_fields = ('username', 'fullname')
+        fields = ('id', 'username', 'fullname', 'photo')
+        read_only_fields = ('id', 'username', 'fullname', 'photo')
 
 
 class BookSerializer(serializers.ModelSerializer):
@@ -56,7 +57,19 @@ class BookSerializer(serializers.ModelSerializer):
 
 
 class BookNoteSerializer(serializers.ModelSerializer):
-    user = UserSimpleSerializer()
+    user = UserSimpleSerializer(read_only=True)
+    book = BookSerializer(read_only=True)
+
+    def update(self, instance, validated_data):
+        user_id = self.initial_data.get('user')
+        book_id = self.initial_data.get('book')
+        if user_id and book_id:
+            validated_data['user'] = User.objects.get(pk=user_id)
+            validated_data['book'] = Book.objects.get(pk=book_id)
+        else:
+            raise ValidationError;
+
+        return super(BookNoteSerializer, self).update(instance, validated_data)
 
     def create(self, validated_data):
         user_id = self.initial_data.get('user')

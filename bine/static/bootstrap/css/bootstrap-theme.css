@@ -5,8 +5,8 @@
  */
 
 /*!
- * Generated using the Bootstrap Customizer (http://getbootstrap.com/customize/?id=358221a50f6a33a23814)
- * Config saved to config.json and https://gist.github.com/358221a50f6a33a23814
+ * Generated using the Bootstrap Customizer (http://getbootstrap.com/customize/?id=af42800aec6f79a898c3)
+ * Config saved to config.json and https://gist.github.com/af42800aec6f79a898c3
  */
 .btn-default,
 .btn-primary,
@@ -285,7 +285,6 @@
 .navbar-fixed-bottom {
     border-radius: 0;
 }
-
 @media (max-width: 49px) {
     .navbar .navbar-nav .open .dropdown-menu > .active > a,
     .navbar .navbar-nav .open .dropdown-menu > .active > a:hover,
@@ -420,12 +419,12 @@
     box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
 }
 .panel-default > .panel-heading {
-    background-image: -webkit-linear-gradient(top, #f5f5f5 0%, #e8e8e8 100%);
-    background-image: -o-linear-gradient(top, #f5f5f5 0%, #e8e8e8 100%);
-    background-image: -webkit-gradient(linear, left top, left bottom, from(#f5f5f5), to(#e8e8e8));
-    background-image: linear-gradient(to bottom, #f5f5f5 0%, #e8e8e8 100%);
+    background-image: -webkit-linear-gradient(top, #ffffff 0%, #f2f2f2 100%);
+    background-image: -o-linear-gradient(top, #ffffff 0%, #f2f2f2 100%);
+    background-image: -webkit-gradient(linear, left top, left bottom, from(#ffffff), to(#f2f2f2));
+    background-image: linear-gradient(to bottom, #ffffff 0%, #f2f2f2 100%);
     background-repeat: repeat-x;
-    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#fff5f5f5', endColorstr='#ffe8e8e8', GradientType=0);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffffff', endColorstr='#fff2f2f2', GradientType=0);
 }
 .panel-primary > .panel-heading {
     background-image: -webkit-linear-gradient(top, #2196f3 0%, #0d8aee 100%);

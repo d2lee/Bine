@@ -11,6 +11,9 @@ bineApp.config(['$routeProvider', function ($routeProvider) {
     }).when('/register/', {
         templateUrl: '/s/app/register.html',
         controller: 'UserAuthControl'
+    }).when('/user/', {
+        templateUrl: '/s/app/user.html',
+        controller: 'UserControl'
     }).when('/note/new/', {
         templateUrl: '/s/app/note_form.html',
         controller: 'NoteNewControl'
@@ -40,8 +43,9 @@ bineApp.config(['$routeProvider', function ($routeProvider) {
     });
 }]);
 
-bineApp.service('authService', ['$http', '$window', 'jwtHelper',
-    function ($http, $window, jwtHelper) {
+
+bineApp.service('authService', ['$http', '$window', '$rootScope', 'jwtHelper',
+    function ($http, $window, $rootScope, jwtHelper) {
 
         this.clear = function () {
             this.set_user(null);
@@ -49,30 +53,32 @@ bineApp.service('authService', ['$http', '$window', 'jwtHelper',
         }
 
         this.check_auth_and_set_user = function ($scope) {
-            var token = this.get_token();
-            var isTokenExpired;
-
-            try {
-                this.refresh_token(token);
-
-                isTokenExpired = jwtHelper.isTokenExpired(token);
-
-                if ((token != null) && !isTokenExpired) {
-                    $scope.user = this.get_user();
-                    return true;
-                }
-            }
-            catch (err) {
-
-            }
-
-            location.href = "#/login/";
-            return false;
+            $scope.user = $rootScope.user;
+            return true;
         }
 
-        this.refresh_token = function (token) {
+        this.isTokenExpired = function () {
+            var token = this.get_token();
+            if (!token)
+                return true;
+
+            var isExpired = true;
+
+            try {
+                isExpired = jwtHelper.isTokenExpired(token);
+            }
+            catch (e) {
+            }
+
+            return isExpired;
+        }
+
+        this.refresh_token_if_expired_soon = function () {
+            var token = this.get_token();
+
             var datetime = jwtHelper.getTokenExpirationDate(token);
             var datetime = new Date(datetime).getTime();
+
             var now = new Date().getTime();
 
             var milisec_diff;
@@ -131,6 +137,30 @@ bineApp.config(function Config($httpProvider, jwtInterceptorProvider) {
 
     $httpProvider.interceptors.push('jwtInterceptor');
 })
+
+
+// 페이지가 변경될 떄마다 token 만료 시간이 얼마남지 않았으면 새로 refresh하고 만료되었으면 login화면으로 이동한다.
+bineApp.run(['$location', '$rootScope', 'authService', function ($location, $rootScope, authService) {
+    $rootScope.$on("$routeChangeStart", function (event, next, current) {
+        if (!authService.get_token()) {
+            $location.path('/login/');
+        }
+        else {
+            authService.refresh_token_if_expired_soon();
+
+            if (authService.isTokenExpired()) {
+                event.preventDefault();
+                $rootScope.$evalAsync(function () {
+                    $location.path('/login/');
+                });
+            }
+            else {
+                $rootScope.user = authService.get_user();
+            }
+        }
+    });
+}]);
+
 
 bineApp.filter('truncate', function () {
     return function (content, maxCharacters) {

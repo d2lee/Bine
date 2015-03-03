@@ -164,16 +164,3 @@ body {
 .register button[type='submit'] {
     width: auto;
 }
-
-.register .glyphicon-info-sign {
-    color: #FF4081;
-    margin-right: 2px;
-}
-
-.register .error-msg {
-    font-size: 9pt;
-    color: #595959;
-
-    margin-top: 6px;
-    margin-left: 6px;
-}

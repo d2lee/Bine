@@ -5,8 +5,8 @@
  */
 
 /*!
- * Generated using the Bootstrap Customizer (http://getbootstrap.com/customize/?id=358221a50f6a33a23814)
- * Config saved to config.json and https://gist.github.com/358221a50f6a33a23814
+ * Generated using the Bootstrap Customizer (http://getbootstrap.com/customize/?id=af42800aec6f79a898c3)
+ * Config saved to config.json and https://gist.github.com/af42800aec6f79a898c3
  */
 if (typeof jQuery === 'undefined') {
     throw new Error('Bootstrap\'s JavaScript requires jQuery')
@@ -527,7 +527,7 @@ if (typeof jQuery === 'undefined') {
             $parent
                 .toggleClass('open')
                 .trigger('shown.bs.dropdown', relatedTarget)
-        }
+    }
 
         return false
     }
@@ -959,7 +959,7 @@ if (typeof jQuery === 'undefined') {
             $target.one('hidden.bs.modal', function () {
                 $this.is(':visible') && $this.trigger('focus')
             })
-        })
+    })
         Plugin.call($target, option, this)
     })
 
@@ -1033,7 +1033,7 @@ if (typeof jQuery === 'undefined') {
                 this.$element.on(eventIn + '.' + this.type, this.options.selector, $.proxy(this.enter, this))
                 this.$element.on(eventOut + '.' + this.type, this.options.selector, $.proxy(this.leave, this))
             }
-        }
+    }
 
         this.options.selector ?
             (this._options = $.extend({}, this.options, {trigger: 'manual', selector: ''})) :
@@ -1287,7 +1287,7 @@ if (typeof jQuery === 'undefined') {
         var $e = this.$element
         if ($e.attr('title') || typeof ($e.attr('data-original-title')) != 'string') {
             $e.attr('data-original-title', $e.attr('title') || '').attr('title', '')
-        }
+    }
     }
 
     Tooltip.prototype.hasContent = function () {
@@ -1304,7 +1304,7 @@ if (typeof jQuery === 'undefined') {
         if (elRect.width == null) {
             // width and height are missing in IE8, so compute them manually; see https://github.com/twbs/bootstrap/issues/14093
             elRect = $.extend({}, elRect, {width: elRect.right - elRect.left, height: elRect.bottom - elRect.top})
-        }
+    }
         var elOffset = isBody ? {top: 0, left: 0} : $element.offset()
         var scroll = {scroll: isBody ? document.documentElement.scrollTop || document.body.scrollTop : $element.scrollTop()}
         var outerDims = isBody ? {width: $(window).width(), height: $(window).height()} : null
@@ -2189,7 +2189,7 @@ if (typeof jQuery === 'undefined') {
             && scrollTop >= offsets[i]
             && (!offsets[i + 1] || scrollTop <= offsets[i + 1])
             && this.activate(targets[i])
-        }
+    }
     }
 
     ScrollSpy.prototype.activate = function (target) {
@@ -2209,7 +2209,7 @@ if (typeof jQuery === 'undefined') {
             active = active
                 .closest('li.dropdown')
                 .addClass('active')
-        }
+    }
 
         active.trigger('activate.bs.scrollspy')
     }
@@ -2257,7 +2257,7 @@ if (typeof jQuery === 'undefined') {
         $('[data-spy="scroll"]').each(function () {
             var $spy = $(this)
             Plugin.call($spy, $spy.data())
-        })
+    })
     })
 
 }(jQuery);
@@ -2291,7 +2291,7 @@ if (typeof jQuery === 'undefined') {
             if (el.style[name] !== undefined) {
                 return {end: transEndEventNames[name]}
             }
-        }
+    }
 
         return false // explicit for ie8 (  ._.)
     }

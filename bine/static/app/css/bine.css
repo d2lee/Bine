@@ -26,11 +26,16 @@
 .navbar-brand {
     font-size: 22px;
     font-weight: bold;
-    margin-right: 30px;
+    margin-right: 50px;
 }
 
 .navbar-nav > li {
-    font-size: 16px;
+    font-size: 15px;
+    font-weight: 500;
+}
+
+.navbar-nav > li > a {
+    color: #ffffff;
 }
 
 /* 화면이 모바일 크기로 줄어들었을 때 책 검색 input box가 다음 줄로 가는 것을 방지하는 기능*/
@@ -56,17 +61,51 @@
     Active인 메뉴 표시
 */
 .navbar-default .navbar-nav > .active > a, .navbar-default .navbar-nav > .active > a:focus, .navbar-default .navbar-nav > .active > a:hover {
-    border-bottom: solid 3px white;
+    border-bottom: solid 4px #ffffff;
+    padding-bottom: 8px;
+    color: #E8F5E9 !important;
 }
 
-.list-container {
+.error-msg {
+    font-size: 9pt;
+    color: #595959;
+
+    margin-top: 6px;
+    margin-left: 6px;
+}
+
+.error-msg .glyphicon-info-sign {
+    color: #FF4081;
+    margin-right: 2px;
+}
+
+.login-user {
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+}
+
+.login-user img {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    border: 0;
+    margin-left: 8px;
+    margin-top: 5px;
+}
+
+.page-menu {
+    padding-right: 16px;
+}
+
+.page-content {
     background: #fff;
     border-radius: 4px;
+    padding-bottom: 16px;
 }
 
-.list-title {
+.page-content .list-title {
     margin-left: 4px;
-    margin-bottom: 20px;
+    /* margin-bottom: 20px; */
     border-bottom: solid 1px #ddd;
     padding-bottom: 8px;
 }
@@ -77,6 +116,8 @@
 }
 
 .list-item > .panel-heading {
+    padding-left: 8px;
+    padding-right: 8px;
     background-color: white;
     border-bottom: none;
 }
@@ -87,34 +128,75 @@
     text-overflow: ellipsis;
 }
 
+.list-item .media-heading {
+    font-size: 12pt;
+    font-weight: bold;
+    text-overflow: ellipsis;
+}
+
+.list-item .media-heading a {
+    color: black;
+}
+
 .list-item > .panel-footer {
     background-color: white;
     border-top: none;
     border-bottom: 1px solid #ddd;
     border-radius: 0;
+    padding-left: 8px;
+    padding-right: 8px;
 }
 
 .list-item > .panel-body {
-    padding-top: 0;
-    padding-bottom: 0;
+    padding: 0 8px;
     margin-bottom: 0;
 }
 
-.list-item .panel-detail {
-    font-size: 9pt;
+.list-item .panel-detail, .detail-item .panel-detail {
+    font-size: 8pt;
     color: #595959;
 }
 
-.list-item .panel-content {
-    margin-top: 6px;
-    margin-bottom: 4px;
+.list-item .panel-content, .detail-item .panel-content {
+    margin-top: 10px;
+    margin-bottom: 2px;
     font-size: 14px;
+}
+
+.list-item .panel-action {
+    margin-top: 8px;
+
+}
+
+.list-item .panel-action a {
+    margin-top: 4px;
+    color: #595959;
+    font-size: 14px;
+}
+
+.detail-item .panel-heading, .detail-item .panel-footer {
+    background: #ffffff;
 }
 
 .list-item .book-photo {
     padding: 4px 4px 4px 8px;
-    width: auto;
-    height: 100px;
+    margin-top: -30px;
+    width: 100px;
+    height: auto;
+}
+
+.detail-item .book-photo {
+    padding: 4px 4px 4px 8px;
+    width: 100px;
+    height: auto;
+}
+
+.list-item .panel-footer {
+    padding-top: 2px;
+}
+
+.list-item .panel-footer a {
+    color: #595959;
 }
 
 .note-new-panel {
@@ -144,4 +226,31 @@
 .book-search-modal .thumbnail {
     background: white;
     border: 0;
+}
+
+.user-info-container {
+    background: #fff;
+    border-radius: 4px;
+}
+
+.user-info-container label {
+    color: #555;
+}
+
+.user-info-container .birthday-control {
+    width: auto;
+    float: left;
+    margin-top: 4pt;
+    margin-bottom: 4pt !important;
+    margin-right: 2pt;
+}
+
+.user-info-container button[type='submit'] {
+    width: auto;
+    margin-bottom: 8px;
+}
+
+.user-info-container .img-thumbnail {
+    width: 100px;
+    height: auto;
 }

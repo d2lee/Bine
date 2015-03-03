@@ -1,10 +1,17 @@
-import urllib.request
+from datetime import date
 
 
-class BookSearch:
-    NAVER_OPEN_API = "http://openapi.naver.com/search"
-    API_KEY = "c1b406b32dbbbbeee5f2a36ddc14067f"
+def calculate_age(born):
+    today = date.today()
+    return today.year - born.year - ((today.month, today.day) < (born.month, born.day))
 
-    def search(self, keyword):
-        url = NAVER_OPEN_API
-        urllib.request.urlopen("http://example.com/foo/bar").read()
+
+def get_category(birthday):
+    age = calculate_age(birthday)
+
+    if 0 <= age <= 7:
+        category = "유아(0~7세)"
+    elif 8 <= age <= 13:
+        category = "어린이(초등)"
+
+    return category

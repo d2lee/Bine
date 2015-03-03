@@ -1,17 +1,19 @@
 bineApp.controller('NoteListControl', ["$rootScope", "$scope", "$sce",
     "$http", "authService",
     function ($rootScope, $scope, $sce, $http, authService) {
-        $rootScope.note = null;
+        $scope.init = function () {
+            $rootScope.note = null;
 
-        // check the authentication
-        if (!authService.check_auth_and_set_user($scope)) {
-            return;
+            // check the authentication
+            if (!authService.check_auth_and_set_user($scope)) {
+                return;
+            }
+
+            $http.get('/api/note/').success(function (data) {
+                $scope.notes = data;
+                $scope.noData = !$scope.notes.length;
+            });
         }
-
-        $http.get('/api/note/').success(function (data) {
-            $scope.notes = data;
-            $scope.noData = !$scope.notes.length;
-        });
 
         $scope.make_html_preference = function (preference) {
             var spanHtml = "";
@@ -28,10 +30,15 @@ bineApp.controller('NoteListControl', ["$rootScope", "$scope", "$sce",
             location.href = "#/note/new/"
         }
 
+        // 노트를 삭제한다.
         $scope.delete_note = function (note, index) {
+            var ret = confirm("노트를 삭제하시겠습니까? 한번 삭제되면 복구할 수 없습니다.")
+            if (!ret)
+                return;
+
             var url = "/api/note/" + note.id + "/";
             $http.delete(url).success(function (data) {
-                alert('삭제되었습니다.');
+                alert('노트가 정상적으로 삭제되었습니다.');
                 $scope.notes.splice(index, 1);
             });
         }
@@ -66,33 +73,75 @@ bineApp.controller('NoteListControl', ["$rootScope", "$scope", "$sce",
             }
             return $sce.trustAsHtml(html);
         }
+
+        $scope.init();
     }]);
 
+/*
+ 자세히 보기 컨트롤러
+ */
 bineApp.controller('NoteDetailControl', ["$rootScope", "$scope", "$sce", "$routeParams",
     "$http", "authService",
     function ($rootScope, $scope, $sce, $routeParams, $http, authService) {
-        var note_id = $routeParams.note_id;
+        $scope.init = function () {
 
-        // check the authentication
-        if (!authService.check_auth_and_set_user($scope)) {
-            return;
+            // check the authentication
+            if (!authService.check_auth_and_set_user($scope)) {
+                return;
+            }
+
+            // 노트 ID 읽기
+            var note_id = $routeParams.note_id;
+            if (!note_id) {
+                alert('자세히 볼 노트에 대한 정보를 읽을 수 없습니다. 초기화면으로 이동합니다.');
+                location.href = "#/note/"
+                return;
+            }
+
+            $scope.note_id = note_id;
+            $scope.new_reply_content = "";
+            $scope.current_reply = "";
+
+            $scope.fetch_note_detail(note_id);
+            $scope.fetch_note_reply(note_id);
         }
 
-        $scope.note_id = note_id;
-        $scope.new_reply_content = "";
-        $scope.current_reply = "";
+        $scope.fetch_note_detail = function (note_id) {
+            // fetch the details about current booknote.
+            var url = '/api/note/' + note_id + "/";
+            $http.get(url).success(function (data) {
+                $scope.note = data;
+            });
+        }
 
-        // fetch the details about current booknote.
-        var note_target_url = '/api/note/' + note_id + "/";
-        $http.get(note_target_url).success(function (data) {
-            $scope.note = data;
-        });
+        $scope.fetch_note_reply = function (note_id) {
+            // fetch the reply information from server.
+            var note_reply_url = '/api/note/' + note_id + "/reply/";
+            $http.get(note_reply_url).success(function (data) {
+                $scope.replies = data;
+            });
+        }
 
-        // fetch the reply information from server.
-        var note_reply_url = '/api/note/' + note_id + "/reply/";
-        $http.get(note_reply_url).success(function (data) {
-            $scope.replies = data;
-        });
+        // 노트를 삭제한다.
+        $scope.delete_note = function () {
+            var ret = confirm("노트를 삭제하시겠습니까? 한번 삭제되면 복구할 수 없습니다.")
+            if (!ret)
+                return;
+
+            var url = "/api/note/" + $scope.note.id + "/";
+            $http.delete(url).success(function (data) {
+                alert('노트가 정상적으로 삭제되었습니다. 이전 화면으로 이동합니다.');
+                window.history.back();
+            });
+        }
+
+        $scope.edit_note = function (note) {
+            if (!note)
+                note = $scope.note;
+
+            $rootScope.note = note;
+            location.href = "#/note/new/"
+        }
 
         $scope.delete_reply = function (reply, index) {
             var url = url = '/api/note/' + $scope.note_id + '/reply/' + reply.id + "/";
@@ -187,21 +236,30 @@ bineApp.controller('NoteDetailControl', ["$rootScope", "$scope", "$sce", "$route
             }
             return $sce.trustAsHtml(html);
         }
+
+        $scope.init();
     }]);
 
+/*
+ NoteNewControl: 새로운 노트를 생성하거나 기존 노트 수정을 처리하기 위한 컨트롤러
+ */
 bineApp.controller('NoteNewControl', ["$rootScope", "$scope", "$upload",
     "$http", "authService",
     function ($rootScope, $scope, $upload, $http, authService) {
+
+        /*
+         New Control이 불리어졌을 때 실행되는 부분.
+         */
         // check the authentication
         if (!authService.check_auth_and_set_user($scope)) {
             return;
         }
 
-        if (!$rootScope.note) {
+        if (!$rootScope.note) { // 새 노트를 생성하려면 기본 값을 채운 노트를 하나 만든다.
             var today = new Date();
 
             $scope.note = {
-                'user': {'id': 2},
+                'user': {'id': $scope.user.id},
                 'preference': 3,
                 'share_to': 'F',
                 'read_date_from': today,
@@ -248,12 +306,10 @@ bineApp.controller('NoteNewControl', ["$rootScope", "$scope", "$upload",
          */
         $scope.save = function () {
             var note = $scope.note;
-            var id = '';
+            var id = "";
 
-            if (!note.book) {
-                alert('책을 선택해 주십시오');
+            if (!$scope.note_form.$valid)
                 return;
-            }
 
             if (note.id)
                 id = note.id;
@@ -266,8 +322,7 @@ bineApp.controller('NoteNewControl', ["$rootScope", "$scope", "$upload",
                 'read_date_from': $scope.format_date(note.read_date_from),
                 'read_date_to': $scope.format_date(note.read_date_to),
                 'preference': note.preference,
-                'share_to': note.share_to,
-                'attach': note.attach
+                'share_to': note.share_to
             };
 
             var url = '/api/note/';
@@ -300,7 +355,6 @@ bineApp.controller('NoteNewControl', ["$rootScope", "$scope", "$upload",
                 return;
             }
             else {
-                // var url = "/api/book/search/?title=" + $scope.book_title;
                 var url = "https://apis.daum.net/search/book";
                 var api_key = "3cf83b5f4a7062c5e99173f7759b6a2e";
 
@@ -330,7 +384,7 @@ bineApp.controller('NoteNewControl', ["$rootScope", "$scope", "$upload",
                 'author': book.author,
                 'title': book.title,
                 'isbn': book.isbn,
-                'isbn13': book.isbn,
+                'isbn13': book.isbn13,
                 'barcode': book.barcode,
                 'author_etc': book.etc_author,
                 'translator': book.translator,
@@ -357,7 +411,7 @@ bineApp.controller('NoteNewControl', ["$rootScope", "$scope", "$upload",
         $scope.select_book = function (book) {
 
             // 이미 데이터베이스에 존재하는지 유무 확인
-            var url = "/api/book/isbn/" + book.isbn + "/";
+            var url = "/api/book/isbn13/" + book.isbn13 + "/";
             $http.get(url).success(function (data, status, headers, config) {
                 $scope.note.book = data;
                 $scope.book_title = book.title;

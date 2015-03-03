@@ -1,5 +1,75 @@
+<nav class="navbar navbar-default navbar-static-top">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="">Bine</a>
+        <ul class="nav navbar-nav visible-sm visible-md visible-lg">
+            <li class="active"><a href="#/note/"><span class="glyphicon glyphicon-file"></span><span
+                    class="menu_caption"> 노트</span></a></li>
+            <li><a href="#/book/"><span class="glyphicon glyphicon-book"></span><span class="menu_caption"> 책</span></a>
+            </li>
+            <li><a href="#/friend/"><span class="glyphicon glyphicon-user"></span><span class="menu_caption"> 친구</span></a>
+            </li>
+        </ul>
+
+        <ul class="nav navbar-nav navbar-right visible-sm visible-md visible-lg">
+            <li>
+                <a class="login-user" href="#/user/">
+                    <img data-toggle="tooltip" data-placement="left" title="{{ user.fullname }} 로그인 중" ng-src="
+                        {{ user.photo || user.sex == 'M' && '/s/app/images/male.jpg' || '/s/app/images/female.jpg'}}">
+                </a>
+            </li>
+        </uL>
+
+        <ul class="nav navbar-nav navbar-right hidden-sm hidden-md hidden-lg">
+            <li class="active">
+                <a href="#/note/"><span class="glyphicon glyphicon-file"></span></a>
+            </li>
+            <li>
+                <a href="#/book/"><span class="glyphicon glyphicon-book"></span></a>
+            </li>
+            <li>
+                <a href="#/friend/"><span class="glyphicon glyphicon-user"></span></a>
+            </li>
+            <li>
+                <div class="dropdown pull-right">
+                    <div class="float-menu dropdown-toggle" data-toggle="dropdown" aria-expanded="true"><span
+                            class="glyphicon glyphicon-menu-hamburger"></span>
+                    </div>
+                    <ul class="dropdown-menu dropdown-menu-right" role="menu" aria-labelledby="dropdownMenu1">
+                        <li role="presentation"><a role="menuitem" tabindex="-1"
+                                                   href="#/note/new">{{ user.fullname }}</a></li>
+                        <li role="presentation" class="divider"></li>
+                        <li role="presentation"><a role="menuitem" tabindex="-1" href="#">기본 정보 수정</a></li>
+                        <li role="presentation"><a role="menuitem" tabindex="-1" href="#">활동 보기</a></li>
+                        <li role="presentation"><a role="menuitem" tabindex="-1" href="#">로그아웃</a></li>
+                        <li role="presentation" class="divider"></li>
+                        <li role="presentation"><a role="menuitem" tabindex="-1" href="#/note/new">독서노트 작성</a></li>
+
+                        <li role="presentation"><a role="menuitem" tabindex="-1" href="#">전체 독서노트 보기</a></li>
+                        <li role="presentation"><a role="menuitem" tabindex="-1" href="#">내 독서노트만 보기</a></li>
+                        <li role="presentation"><a role="menuitem" tabindex="-1" href="#">새 독서노트만 보기</a></li>
+                    </ul>
+                </div>
+            </li>
+        </ul>
+
+        <form class="navbar-form navbar-right" role="search">
+            <div class="form-group">
+                <div class="input-group  hidden-xs">
+                    <input type="text" class="form-control" placeholder="책 검색">
+						<span class="input-group-btn">
+							<button class="btn btn-default" type="button">
+                                <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+                            </button>
+						</span>
+                </div>
+
+            </div>
+        </form>
+    </div>
+</nav>
+
 <!-- Book Search Modal -->
-<div class="modal  book-search-modal" id="book_search_modal"
+<div class="modal fade  book-search-modal" id="book_search_modal"
      tabindex="-1" role="dialog" aria-labelledby="" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
@@ -14,8 +84,9 @@
             <div class="modal-body">
                 <div class="input-group">
                     <input type="text" class="form-control" ng-model="book_title"
-                           placeholder="책이름"> <span class="input-group-btn">
-						<button class="btn btn-primary" type="button"
+                           placeholder="책이름" ng-keyup="$event.keyCode == 13 ? search_book() : null"> <span
+                        class="input-group-btn">
+						<button class="btn btn-primary" type="submit"
                                 ng-click="search_book()">
                             <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
                         </button>
@@ -52,18 +123,25 @@
     <div class="panel-heading">
         <a href="#/note/"><span class="glyphicon glyphicon-menu-left"></span></a>독서노트
     </div>
-    <div class="panel-body">
-        <form method="post" name="note_form" novalidate>
+    <form name="note_form" novalidate>
+        <div class="panel-body">
+
             <div class="form-group">
                 <div class="input-group">
-                    <input class="form-control" type="text" ng-model="book_title"
-                           placeholder="책이름으로 찾아보세요." required></input> <span
+                    <input class="form-control" type="text" name="book_title" ng-model="book_title"
+                           placeholder="읽은 책을 검색하세요." required readonly><span
                         class="input-group-btn">
 						<button class="btn btn-primary" type="button"
                                 ng-click="search_book()">
-                            <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
+                            <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
                         </button>
 					</span>
+                </div>
+                <div class="error-msg"
+                     ng-show="note_form.$submitted || note_form.book_title.$touched">
+                    <div ng-show="note_form.book_title.$error.required">
+                        <span class='glyphicon glyphicon-info-sign'></span>책을 선택하십시오.
+                    </div>
                 </div>
             </div>
 
@@ -76,7 +154,7 @@
             <div class="form-inline">
                 <span class="form-control-static date-label">읽은 날짜:</span> <input
                     type="date" class="form-control" ng-model="note.read_date_from"
-                    name="read_date_from"></input> <span class="form-control-static">
+                    name="read_date_from"><span class="form-control-static">
 					부터 </span> <input type="date" class="form-control"
                                       ng-model="note.read_date_to" name="read_date_to"></input> <span
                     class="form-control-static"> 까지 </span>
@@ -117,11 +195,12 @@
                                                                       class="filestyle" name="attach"
                                                                       data-buttonText="첨부파일">
             </div>
-        </form>
 
-    </div>
-    <div class="panel-footer">
-        <button type="button" class="btn btn-primary" ng-click="save()">저장</button>
-    </div>
+        </div>
+        <div class="panel-footer">
+            <button type="submit" class="btn btn-primary" ng-click="save()">저장</button>
+        </div>
+    </form>
+
 </div>
 

@@ -10,6 +10,8 @@ from django.db.models.fields.files import ImageField
 from django.contrib.auth.models import BaseUserManager, AbstractBaseUser, \
     PermissionsMixin
 
+from bine.commons import get_category
+
 
 class UserManager(BaseUserManager):
     def create_user(self, username, password, is_staff=False, is_superuser=False, **kwargs):
@@ -108,6 +110,12 @@ class User(AbstractBaseUser, PermissionsMixin):
         # Exclude self and self's friends
         return users.exclude(Q(id=self.id) | Q(friends__id=self.id)).all()
 
+    def get_user_and_friend_notes(self):
+        """
+            현재 사용자와 친구들의 노트 목록을 리턴한다.
+        """
+        return BookNote.objects.filter(Q(user=self) | Q(user__friends=self)).order_by('-created_at')[0:10]
+
     def to_json(self):
         json_data = {}
         if self.photo:
@@ -181,10 +189,10 @@ class BookCategory(models.Model):
 class Book(models.Model):
     title = CharField(max_length=128, blank=False)
     category = CharField(max_length=128, blank=True)
-    isbn = CharField(max_length=10, blank=False, unique=True)
+    isbn = CharField(max_length=10, blank=True, unique=False)
     barcode = models.CharField(max_length=16, blank=False)
     author = CharField(max_length=128, blank=False)
-    isbn13 = CharField(max_length=13, blank=True)
+    isbn13 = CharField(max_length=13, blank=False, unique=True)
     author_etc = CharField(max_length=128, blank=True)
     illustrator = CharField(max_length=128, blank=True)
     translator = CharField(max_length=50, blank=True)
@@ -196,8 +204,10 @@ class Book(models.Model):
     updated_on = DateTimeField(auto_now=True)
     created_at = DateTimeField(auto_now_add=True)
 
-    def __str__(self):
-        return self.title
+    @staticmethod
+    def get_recommended_books(user):
+        category = get_category(user.birthday)
+        return Book.objects.filter(category=category).order_by('-pub_date')
 
     def to_json(self):
         json_data = {}
@@ -213,6 +223,9 @@ class Book(models.Model):
                           'description': self.description,
         })
         return json_data
+
+    def __str__(self):
+        return self.title
 
     class Meta:
         db_table = 'books'
