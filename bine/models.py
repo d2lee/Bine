@@ -1,13 +1,15 @@
+# -*- coding:cp949 -*-
+
 import os.path
 from time import strftime, gmtime
 
 from django.db import models
 from django.db.models import Q
-from django.db.models.fields import CharField, DateField, TextField, \
+from django.db.models.fields import CharField, DateField, TextField, ‚
     DateTimeField
 from django.db.models.fields.related import ForeignKey
 from django.db.models.fields.files import ImageField
-from django.contrib.auth.models import BaseUserManager, AbstractBaseUser, \
+from django.contrib.auth.models import BaseUserManager, AbstractBaseUser, ‚
     PermissionsMixin
 
 from bine.commons import get_category
@@ -54,8 +56,8 @@ class User(AbstractBaseUser, PermissionsMixin):
     fullname = models.CharField(max_length=80, blank=False)
     birthday = models.DateField(blank=False)
     SEX_CHOICES = (
-        ('M', 'ë‚¨ì'),
-        ('F', 'ì—¬ì'),
+        ('M', '³²ÀÚ'),
+        ('F', '¿©ÀÚ'),
     )
     sex = models.CharField(max_length=1, choices=SEX_CHOICES, blank=False)
     tagline = models.CharField(max_length=128, blank=True)
@@ -112,7 +114,7 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     def get_user_and_friend_notes(self):
         """
-            í˜„ì¬ ì‚¬ìš©ìì™€ ì¹œêµ¬ë“¤ì˜ ë…¸íŠ¸ ëª©ë¡ì„ ë¦¬í„´í•œë‹¤.
+            ÇöÀç »ç¿ëÀÚ¿Í Ä£±¸µéÀÇ ³ëÆ® ¸ñ·ÏÀ» ¸®ÅÏÇÑ´Ù.
         """
         return BookNote.objects.filter(Q(user=self) | Q(user__friends=self)).order_by('-created_at')[0:10]
 
@@ -150,9 +152,9 @@ class FriendRelation(models.Model):
     to_user = ForeignKey(User, related_name='to_people')
 
     STATUS_CHOICES = (
-        ('N', 'ëŒ€ê¸°'),
-        ('Y', 'ìŠ¹ë½'),
-        ('D', 'ì‚­ì œ'),
+        ('N', '´ë±â'),
+        ('Y', '½Â¶ô'),
+        ('D', '»èÁ¦'),
     )
     status = models.CharField(max_length=1, choices=STATUS_CHOICES, default='N', blank=False)
     created_at = models.DateTimeField(auto_now_add=True)
@@ -250,9 +252,9 @@ class BookNote(models.Model):
     attach = ImageField(upload_to=get_file_name, blank=True, null=True)
 
     SHARE_CHOICES = (
-        ('P', 'ê°œì¸'),
-        ('F', 'ì¹œêµ¬'),
-        ('A', 'ëª¨ë‘'),
+        ('P', '°³ÀÎ'),
+        ('F', 'Ä£±¸'),
+        ('A', '¸ğµÎ'),
     )
 
     share_to = CharField(max_length=1, choices=SHARE_CHOICES, blank=False, default='F')

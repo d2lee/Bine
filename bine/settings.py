@@ -1,3 +1,5 @@
+# -*- coding:cp949 -*-
+
 """
 Django settings for bine project.
 

@@ -1,3 +1,5 @@
+# -*- coding:cp949 -*-
+
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ObjectDoesNotExist
 from django.views.decorators.csrf import csrf_exempt
@@ -6,7 +8,7 @@ from rest_framework.permissions import AllowAny
 from rest_framework.views import APIView
 from django.http.response import JsonResponse, HttpResponseBadRequest
 from django.contrib.auth import authenticate, login, logout
-from rest_framework.status import HTTP_403_FORBIDDEN, HTTP_400_BAD_REQUEST, \
+from rest_framework.status import HTTP_403_FORBIDDEN, HTTP_400_BAD_REQUEST, ‚
     HTTP_200_OK
 from rest_framework.response import Response
 from django.views.generic.base import View
@@ -204,7 +206,7 @@ class BookNoteList(APIView):
     @staticmethod
     def get(request):
         """
-        í˜„ì¬ ì‚¬ìš©ìì™€ ì¹œêµ¬ë“¤ì˜ ì±… ë…¸íŠ¸ ëª©ë¡ì„ ë³´ì—¬ì¤€ë‹¤.
+        ÇöÀç »ç¿ëÀÚ¿Í Ä£±¸µéÀÇ Ã¥ ³ëÆ® ¸ñ·ÏÀ» º¸¿©ÁØ´Ù.
         """
         notes = request.user.get_user_and_friend_notes()
         return Response(BookNoteSerializer(notes, many=True).data)

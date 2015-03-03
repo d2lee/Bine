@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="PublishConfigData" serverName="bine.co.kr">
+    <serverData>
+      <paths name="bine.co.kr">
+        <serverdata>
+          <mappings>
+            <mapping deploy="/home/django/bine" local="$PROJECT_DIR$" web="/" />
+          </mappings>
+        </serverdata>
+      </paths>
+    </serverData>
+  </component>
+</project>
